@@ -1,7 +1,6 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { auth, currentUser, User } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { useState } from "react";
 
 import { LatestPost } from "~/app/_components/post";
 import { api, HydrateClient } from "~/trpc/server";
