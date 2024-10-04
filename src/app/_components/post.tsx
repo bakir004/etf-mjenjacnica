@@ -1,6 +1,6 @@
 "use client";
-
 import { useState } from "react";
+import { Button } from "~/components/ui/button";
 
 import { api } from "~/trpc/react";
 
@@ -51,12 +51,9 @@ export function LatestPost() {
           {createPost.isPending ? "Submitting..." : "Submit"}
         </button>
       </form>
-      <button
-        disabled={deletePost.isPending}
-        onClick={(e) => deletePost.mutate({ name })}
-      >
+      <Button disabled={deletePost.isPending}>
         {deletePost.isPending ? "Deleting..." : "Delete"}
-      </button>
+      </Button>
     </div>
   );
 }

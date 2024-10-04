@@ -10,7 +10,8 @@ export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
 
   const { userId } = auth();
-  const user = await currentUser();
+  let user = null;
+  if (userId) user = await currentUser();
   void api.post.getLatest.prefetch();
 
   return (
