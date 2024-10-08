@@ -19,3 +19,20 @@ model Post {
 
     @@index([name])
 }
+
+model Offer {
+  id           Int      @id @default(autoincrement())
+  phoneNumber  String
+  creatorId    String
+  creatorName  String
+  subjectGive  String
+  timeGive     String
+  dayGive      String
+  subjectWant  String
+  timeWant     String
+  dayWant      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([creatorId])
+}
