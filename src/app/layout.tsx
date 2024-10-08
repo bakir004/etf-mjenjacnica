@@ -34,6 +34,7 @@ export default function RootLayout({
           <nav className="h-16 w-full bg-blue-900">
             <SignedOut>
               <SignInButton />
+              asdasd
             </SignedOut>
             <SignedIn>
               <UserButton />
