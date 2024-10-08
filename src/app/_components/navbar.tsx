@@ -7,7 +7,11 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import { Button } from "~/components/ui/button";
-import { HomeIcon, PlusIcon } from "@radix-ui/react-icons";
+import {
+  HomeIcon,
+  PlusIcon,
+  QuestionMarkCircledIcon,
+} from "@radix-ui/react-icons";
 import Link from "next/link";
 import {
   Dialog,
@@ -131,11 +135,16 @@ export default function Navbar() {
 
   return (
     <nav className="flex h-12 w-full items-center gap-4 bg-primary-foreground px-4 py-2 font-mono">
-      <h2 className="font-black md:text-xl">Grupomjenjac v0.1</h2>
+      <Link href="/" className="font-black md:text-xl">
+        Grupomjenjac v0.1
+      </Link>
       <div className="ml-auto flex items-center gap-4">
+        <Link href={"/ispomoc"}>
+          <QuestionMarkCircledIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></QuestionMarkCircledIcon>
+        </Link>
         <SignedOut>
           <SignInButton>
-            <Button className="bg-blue-700 font-bold hover:bg-blue-700/80">
+            <Button className="bg-blue-700 font-bold text-white hover:bg-blue-700/80">
               Prijavi se
             </Button>
           </SignInButton>
