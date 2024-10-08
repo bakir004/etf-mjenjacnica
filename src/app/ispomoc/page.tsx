@@ -19,12 +19,13 @@ export default async function Dashboard() {
           kojom se želite zamijeniti.
         </em>
         <p>
-          Na vrhu stranice imate dugme "Prijavi se". Prijavom omogućavate sebi
-          kreiranje razmjena (klikom na "+" u ćošku) da svi drugi vide. Pri
-          kreiranju nastojite popuniti sva polja korektno, jer aplikacija (još)
-          nema nikakve validacije polja. Kada kreirate razmjenu, pisaće ime sa
-          vašeg githuba/gmaila i vaš broj telefona koji ste unijeli, u svrhu
-          potvrde da je broj i osoba kojoj se javljate korektna.
+          Na vrhu stranice imate dugme &quot;Prijavi se&quot;. Prijavom
+          omogućavate sebi kreiranje razmjena (klikom na "+" u ćošku) da svi
+          drugi vide. Pri kreiranju nastojite popuniti sva polja korektno, jer
+          aplikacija (još) nema nikakve validacije polja. Kada kreirate
+          razmjenu, pisaće ime sa vašeg githuba/gmaila i vaš broj telefona koji
+          ste unijeli, u svrhu potvrde da je broj i osoba kojoj se javljate
+          korektna.
         </p>
         <p>
           Kada se dogovorite sa kolegom oko zamjene, obrišite razmjenu sa ove
