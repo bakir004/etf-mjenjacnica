@@ -44,7 +44,7 @@ const subjectColor: Record<string, string> = {
   OBP: "bg-purple-600 hover:bg-purple-600/80",
 };
 
-export default function Offer({ offer }: { offer: Offer }) {
+export default function Offer({ offer, key }: { offer: Offer; key: number }) {
   const { user } = useUser();
   const utils = api.useUtils();
   const router = useRouter();
@@ -60,7 +60,7 @@ export default function Offer({ offer }: { offer: Offer }) {
     },
   });
   return (
-    <Alert>
+    <Alert key={key}>
       <Dialog>
         <AlertTitle className="">
           <div className="flex w-full items-center gap-2">

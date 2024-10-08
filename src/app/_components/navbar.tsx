@@ -106,8 +106,8 @@ export default function Navbar() {
     );
     createOffer.mutate({
       phoneNumber: number,
-      creatorId: user?.id || "", // Replace with actual creator ID, if necessary
-      creatorName: user?.firstName || "nepoznat", // Replace with actual creator name, if necessary
+      creatorId: user?.id ?? "", // Replace with actual creator ID, if necessary
+      creatorName: user?.firstName ?? "nepoznat", // Replace with actual creator name, if necessary
       subjectGive: subjectGive,
       timeGive: timeGive,
       dayGive: dayGive,

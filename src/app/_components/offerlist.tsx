@@ -25,7 +25,7 @@ export default async function OfferList() {
       {offers.length === 0 ? (
         <p className="italic">Nema trenutno aktivnih razmjena</p>
       ) : (
-        offers.map((item: Offer, i) => <Offer offer={item}></Offer>)
+        offers.map((item: Offer, i) => <Offer offer={item} key={i}></Offer>)
       )}
     </div>
   );
