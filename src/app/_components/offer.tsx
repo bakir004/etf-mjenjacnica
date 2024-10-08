@@ -51,9 +51,9 @@ export default function Offer({ offer, key }: { offer: Offer; key: number }) {
 
   const deleteOffer = api.offer.deleteOffer.useMutation({
     onSuccess: async () => {
-      await utils.offer.getAll.invalidate(); // Invalidate the cache to refresh the offer list
+      void utils.offer.getAll.invalidate(); // Invalidate the cache to refresh the offer list
       toast.success("Ponuda uspjesno obrisana"); // Show success notification
-      await router.refresh();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(`Greska na serveru: ${error.message}`); // Show error notification
