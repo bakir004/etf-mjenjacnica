@@ -1,5 +1,10 @@
 import { HydrateClient } from "~/trpc/server";
 import OfferList from "./_components/offerlist";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ETF Grupomjenjacnica",
+};
 
 export default async function Home() {
   return (
