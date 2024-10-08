@@ -145,14 +145,16 @@ export default function Navbar() {
             <DialogTrigger asChild>
               <PlusIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></PlusIcon>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="">
               <DialogHeader>
                 <DialogTitle className="text-xl">
                   Dodaj razmjenu grupa
                 </DialogTitle>
-                <div className="text-sm text-gray-300">
-                  <h2 className="text-lg text-white">Nudim termin:</h2>
-                  <div className="flex gap-2">
+                <div className="flex w-full flex-col text-sm text-gray-300">
+                  <h2 className="text-left text-lg text-white">
+                    Nudim termin:
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
                     <div className="my-1 flex items-center gap-2">
                       <p>Predmet:</p>
                       <Select onValueChange={(v) => setSubjectGive(v)}>
@@ -183,26 +185,26 @@ export default function Navbar() {
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p>Termin:</p>
-                    <Select onValueChange={(v) => setTimeGive(v)}>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Termin" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <ScrollArea className="h-[220px]">
-                          {times.map((item, i) => (
-                            <SelectItem key={i} value={item}>
-                              {item}
-                            </SelectItem>
-                          ))}
-                        </ScrollArea>
-                      </SelectContent>
-                    </Select>
+                    <div className="flex items-center gap-2">
+                      <p>Termin:</p>
+                      <Select onValueChange={(v) => setTimeGive(v)}>
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Termin" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <ScrollArea className="h-[220px]">
+                            {times.map((item, i) => (
+                              <SelectItem key={i} value={item}>
+                                {item}
+                              </SelectItem>
+                            ))}
+                          </ScrollArea>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                   <h2 className="text-lg text-white">Želim termin:</h2>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <div className="my-1 flex items-center gap-2">
                       <p>Predmet:</p>
                       <Select onValueChange={(v) => setSubjectWant(v)}>
@@ -233,23 +235,23 @@ export default function Navbar() {
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p>Termin:</p>
-                    <Select onValueChange={(v) => setTimeWant(v)}>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Termin" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <ScrollArea className="h-[220px]">
-                          {times.map((item, i) => (
-                            <SelectItem key={i} value={item}>
-                              {item}
-                            </SelectItem>
-                          ))}
-                        </ScrollArea>
-                      </SelectContent>
-                    </Select>
+                    <div className="flex items-center gap-2">
+                      <p>Termin:</p>
+                      <Select onValueChange={(v) => setTimeWant(v)}>
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Termin" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <ScrollArea className="h-[220px]">
+                            {times.map((item, i) => (
+                              <SelectItem key={i} value={item}>
+                                {item}
+                              </SelectItem>
+                            ))}
+                          </ScrollArea>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                   <p className="mt-4">Kontakt telefon (za viber):</p>
                   <Input
