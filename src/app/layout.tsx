@@ -4,24 +4,9 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/nextjs";
-import { Button } from "~/components/ui/button";
-import { HomeIcon, PlusIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../components/ui/dialog";
+import { ClerkProvider } from "@clerk/nextjs";
+import Navbar from "./_components/navbar";
+import { Toaster } from "../components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -41,42 +26,13 @@ export default function RootLayout({
       }}
     >
       <html lang="en" className={`${GeistSans.variable}`}>
-        <body className="dark">
-          <nav className="flex h-12 w-full items-center gap-4 bg-primary-foreground px-4 py-2 font-mono">
-            <h2 className="font-black md:text-xl">Grupomjenjac v0.1</h2>
-            <div className="ml-auto flex items-center gap-4">
-              <SignedOut>
-                <SignInButton>
-                  <Button className="bg-blue-700 font-bold hover:bg-blue-700/80">
-                    Prijavi se
-                  </Button>
-                </SignInButton>
-              </SignedOut>
-              <SignedIn>
-                <PlusIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></PlusIcon>
-                <Link href={"/moje-ponude"}>
-                  <HomeIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-1 text-white hover:bg-secondary/80"></HomeIcon>
-                </Link>
-                <UserButton />
-              </SignedIn>
-            </div>
-          </nav>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>asd</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
-                <DialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-        </body>
+        <TRPCReactProvider>
+          <body className="dark">
+            <Navbar></Navbar>
+            {children}
+            <Toaster></Toaster>
+          </body>
+        </TRPCReactProvider>
       </html>
     </ClerkProvider>
   );

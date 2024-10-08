@@ -1,20 +1,13 @@
-import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { auth, currentUser, User } from "@clerk/nextjs/server";
-import Link from "next/link";
-
-import { api, HydrateClient } from "~/trpc/server";
+import { HydrateClient } from "~/trpc/server";
+import OfferList from "./_components/offerlist";
 
 export default async function Home() {
-  // const hello = await api.post.hello({ text: "from tRPC" });
-
-  const { userId } = auth();
-  let user = null;
-  if (userId) user = await currentUser();
-  // void api.post.getLatest.prefetch();
-
   return (
     <HydrateClient>
-      <main>asd</main>
+      <main className="mx-auto max-w-[1280px] p-4 sm:mt-12">
+        <h1 className="mb-4 text-2xl font-bold">Aktivne razmjene termina</h1>
+        <OfferList></OfferList>
+      </main>
     </HydrateClient>
   );
 }
