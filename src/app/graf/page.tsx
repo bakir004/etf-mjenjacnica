@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { api, HydrateClient } from "~/trpc/server";
-import GraphView from "../_components/graphview";
+// import GraphView from "../_components/graphview";
+import dynamic from "next/dynamic";
 
 interface Offer {
   id: number;
@@ -17,11 +18,15 @@ interface Offer {
   createdAt: Date;
 }
 
+const GraphViewNoSSR = dynamic(() => import("../_components/graphview"), {
+  ssr: false, // This disables SSR for this component
+});
+
 export default async function GraphPage() {
   const offers = await api.offer.getAll();
   return (
     <div>
-      <GraphView offers={offers}></GraphView>
+      <GraphViewNoSSR offers={offers}></GraphViewNoSSR>
     </div>
   );
 }
