@@ -31,6 +31,12 @@ export default async function Dashboard() {
           Kada se dogovorite sa kolegom oko zamjene, obrišite razmjenu sa ove
           stranice klikom na crvenu kantu u vašoj razmjeni.
         </p>
+        <p>
+          Na grafičkom prikazu, tumač je slijedeći: čvorovi predstavljaju
+          termine, a strelice se kreću od termina koji se nude i ulaze u termine
+          koji se traže. Ciklusi u grafiku znači da je moguć dogovor između
+          osoba čiji se termini pronađu u tom ciklusu.
+        </p>
         <p>Nadam se da ćete s ovim uspjeti upasti na željene termine :{")"}</p>
         <em className="-mt-4 text-sm text-gray-400">- bc</em>
       </main>
