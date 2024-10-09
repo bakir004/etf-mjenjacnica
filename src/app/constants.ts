@@ -1,4 +1,4 @@
-export const subjects = ["ASP", "DM", "LD", "RPR", "OBP"];
+export const subjects = ["ASP", "DM", "LD", "RPR", "OBP", "NA", "SP"];
 export const days = ["Ponedjeljak", "Utorak", "Srijeda", "Cetvrtak", "Petak"];
 export const times = [
   "12:00",

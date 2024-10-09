@@ -42,6 +42,8 @@ const subjectColor: Record<string, string> = {
   RPR: "bg-orange-600 hover:bg-orange-600/80",
   LD: "bg-green-600 hover:bg-green-600/80",
   OBP: "bg-purple-600 hover:bg-purple-600/80",
+  NA: "bg-yellow-500 hover:bg-yellow-500/80",
+  SP: "bg-rose-600 hover:bg-rose-600/80",
 };
 
 export default function Offer({ offer, key }: { offer: Offer; key: number }) {
