@@ -1,14 +1,21 @@
+"use client";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { auth, currentUser, User } from "@clerk/nextjs/server";
-import { Graph } from "react-graph-vis";
-
-import "./styles.css";
-import "./network.css";
+import { GraphCanvas, darkTheme } from "reagraph";
 
 import { api } from "~/trpc/server";
 import Offer from "./offer";
+import dynamic from "next/dynamic";
 
-export interface Offer {
+// Dynamic import of GraphCanvas, disabling SSR for this component
+const GraphCanvasNoSSR = dynamic(
+  () => import("reagraph").then((mod) => mod.GraphCanvas),
+  {
+    ssr: false,
+  },
+);
+
+interface Offer {
   id: number;
   phoneNumber: string;
   creatorId: string;
@@ -22,47 +29,30 @@ export interface Offer {
   createdAt: Date;
 }
 
-export default async function OfferList() {
-  const offers = await api.offer.getAll();
-  const graph = {
-    nodes: [
-      { id: 1, label: "Node 1", title: "node 1 tootip text" },
-      { id: 2, label: "Node 2", title: "node 2 tootip text" },
-      { id: 3, label: "Node 3", title: "node 3 tootip text" },
-      { id: 4, label: "Node 4", title: "node 4 tootip text" },
-      { id: 5, label: "Node 5", title: "node 5 tootip text" },
-    ],
-    edges: [
-      { from: 1, to: 2 },
-      { from: 1, to: 3 },
-      { from: 2, to: 4 },
-      { from: 2, to: 5 },
-    ],
-  };
-
-  const options = {
-    layout: {
-      hierarchical: true,
-    },
-    edges: {
-      color: "#000000",
-    },
-    height: "500px",
-  };
-
-  const events = {
-    select: function (event: { nodes: any; edges: any }) {
-      var { nodes, edges } = event;
-    },
-  };
+export default function GraphView({ offers }: { offers: Offer[] }) {
   return (
-    <Graph
-      graph={graph}
-      options={options}
-      events={events}
-      getNetwork={(network: any) => {
-        //  if you want access to vis.js network api you can set the state in a parent component using this property
-      }}
-    />
+    <div>
+      <GraphCanvasNoSSR
+        theme={darkTheme}
+        nodes={[
+          {
+            id: "n-1",
+            label: "RPR",
+          },
+          {
+            id: "n-2",
+            label: "2",
+          },
+        ]}
+        edges={[
+          {
+            id: "1->2",
+            source: "n-1",
+            target: "n-2",
+            label: "Edge 1-2",
+          },
+        ]}
+      />
+    </div>
   );
 }
