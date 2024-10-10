@@ -1,66 +1,24 @@
 "use client";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
-import {
-  StarIcon,
-  StopwatchIcon,
-  TrashIcon,
-  UpdateIcon,
-} from "@radix-ui/react-icons";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../components/ui/dialog";
+import { TrashIcon, UpdateIcon } from "@radix-ui/react-icons";
+import { Dialog, DialogTrigger } from "../../components/ui/dialog";
 import { Badge } from "~/components/ui/badge";
 import clsx from "clsx";
 import { useUser } from "@clerk/nextjs";
-import { Button } from "~/components/ui/button";
-import { api } from "~/trpc/react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
-export interface Offer {
-  id: number;
-  phoneNumber: string;
-  creatorId: string;
-  creatorName: string;
-  subjectGive: string;
-  timeGive: string;
-  dayGive: string;
-  subjectWant: string;
-  timeWant: string;
-  dayWant: string;
-  createdAt: Date;
-}
-const subjectColor: Record<string, string> = {
-  ASP: "bg-blue-800 hover:bg-blue-800/80",
-  DM: "bg-red-600 hover:bg-red-600/80",
-  RPR: "bg-orange-600 hover:bg-orange-600/80",
-  LD: "bg-green-600 hover:bg-green-600/80",
-  OBP: "bg-purple-600 hover:bg-purple-600/80",
-  NA: "bg-yellow-500 hover:bg-yellow-500/80",
-  SP: "bg-rose-600 hover:bg-rose-600/80",
-};
+import { Offer } from "@prisma/client";
+import DeleteOfferModal from "~/app/_components/DeleteOfferModal";
+import { subjectColor } from "~/lib/constants";
 
-export default function Offer({ offer, key }: { offer: Offer; key: number }) {
+export default function OfferItem({
+  offer,
+  key,
+}: {
+  offer: Offer;
+  key: number;
+}) {
   const { user } = useUser();
-  const utils = api.useUtils();
-  const router = useRouter();
 
-  const deleteOffer = api.offer.deleteOffer.useMutation({
-    onSuccess: async () => {
-      void utils.offer.getAll.invalidate(); // Invalidate the cache to refresh the offer list
-      toast.success("Ponuda uspjesno obrisana"); // Show success notification
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(`Greska na serveru: ${error.message}`); // Show error notification
-    },
-  });
   return (
     <Alert key={key}>
       <Dialog>
@@ -71,7 +29,7 @@ export default function Offer({ offer, key }: { offer: Offer; key: number }) {
             </p>
             {user?.id === offer.creatorId ? (
               <DialogTrigger asChild>
-                <TrashIcon className="ml-auto h-4 w-4 cursor-pointer text-red-500"></TrashIcon>
+                <TrashIcon className="text-white-500 ml-auto h-6 w-6 cursor-pointer rounded bg-red-600 p-0.5 hover:bg-red-600/80"></TrashIcon>
               </DialogTrigger>
             ) : null}
           </div>
@@ -107,26 +65,7 @@ export default function Offer({ offer, key }: { offer: Offer; key: number }) {
             </Badge>
           </div>
         </AlertDescription>
-
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-xl">Dodaj razmjenu grupa</DialogTitle>
-            <div>Jeste li sigurni da želite obrisati ovu razmjenu?</div>
-            <div className="flex items-center gap-2">
-              <DialogClose asChild>
-                <Button variant={"outline"}>Zatvori</Button>
-              </DialogClose>
-              <DialogClose asChild>
-                <Button
-                  variant={"destructive"}
-                  onClick={() => deleteOffer.mutate({ id: offer.id })}
-                >
-                  Obriši
-                </Button>
-              </DialogClose>
-            </div>
-          </DialogHeader>
-        </DialogContent>
+        <DeleteOfferModal id={offer.id} />
       </Dialog>
     </Alert>
   );

@@ -32,7 +32,8 @@ export const offerRouter = createTRPCRouter({
       });
     }),
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.offer.findMany(); // Fetch all offers from the database
+    const offers = await ctx.db.offer.findMany(); // Fetch all offers from the database
+    return offers ?? null;
   }),
 
   deleteOffer: publicProcedure
