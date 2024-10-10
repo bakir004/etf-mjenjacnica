@@ -3,7 +3,7 @@ import { darkTheme, GraphCanvas } from "reagraph";
 
 import { useEffect, useState } from "react";
 import { subjectColorHex } from "~/lib/constants";
-import { Offer } from "@prisma/client";
+import type { Offer } from "@prisma/client";
 
 export default function GraphView({ offers }: { offers: Offer[] }) {
   const [nodes, setNodes] = useState<

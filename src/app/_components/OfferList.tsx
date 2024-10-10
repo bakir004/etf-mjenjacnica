@@ -1,4 +1,4 @@
-import { Offer } from "@prisma/client";
+import type { Offer } from "@prisma/client";
 import OfferItem from "./Offer";
 import { api } from "~/trpc/server";
 

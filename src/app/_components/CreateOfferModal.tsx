@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import { Offer } from "@prisma/client";
+import type { Offer } from "@prisma/client";
 import LoadingSpinnerSVG from "./Spinner";
 import { z } from "zod";
 import {
@@ -47,7 +47,7 @@ export default function CreateOfferModal() {
     },
     onError: (error) => {
       toast.dismiss("begin-processing");
-      toast.error(`Desila se greška na serveru. ${error}`);
+      toast.error(`Desila se greška na serveru. ${error.message}`);
     },
   });
   const submit = (event: React.FormEvent) => {

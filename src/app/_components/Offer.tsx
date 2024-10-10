@@ -6,7 +6,7 @@ import { Badge } from "~/components/ui/badge";
 import clsx from "clsx";
 import { useUser } from "@clerk/nextjs";
 
-import { Offer } from "@prisma/client";
+import type { Offer } from "@prisma/client";
 import DeleteOfferModal from "~/app/_components/DeleteOfferModal";
 // import { subjectColor } from "~/lib/constants";
 export const subjectColor: Record<string, string> = {

@@ -24,7 +24,13 @@ export function SelectForm({
     <Select
       name={name}
       required={required ?? false}
-      onValueChange={onChange ? (v: string) => onChange(v) : () => {}}
+      onValueChange={
+        onChange
+          ? (v: string) => onChange(v)
+          : () => {
+              console.log(":)");
+            }
+      }
     >
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder={placeholder} />
