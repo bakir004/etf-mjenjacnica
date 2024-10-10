@@ -1,7 +1,7 @@
 import { api } from "~/trpc/server";
 import dynamic from "next/dynamic";
 
-const GraphViewNoSSR = dynamic(() => import("../_components/graphview"), {
+const GraphViewNoSSR = dynamic(() => import("../_components/GraphView"), {
   ssr: false,
 });
 
