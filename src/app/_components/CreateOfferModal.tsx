@@ -54,11 +54,9 @@ export default function CreateOfferModal() {
     event.preventDefault();
 
     const formData = new FormData(event.target as HTMLFormElement);
-    const data = Object.fromEntries(formData.entries()) as {
-      [key: string]: FormDataEntryValue;
-    };
+    const data = Object.fromEntries(formData.entries());
 
-    let offer: Offer = {
+    const offer: Offer = {
       phoneNumber: data.phoneNumber as string,
       creatorId: user?.id ?? "",
       creatorName: user?.firstName ?? "Anonimac",
