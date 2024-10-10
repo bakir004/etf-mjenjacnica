@@ -1,3 +1,5 @@
+import { HydrateClient } from "~/trpc/server";
+
 export default async function AboutPage() {
   return (
     <HydrateClient>

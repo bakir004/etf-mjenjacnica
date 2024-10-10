@@ -1,4 +1,3 @@
-"strict mode";
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";

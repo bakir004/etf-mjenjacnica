@@ -34,7 +34,7 @@ const OfferSchema = z.object({
   id: z.number().int().nonnegative("ID mora biti nenegativni cijeli broj"),
 });
 
-export function CreateOfferModal() {
+export default function CreateOfferModal() {
   const router = useRouter();
   const utils = api.useUtils();
   const { user } = useUser();

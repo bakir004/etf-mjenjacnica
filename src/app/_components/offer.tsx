@@ -8,8 +8,16 @@ import { useUser } from "@clerk/nextjs";
 
 import { Offer } from "@prisma/client";
 import DeleteOfferModal from "~/app/_components/DeleteOfferModal";
-import { subjectColor } from "~/lib/constants";
-
+// import { subjectColor } from "~/lib/constants";
+export const subjectColor: Record<string, string> = {
+  ASP: "bg-blue-800 hover:bg-blue-800/80",
+  DM: "bg-red-600 hover:bg-red-600/80",
+  RPR: "bg-orange-600 hover:bg-orange-600/80",
+  LD: "bg-green-600 hover:bg-green-600/80",
+  OBP: "bg-purple-600 hover:bg-purple-600/80",
+  NA: "bg-yellow-500 hover:bg-yellow-500/80",
+  SP: "bg-rose-600 hover:bg-rose-600/80",
+};
 export default function OfferItem({
   offer,
   key,

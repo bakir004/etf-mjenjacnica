@@ -1,4 +1,4 @@
-import { CreateOfferModal } from "./CreateOfferModal";
+import CreateOfferModal from "./CreateOfferModal";
 import React from "react";
 import { Dialog, DialogTrigger } from "../../components/ui/dialog";
 import { PlusIcon } from "@radix-ui/react-icons";
