@@ -14,7 +14,6 @@ import {
   SheetClose,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -27,11 +26,17 @@ export default function Navbar() {
         Zmanger v0.3
       </Link>
       <div className="ml-auto hidden items-center gap-4 sm:flex">
-        <Link href={"/ispomoc"} prefetch={true}>
+        <Link href={"/ispomoc"}>
           <QuestionMarkCircledIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></QuestionMarkCircledIcon>
         </Link>
-        <Link href={"/graf"} prefetch={true}>
+        <Link href={"/graf"}>
           <CommitIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></CommitIcon>
+        </Link>
+        <Link href={"/asp"}>
+          <ReaderIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></ReaderIcon>
+        </Link>
+        <Link href={"/na"}>
+          <RocketIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></RocketIcon>
         </Link>
         <SignedOut>
           <SignInButton>
@@ -62,7 +67,6 @@ export default function Navbar() {
                 <Link
                   className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
                   href={"/ispomoc"}
-                  prefetch={true}
                 >
                   <QuestionMarkCircledIcon className="h-4 w-4"></QuestionMarkCircledIcon>
                   Pomoć
@@ -72,7 +76,6 @@ export default function Navbar() {
                 <Link
                   className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
                   href={"/graf"}
-                  prefetch={true}
                 >
                   <CommitIcon className="h-4 w-4"></CommitIcon>
                   Grafik razmjena
@@ -82,7 +85,6 @@ export default function Navbar() {
                 <Link
                   className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
                   href={"/asp"}
-                  prefetch={true}
                 >
                   <ReaderIcon className="h-4 w-4"></ReaderIcon>
                   ASP testovi
@@ -92,7 +94,6 @@ export default function Navbar() {
                 <Link
                   className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
                   href={"/na"}
-                  prefetch={true}
                 >
                   <RocketIcon className="h-4 w-4"></RocketIcon>
                   NA testovi
