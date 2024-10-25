@@ -1,20 +1,36 @@
 import { CreateOfferButton } from "./CreateOfferButton";
 import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 import { Button } from "~/components/ui/button";
-import { CommitIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
+import {
+  CommitIcon,
+  HamburgerMenuIcon,
+  QuestionMarkCircledIcon,
+  ReaderIcon,
+  RocketIcon,
+} from "@radix-ui/react-icons";
 import Link from "next/link";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "~/components/ui/sheet";
 
 export default function Navbar() {
   return (
     <nav className="relative z-10 flex h-12 w-full items-center gap-4 bg-primary-foreground px-4 py-2 font-mono">
       <Link href="/" className="font-black md:text-xl">
-        Grupomjenjac v0.2
+        Zmanger v0.3
       </Link>
-      <div className="ml-auto flex items-center gap-4">
-        <Link href={"/ispomoc"}>
+      <div className="ml-auto hidden items-center gap-4 sm:flex">
+        <Link href={"/ispomoc"} prefetch={true}>
           <QuestionMarkCircledIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></QuestionMarkCircledIcon>
         </Link>
-        <Link href={"/graf"}>
+        <Link href={"/graf"} prefetch={true}>
           <CommitIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></CommitIcon>
         </Link>
         <SignedOut>
@@ -26,6 +42,66 @@ export default function Navbar() {
         </SignedOut>
         <SignedIn>
           <CreateOfferButton />
+          <UserButton />
+        </SignedIn>
+      </div>
+      <div className="ml-auto flex items-center justify-end gap-4 sm:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <HamburgerMenuIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></HamburgerMenuIcon>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Navigacija</SheetTitle>
+              <SheetDescription>
+                Sve opcije i rute se nalaze ovdje
+              </SheetDescription>
+            </SheetHeader>
+            <div className="mt-2 flex flex-col gap-2">
+              <SheetClose asChild>
+                <Link
+                  className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
+                  href={"/ispomoc"}
+                  prefetch={true}
+                >
+                  <QuestionMarkCircledIcon className="h-4 w-4"></QuestionMarkCircledIcon>
+                  Pomoć
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link
+                  className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
+                  href={"/graf"}
+                  prefetch={true}
+                >
+                  <CommitIcon className="h-4 w-4"></CommitIcon>
+                  Grafik razmjena
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link
+                  className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
+                  href={"/asp"}
+                  prefetch={true}
+                >
+                  <ReaderIcon className="h-4 w-4"></ReaderIcon>
+                  ASP testovi
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link
+                  className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
+                  href={"/na"}
+                  prefetch={true}
+                >
+                  <RocketIcon className="h-4 w-4"></RocketIcon>
+                  NA testovi
+                </Link>
+              </SheetClose>
+            </div>
+          </SheetContent>
+        </Sheet>
+        <SignedIn>
           <UserButton />
         </SignedIn>
       </div>
