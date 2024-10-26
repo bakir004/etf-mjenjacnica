@@ -12,7 +12,6 @@ import aspTests from "../../tests/asp.json";
 import naTests from "../../tests/na.json";
 import { CodeForm } from "./CodeForm";
 import { SelectForm } from "./Select";
-import { BATCH_SIZE } from "~/lib/constants";
 
 export function TestTable() {
   const [outputs, setOutputs] = useState<

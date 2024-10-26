@@ -85,7 +85,7 @@ func runCppCode(id int, code string) CodeResponse {
 	defer os.Remove(compiledFile) // Clean up the compiled output file
 
 	// Step 4: Run the compiled output with a timeout
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 7*time.Second)
 	defer cancel()
 
 	runCmd := exec.CommandContext(ctx, compiledFile)
@@ -98,7 +98,7 @@ func runCppCode(id int, code string) CodeResponse {
 
 	// Check if the error is due to a timeout
 	if ctx.Err() == context.DeadlineExceeded {
-		return CodeResponse{id, "", "Execution timed out after 10 seconds"}
+		return CodeResponse{id, "", "Execution timed out after 7 seconds"}
 	}
 
 	if err != nil {
