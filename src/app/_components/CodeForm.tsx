@@ -4,19 +4,26 @@ import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import LoadingSpinnerSVG from "./Spinner";
 import { Progress } from "~/components/ui/progress";
+import { BATCH_SIZE } from "~/lib/constants";
 
 export function CodeForm({
   sendResults,
   reset,
   tests,
 }: {
-  sendResults: (results: Array<{ output: string; error: string }>) => void;
+  sendResults: (
+    results: Array<{ output: string; error: string; id: number }>,
+  ) => void;
   reset: () => void;
   tests: any;
 }) {
   const [code, setCode] = useState<string>("");
-  const mutation = api.coderunner.getAll.useMutation();
-  const { mutate, data, status } = mutation;
+  const mutation = api.coderunner.getAll.useMutation({
+    onSuccess: (data) => {
+      if (data) sendResults(data);
+    },
+  });
+  const { mutate, data, status, error } = mutation;
   const [progress, setProgress] = useState(0);
 
   const submit = (event: React.FormEvent) => {
@@ -29,8 +36,8 @@ export function CodeForm({
       return;
     }
 
-    const allCodes: string[] = [];
-    tests.forEach((item: any) => {
+    const allCodes: { id: number; code: string }[] = [];
+    tests.forEach((item: any, i: number) => {
       let currentCode = "";
       (item?.tools[0] &&
         typeof item.tools[0] !== "string" &&
@@ -61,47 +68,18 @@ export function CodeForm({
       item.tools[0].patch?.[0]?.position === "main"
         ? (currentCode += "\n}")
         : "";
-      allCodes.push(currentCode);
+      allCodes.push({ id: i, code: currentCode });
     });
 
-    mutate({ codes: allCodes.splice(0, 3) });
-
-    setTimeout(() => {
-      setProgress(15); // Initial progress
-    }, 1000);
-
-    setTimeout(() => {
-      setProgress(35); // Increase more initially
-    }, 2500);
-
-    setTimeout(() => {
-      setProgress(50); // Gradual increase
-    }, 6000);
-
-    setTimeout(() => {
-      setProgress(65); // Continuing gradual increase
-    }, 9000);
-
-    setTimeout(() => {
-      setProgress(75); // Slower increase
-    }, 13000);
-
-    setTimeout(() => {
-      setProgress(85); // Slower increase
-    }, 15000);
-
-    setTimeout(() => {
-      setProgress(92); // Final push
-    }, 16000);
-
-    setTimeout(() => {
-      setProgress(100); // Complete loading
-    }, 17000);
+    for (let i = 0; i < allCodes.length; i += BATCH_SIZE) {
+      setTimeout(() => {
+        console.log("Getting " + i + " to " + (i + BATCH_SIZE));
+        const codeBatch = allCodes.slice(i, BATCH_SIZE + i);
+        mutate({ codes: codeBatch });
+        setProgress((i / allCodes.length) * 100); // Initial progress
+      }, i * 1000);
+    }
   };
-
-  useEffect(() => {
-    if (data) sendResults(data);
-  }, [data, sendResults]);
 
   return (
     <form onSubmit={submit}>
@@ -125,6 +103,7 @@ export function CodeForm({
         {status === "pending" && (
           <Progress className="bg-blue-800" value={progress} />
         )}
+        {error && <div className="text-sm text-red-700">{error.message}</div>}
       </div>
     </form>
   );

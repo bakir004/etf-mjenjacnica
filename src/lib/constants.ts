@@ -24,3 +24,5 @@ export const subjectColorHex: Record<string, string> = {
   NA: "#eab308",
   SP: "#e11d48",
 };
+
+export const BATCH_SIZE = 4;

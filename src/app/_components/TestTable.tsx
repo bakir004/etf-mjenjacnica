@@ -12,11 +12,12 @@ import aspTests from "../../tests/asp.json";
 import naTests from "../../tests/na.json";
 import { CodeForm } from "./CodeForm";
 import { SelectForm } from "./Select";
+import { BATCH_SIZE } from "~/lib/constants";
 
 export function TestTable() {
-  const [outputs, setOutputs] = useState<{ output: string; error: string }[]>(
-    [],
-  );
+  const [outputs, setOutputs] = useState<
+    { output: string; error: string; id: number }[]
+  >([]);
   const [tests, setTests] = useState<any>(aspTests.tests);
   const formattedTests: {
     id: number;
@@ -62,9 +63,19 @@ export function TestTable() {
   const resetOutputs = () => {
     setOutputs([]);
   };
-  const getResults = (results: Array<{ output: string; error: string }>) => {
-    setOutputs(results);
+  const getResults = (
+    results: Array<{ output: string; error: string; id: number }>,
+  ) => {
+    setOutputs((prevOutputs) => {
+      const unsortedOutputs = [...prevOutputs, ...results];
+      const sortedOutputs = unsortedOutputs.sort((a, b) =>
+        a.id > b.id ? 1 : a.id < b.id ? -1 : 0,
+      );
+      console.log(sortedOutputs);
+      return sortedOutputs;
+    });
   };
+
   const handleSubjectChange = (v: string) => {
     if (v === "NA") setTests(naTests.tests);
     else setTests(aspTests.tests);

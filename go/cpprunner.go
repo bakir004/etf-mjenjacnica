@@ -5,64 +5,70 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 	"net/http"
+	"os"
 	"os/exec"
-	"time"
 	"sync"
+	"time"
 )
 
-type CodeRequest struct {
-	Code string `json:"code"`
+// Code represents the code structure with an Id and Code string
+type Code struct {
+	Id   int    `json:"id"`   // Unique identifier for the code
+	Code string `json:"code"` // C++ code to execute
 }
 
+// CodeResponse includes an Id, Output, and Error fields
 type CodeResponse struct {
-	Output string `json:"output"`
-	Error  string `json:"error,omitempty"`
+	Id     int    `json:"id"`     // Unique identifier for the code
+	Output string `json:"output"` // Output of the code execution
+	Error  string `json:"error,omitempty"` // Error if any occurred during execution
 }
 
-func runMultipleCppCodes(codes []string) []CodeResponse {
-	results := make([]CodeResponse, len(codes))
+func runMultipleCppCodes(codes []Code) []CodeResponse {
+	var results []CodeResponse // Flexible slice for appending results
 	var wg sync.WaitGroup
 
 	// Limit the number of concurrent executions to avoid CPU overload on a single core
 	concurrencyLimit := 3
 	semaphore := make(chan struct{}, concurrencyLimit)
 
-	for i, code := range codes {
+	for _, codeObj := range codes {
 		wg.Add(1)
 
-		go func(i int, code string) {
+		go func(codeObj Code) {
 			defer wg.Done()
 
 			// Acquire a slot in the semaphore
 			semaphore <- struct{}{}
 			defer func() { <-semaphore }()
 
-			results[i] = runCppCode(code)
-		}(i, code)
+			// Run the code and append the result to the results slice
+			result := runCppCode(codeObj.Id, codeObj.Code)
+			results = append(results, result)
+		}(codeObj)
 	}
 
 	wg.Wait()
 	return results
 }
 
-func runCppCode(code string) CodeResponse {
+func runCppCode(id int, code string) CodeResponse {
 	// Step 1: Create a temporary C++ file
 	tmpFile, err := os.CreateTemp("", "*.cpp")
 	if err != nil {
-		return CodeResponse{"", fmt.Sprintf("Failed to create temp file: %v", err)}
+		return CodeResponse{id, "", fmt.Sprintf("Failed to create temp file: %v", err)}
 	}
 	defer os.Remove(tmpFile.Name()) // Clean up the temp file after execution
 
 	// Step 2: Write the C++ code to the temporary file
 	if _, err := tmpFile.WriteString(code); err != nil {
-		return CodeResponse{"", fmt.Sprintf("Failed to write code to file: %v", err)}
+		return CodeResponse{id, "", fmt.Sprintf("Failed to write code to file: %v", err)}
 	}
 
 	// Ensure the file is closed before running commands
 	if err := tmpFile.Close(); err != nil {
-		return CodeResponse{"", fmt.Sprintf("Failed to close temp file: %v", err)}
+		return CodeResponse{id, "", fmt.Sprintf("Failed to close temp file: %v", err)}
 	}
 
 	// Step 3: Compile the C++ code
@@ -73,7 +79,7 @@ func runCppCode(code string) CodeResponse {
 
 	// Run the compile command
 	if err := compileCmd.Run(); err != nil {
-		return CodeResponse{"", fmt.Sprintf("Compilation Error: %s", compileErrBuf.String())}
+		return CodeResponse{id, "", fmt.Sprintf("Compilation Error: %s", compileErrBuf.String())}
 	}
 
 	defer os.Remove(compiledFile) // Clean up the compiled output file
@@ -92,20 +98,20 @@ func runCppCode(code string) CodeResponse {
 
 	// Check if the error is due to a timeout
 	if ctx.Err() == context.DeadlineExceeded {
-		return CodeResponse{"", "Execution timed out after 10 seconds"}
+		return CodeResponse{id, "", "Execution timed out after 10 seconds"}
 	}
 
 	if err != nil {
-		return CodeResponse{"", fmt.Sprintf("Execution Error: %s", errBuf.String())}
+		return CodeResponse{id, "", fmt.Sprintf("Execution Error: %s", errBuf.String())}
 	}
 
 	// Step 6: Return the output
-	return CodeResponse{outBuf.String(), ""}
+	return CodeResponse{id, outBuf.String(), ""}
 }
 
 func handleCodeExecution(w http.ResponseWriter, r *http.Request) {
 	var req struct {
-		Codes []string `json:"codes"`
+		Codes []Code `json:"codes"` // Updated to accept an array of Code objects
 	}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
