@@ -23,7 +23,7 @@ export default function Navbar() {
   return (
     <nav className="relative z-10 flex h-12 w-full items-center gap-4 bg-primary-foreground px-4 py-2 font-mono">
       <Link href="/" className="font-black md:text-xl">
-        Zmanger v0.3
+        Zmanger v0.4
       </Link>
       <div className="ml-auto hidden items-center gap-4 sm:flex">
         <Link href={"/ispomoc"}>
