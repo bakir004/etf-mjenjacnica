@@ -77,7 +77,7 @@ export function CodeForm({
         const codeBatch = allCodes.slice(i, BATCH_SIZE + i);
         mutate({ codes: codeBatch });
         setProgress((i / allCodes.length) * 100); // Initial progress
-      }, i * 500);
+      }, i * 400);
     }
   };
 
@@ -100,9 +100,7 @@ export function CodeForm({
           {status === "pending" && <LoadingSpinnerSVG></LoadingSpinnerSVG>}
           Pokreni
         </Button>
-        {status === "pending" && (
-          <Progress className="bg-blue-800" value={progress} />
-        )}
+        <Progress className="bg-blue-800" value={progress} />
         {error && <div className="text-sm text-red-700">{error.message}</div>}
       </div>
     </form>

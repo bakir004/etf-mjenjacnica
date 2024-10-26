@@ -43,10 +43,17 @@ export default async function AspPage() {
               JSONa koji je postavljen na c2. Uvijek će biti oblik fajla
               provjeren, ali se možda slučajno desi previd.
             </li>
+            <li>
+              Ako vam test ne prolazi (u boxu za vaš izlaz piše: &quot;Execution
+              error:&quot;, bez objašnjenja), to je greška koju kompajler nije
+              uspio dijagnosticirati. U tom slučaju, ova stranica ne može
+              utvrditi tačnost (ili netačnost) tog testa. U slučaju sličnih
+              neobičnosti, testirajte na zamgeru kao dosad.
+            </li>
           </ul>
           <p className="mt-2 italic">
-            U slučaju čekanja testova duže od pola minute, vjerovatno je spor
-            server ili se zakrčio. Prijavite problem tako da se server može
+            U slučaju čekanja testova duže od minute, vjerovatno je spor server
+            ili se zakrčio. Prijavite problem tako da se server može
             restartovati/ubrzati.
           </p>
         </main>

@@ -80,7 +80,7 @@ export function TestTable() {
     else setTests(aspTests.tests);
   };
   return (
-    <>
+    <div className="mt-2">
       <SelectForm
         name="forma"
         onChange={(v) => handleSubjectChange(v)}
@@ -89,7 +89,7 @@ export function TestTable() {
       ></SelectForm>
       <CodeForm tests={tests} reset={resetOutputs} sendResults={getResults} />
       {outputs.length > 0 && (
-        <span className={`mt-4`}>
+        <div className={`mt-4`}>
           Prošlo:{" "}
           {
             formattedTests.filter(
@@ -97,7 +97,7 @@ export function TestTable() {
             ).length
           }
           /{formattedTests.length}
-        </span>
+        </div>
       )}
       {outputs.length > 0 && (
         <Table className="mt-4">
@@ -186,6 +186,6 @@ export function TestTable() {
           </TableBody>
         </Table>
       )}
-    </>
+    </div>
   );
 }
