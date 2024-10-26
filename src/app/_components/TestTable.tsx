@@ -18,7 +18,7 @@ export function TestTable() {
     [],
   );
   const [tests, setTests] = useState<any>(aspTests.tests);
-  let formattedTests: {
+  const formattedTests: {
     id: number;
     code: string;
     expect: string;

@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import LoadingSpinnerSVG from "./Spinner";
-import aspTests from "../../tests/asp.json";
-import naTests from "../../tests/na.json";
 import { Progress } from "~/components/ui/progress";
 
 export function CodeForm({
@@ -104,7 +102,7 @@ export function CodeForm({
 
   useEffect(() => {
     if (data) sendResults(data);
-  }, [data]);
+  }, [data, sendResults]);
 
   return (
     <form onSubmit={submit}>
