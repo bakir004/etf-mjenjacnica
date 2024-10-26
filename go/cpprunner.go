@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os/exec"
 	"time"
+	"sync"
 )
 
 type CodeRequest struct {
@@ -20,40 +21,68 @@ type CodeResponse struct {
 	Error  string `json:"error,omitempty"`
 }
 
-func runCppCode(code string) (string, string) {
+func runMultipleCppCodes(codes []string) []CodeResponse {
+	results := make([]CodeResponse, len(codes))
+	var wg sync.WaitGroup
+
+	// Limit the number of concurrent executions to avoid CPU overload on a single core
+	concurrencyLimit := 3
+	semaphore := make(chan struct{}, concurrencyLimit)
+
+	for i, code := range codes {
+		wg.Add(1)
+
+		go func(i int, code string) {
+			defer wg.Done()
+
+			// Acquire a slot in the semaphore
+			semaphore <- struct{}{}
+			defer func() { <-semaphore }()
+
+			results[i] = runCppCode(code)
+		}(i, code)
+	}
+
+	wg.Wait()
+	return results
+}
+
+func runCppCode(code string) CodeResponse {
 	// Step 1: Create a temporary C++ file
 	tmpFile, err := os.CreateTemp("", "*.cpp")
 	if err != nil {
-		return "", fmt.Sprintf("Failed to create temp file: %v", err)
+		return CodeResponse{"", fmt.Sprintf("Failed to create temp file: %v", err)}
 	}
 	defer os.Remove(tmpFile.Name()) // Clean up the temp file after execution
 
 	// Step 2: Write the C++ code to the temporary file
 	if _, err := tmpFile.WriteString(code); err != nil {
-		return "", fmt.Sprintf("Failed to write code to file: %v", err)
+		return CodeResponse{"", fmt.Sprintf("Failed to write code to file: %v", err)}
 	}
 
 	// Ensure the file is closed before running commands
 	if err := tmpFile.Close(); err != nil {
-		return "", fmt.Sprintf("Failed to close temp file: %v", err)
+		return CodeResponse{"", fmt.Sprintf("Failed to close temp file: %v", err)}
 	}
 
 	// Step 3: Compile the C++ code
-	compileCmd := exec.Command("g++", tmpFile.Name(), "-o", tmpFile.Name()+".out")
-	var compileOutBuf, compileErrBuf bytes.Buffer
-	compileCmd.Stdout = &compileOutBuf
+	compiledFile := tmpFile.Name() + ".out"
+	compileCmd := exec.Command("g++", tmpFile.Name(), "-o", compiledFile)
+	var compileErrBuf bytes.Buffer
 	compileCmd.Stderr = &compileErrBuf
 
 	// Run the compile command
 	if err := compileCmd.Run(); err != nil {
-		return "", fmt.Sprintf("Compilation Error: %s, %s", compileErrBuf.String(), err)
+		return CodeResponse{"", fmt.Sprintf("Compilation Error: %s", compileErrBuf.String())}
 	}
 
+	defer os.Remove(compiledFile) // Clean up the compiled output file
+
 	// Step 4: Run the compiled output with a timeout
-	ctx, cancel := context.WithTimeout(context.Background(), 7*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	runCmd := exec.CommandContext(ctx, tmpFile.Name()+".out")
+	runCmd := exec.CommandContext(ctx, compiledFile)
 	var outBuf, errBuf bytes.Buffer
 	runCmd.Stdout = &outBuf
 	runCmd.Stderr = &errBuf
@@ -63,36 +92,33 @@ func runCppCode(code string) (string, string) {
 
 	// Check if the error is due to a timeout
 	if ctx.Err() == context.DeadlineExceeded {
-		return "", "Execution timed out after 7 seconds"
+		return CodeResponse{"", "Execution timed out after 10 seconds"}
 	}
 
 	if err != nil {
-		return "", fmt.Sprintf("Execution Error: %s, %s", errBuf.String(), err)
+		return CodeResponse{"", fmt.Sprintf("Execution Error: %s", errBuf.String())}
 	}
 
-	// Clean up the compiled output file
-	os.Remove(tmpFile.Name() + ".out")
-
 	// Step 6: Return the output
-	return outBuf.String(), ""
+	return CodeResponse{outBuf.String(), ""}
 }
 
 func handleCodeExecution(w http.ResponseWriter, r *http.Request) {
-	var req CodeRequest
+	var req struct {
+		Codes []string `json:"codes"`
+	}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
 
-	output, compileErr := runCppCode(req.Code)
-	resp := CodeResponse{
-		Output: output,
-		Error:  compileErr,
-	}
+	// Execute each code and gather results
+	results := runMultipleCppCodes(req.Codes)
 
+	// Set response header and encode the results as JSON
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	json.NewEncoder(w).Encode(results)
 }
 
 func main() {

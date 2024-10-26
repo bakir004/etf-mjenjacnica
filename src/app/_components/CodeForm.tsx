@@ -3,22 +3,26 @@ import React, { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import LoadingSpinnerSVG from "./Spinner";
-import jsonTests from "../../tests/asp.json";
+import aspTests from "../../tests/asp.json";
+import naTests from "../../tests/na.json";
+import { Progress } from "~/components/ui/progress";
 
 export function CodeForm({
-  sendOutputAndError,
+  sendResults,
   reset,
+  tests,
 }: {
-  sendOutputAndError: (output: string, error: string) => void;
+  sendResults: (results: Array<{ output: string; error: string }>) => void;
   reset: () => void;
+  tests: any;
 }) {
-  const tests = jsonTests.tests;
-
   const [code, setCode] = useState<string>("");
   const mutation = api.coderunner.getAll.useMutation();
   const { mutate, data, status } = mutation;
+  const [progress, setProgress] = useState(0);
 
   const submit = (event: React.FormEvent) => {
+    setProgress(0);
     reset();
     event.preventDefault();
 
@@ -28,7 +32,7 @@ export function CodeForm({
     }
 
     const allCodes: string[] = [];
-    tests.forEach((item) => {
+    tests.forEach((item: any) => {
       let currentCode = "";
       (item?.tools[0] &&
         typeof item.tools[0] !== "string" &&
@@ -60,19 +64,46 @@ export function CodeForm({
         ? (currentCode += "\n}")
         : "";
       allCodes.push(currentCode);
-      console.log(currentCode);
     });
 
-    allCodes.forEach((currentCode, i) => {
-      setTimeout(() => {
-        mutate({ code: currentCode });
-      }, i * 1000);
-    });
+    mutate({ codes: allCodes });
+    // Assuming you have a setProgress function defined somewhere
+
+    setTimeout(() => {
+      setProgress(15); // Initial progress
+    }, 1000);
+
+    setTimeout(() => {
+      setProgress(35); // Increase more initially
+    }, 2500);
+
+    setTimeout(() => {
+      setProgress(50); // Gradual increase
+    }, 6000);
+
+    setTimeout(() => {
+      setProgress(65); // Continuing gradual increase
+    }, 9000);
+
+    setTimeout(() => {
+      setProgress(75); // Slower increase
+    }, 13000);
+
+    setTimeout(() => {
+      setProgress(85); // Slower increase
+    }, 15000);
+
+    setTimeout(() => {
+      setProgress(92); // Final push
+    }, 16000);
+
+    setTimeout(() => {
+      setProgress(100); // Complete loading
+    }, 17000);
   };
 
   useEffect(() => {
-    if (data) sendOutputAndError(data.output, data.error);
-    console.log(data?.output);
+    if (data) sendResults(data);
   }, [data]);
 
   return (
@@ -85,16 +116,19 @@ export function CodeForm({
         placeholder="Unesite svoj C++ kod ovdje..."
       ></textarea>
 
-      <Button
-        type="submit"
-        className="flex items-center gap-1 bg-blue-900 text-white hover:bg-blue-800"
-        disabled={status === "pending"}
-      >
-        {status === "pending" && <LoadingSpinnerSVG></LoadingSpinnerSVG>}
-        Pokreni
-      </Button>
-
-      {data?.error && <p>Error: {data?.error}</p>}
+      <div className="flex items-center gap-2">
+        <Button
+          type="submit"
+          className="flex items-center gap-1 bg-blue-900 text-white hover:bg-blue-800"
+          disabled={status === "pending"}
+        >
+          {status === "pending" && <LoadingSpinnerSVG></LoadingSpinnerSVG>}
+          Pokreni
+        </Button>
+        {status === "pending" && (
+          <Progress className="bg-blue-800" value={progress} />
+        )}
+      </div>
     </form>
   );
 }

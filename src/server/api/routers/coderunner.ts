@@ -5,12 +5,12 @@ export const coderunnerRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(
       z.object({
-        code: z.string().min(1), // Validates that 'code' is a non-empty string
+        codes: z.array(z.string()).min(1), // Validates that 'codes' is a non-empty array of strings
       }),
     )
     .mutation(async ({ input }) => {
       try {
-        const jsonInput = JSON.stringify({ code: input.code });
+        const jsonInput = JSON.stringify({ codes: input.codes });
         const response = await fetch("http://167.99.134.197:8080/api/v1/run", {
           method: "POST",
           headers: {
@@ -24,19 +24,22 @@ export const coderunnerRouter = createTRPCRouter({
           throw new Error(`Failed to call external API: ${errorText}`);
         }
 
-        const result: { output: string; error: string } = await response.json();
+        const result: Array<{ output: string; error: string }> =
+          await response.json();
 
-        return {
-          output: result.output ?? "",
-          error: result.error ?? "",
-        };
+        return result.map((res) => ({
+          output: res.output ?? "",
+          error: res.error ?? "",
+        }));
       } catch (error: any) {
         console.error("API call error:", error.message || error);
 
-        return {
-          output: "",
-          error: "An error occurred while processing the request.",
-        };
+        return [
+          {
+            output: "",
+            error: "An error occurred while processing the request.",
+          },
+        ];
       }
     }),
 });
