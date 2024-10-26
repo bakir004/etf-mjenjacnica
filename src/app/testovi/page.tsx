@@ -11,13 +11,15 @@ export default async function AspPage() {
             Testovi za trenutnu zadaću iz ASP/NA
           </h1>
 
-          <p>
+          <div className="font-bold text-blue-400">
             Odaberite predmet, unesite svoj C++ kod u polje ispod, zatim
-            kliknite na dugme &quot;Pokreni&quot;. (Nemojte unositi funkciju
-            main!)
-          </p>
+            kliknite na dugme &quot;Pokreni&quot;.{" "}
+            <p className="font-bold text-red-500">
+              (Nemojte unositi funkciju main!)
+            </p>
+          </div>
           <TestTable />
-          <p className="mt-2 italic">
+          <p className="mt-2 font-bold italic">
             Napomene: Ovi testovi nisu 100% mjerodavni iz sljedećih razloga:
           </p>
           <ul className="ml-4 mt-2 list-disc italic">
@@ -51,7 +53,7 @@ export default async function AspPage() {
               neobičnosti, testirajte na zamgeru kao dosad.
             </li>
           </ul>
-          <p className="mt-2 italic">
+          <p className="mt-2">
             U slučaju čekanja testova duže od minute, vjerovatno je spor server
             ili se zakrčio. Prijavite problem tako da se server može
             restartovati/ubrzati.
