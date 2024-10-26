@@ -64,8 +64,7 @@ export function CodeForm({
       allCodes.push(currentCode);
     });
 
-    mutate({ codes: allCodes });
-    // Assuming you have a setProgress function defined somewhere
+    mutate({ codes: allCodes.splice(0, 3) });
 
     setTimeout(() => {
       setProgress(15); // Initial progress

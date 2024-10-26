@@ -32,11 +32,8 @@ export default function Navbar() {
         <Link href={"/graf"}>
           <CommitIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></CommitIcon>
         </Link>
-        <Link href={"/asp"}>
+        <Link href={"/testovi"}>
           <ReaderIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></ReaderIcon>
-        </Link>
-        <Link href={"/na"}>
-          <RocketIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></RocketIcon>
         </Link>
         <SignedOut>
           <SignInButton>
@@ -84,19 +81,10 @@ export default function Navbar() {
               <SheetClose asChild>
                 <Link
                   className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
-                  href={"/asp"}
+                  href={"/testovi"}
                 >
                   <ReaderIcon className="h-4 w-4"></ReaderIcon>
-                  ASP testovi
-                </Link>
-              </SheetClose>
-              <SheetClose asChild>
-                <Link
-                  className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
-                  href={"/na"}
-                >
-                  <RocketIcon className="h-4 w-4"></RocketIcon>
-                  NA testovi
+                  Zamger testovi
                 </Link>
               </SheetClose>
             </div>

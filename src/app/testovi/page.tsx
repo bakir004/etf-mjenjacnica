@@ -1,4 +1,4 @@
-import { TestTable } from "./../_components/TestTable";
+import { TestTable } from "../_components/TestTable";
 import { HydrateClient } from "~/trpc/server";
 import SuspenseWrapper from "../_components/LoadingSuspenseWrapper";
 
@@ -37,6 +37,11 @@ export default async function AspPage() {
               direktno poređenje izlaza vraća false zbog nekih viška razmaka
               koji se ne vide na zamgeru. U tom slučaju manuelno pogledajte da
               li vam se izlazi poklapaju.
+            </li>
+            <li>
+              Moguće je da se neki testovi ne pojave zbog nepravilnog oblika
+              JSONa koji je postavljen na c2. Uvijek će biti oblik fajla
+              provjeren, ali se možda slučajno desi previd.
             </li>
           </ul>
           <p className="mt-2 italic">
