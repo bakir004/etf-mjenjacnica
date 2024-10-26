@@ -30,7 +30,7 @@ func runMultipleCppCodes(codes []Code) []CodeResponse {
 	var wg sync.WaitGroup
 
 	// Limit the number of concurrent executions to avoid CPU overload on a single core
-	concurrencyLimit := 3
+	concurrencyLimit := 5
 	semaphore := make(chan struct{}, concurrencyLimit)
 
 	for _, codeObj := range codes {

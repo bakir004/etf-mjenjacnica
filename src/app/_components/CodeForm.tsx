@@ -77,7 +77,7 @@ export function CodeForm({
         const codeBatch = allCodes.slice(i, BATCH_SIZE + i);
         mutate({ codes: codeBatch });
         setProgress((i / allCodes.length) * 100); // Initial progress
-      }, i * 1000);
+      }, i * 500);
     }
   };
 
