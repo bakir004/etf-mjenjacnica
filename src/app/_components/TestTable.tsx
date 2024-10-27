@@ -115,7 +115,7 @@ export function TestTable() {
             </TableRow>
           </TableHeader>
           <TableBody className="font-mono">
-            {tests.map((item: any, i: number) => (
+            {outputs.map((item: any, i: number) => (
               <TableRow
                 key={i}
                 className={`border-b border-neutral-500 ${
@@ -133,30 +133,30 @@ export function TestTable() {
                     whiteSpace: "pre-wrap",
                   }}
                 >
-                  {(item?.tools[0] &&
-                    typeof item.tools[0] !== "string" &&
-                    item.tools[0].patch?.[1]?.position === "above_main") ||
-                  (item?.tools[0] &&
-                    typeof item.tools[0] !== "string" &&
-                    item.tools[0].patch?.[1]?.position === "top_of_file")
-                    ? item?.tools[0] &&
-                      typeof item.tools[0] !== "string" &&
-                      item.tools[0].patch?.[1]?.code +
+                  {(tests[i]?.tools[0] &&
+                    typeof tests[i].tools[0] !== "string" &&
+                    tests[i].tools[0].patch?.[1]?.position === "above_main") ||
+                  (tests[i]?.tools[0] &&
+                    typeof tests[i].tools[0] !== "string" &&
+                    tests[i].tools[0].patch?.[1]?.position === "top_of_file")
+                    ? tests[i]?.tools[0] &&
+                      typeof tests[i].tools[0] !== "string" &&
+                      tests[i].tools[0].patch?.[1]?.code +
                         "\n\n//Vaš kod ide ovdje...\n\n"
                     : null}
-                  {item?.tools[0] &&
-                  typeof item.tools[0] !== "string" &&
-                  item.tools[0].patch?.[0]?.position === "main"
+                  {tests[i]?.tools[0] &&
+                  typeof tests[i].tools[0] !== "string" &&
+                  tests[i].tools[0].patch?.[0]?.position === "main"
                     ? "int main() {\n"
                     : null}
                   <div className="ml-6">
-                    {item?.tools[0] &&
-                      typeof item.tools[0] !== "string" &&
-                      item.tools[0].patch?.[0]?.code}
+                    {tests[i]?.tools[0] &&
+                      typeof tests[i].tools[0] !== "string" &&
+                      tests[i].tools[0].patch?.[0]?.code}
                   </div>
-                  {item?.tools[0] &&
-                  typeof item.tools[0] !== "string" &&
-                  item.tools[0].patch?.[0]?.position === "main"
+                  {tests[i]?.tools[0] &&
+                  typeof tests[i].tools[0] !== "string" &&
+                  tests[i].tools[0].patch?.[0]?.position === "main"
                     ? "}"
                     : null}
                 </TableCell>
@@ -166,9 +166,9 @@ export function TestTable() {
                     whiteSpace: "pre-wrap",
                   }}
                 >
-                  {item?.tools[2] &&
-                    typeof item.tools[2] !== "string" &&
-                    item.tools[2]?.execute?.expect}
+                  {tests[i]?.tools[2] &&
+                    typeof tests[i].tools[2] !== "string" &&
+                    tests[i].tools[2]?.execute?.expect}
                 </TableCell>
                 <TableCell
                   className="border-r border-neutral-500"
@@ -176,9 +176,9 @@ export function TestTable() {
                     whiteSpace: "pre-wrap",
                   }}
                 >
-                  {outputs[i]?.output && outputs[i].output.length > 0
-                    ? outputs[i]?.output
-                    : outputs[i]?.error}
+                  {item?.output && item.output.length > 0
+                    ? item?.output
+                    : item?.error}
                 </TableCell>
               </TableRow>
             ))}
