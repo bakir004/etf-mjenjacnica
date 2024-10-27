@@ -76,7 +76,8 @@ export function CodeForm({
         console.log("Getting " + i + " to " + (i + BATCH_SIZE));
         const codeBatch = allCodes.slice(i, BATCH_SIZE + i);
         mutate({ codes: codeBatch });
-        setProgress((i / allCodes.length) * 100); // Initial progress
+        setProgress(((i + BATCH_SIZE) / allCodes.length) * 100);
+        console.log(((i + BATCH_SIZE) / allCodes.length) * 100);
       }, i * 400);
     }
   };
@@ -95,9 +96,11 @@ export function CodeForm({
         <Button
           type="submit"
           className="flex items-center gap-1 bg-blue-900 text-white hover:bg-blue-800"
-          disabled={status === "pending"}
+          disabled={status === "pending" || (progress > 0 && progress < 90)}
         >
-          {status === "pending" && <LoadingSpinnerSVG></LoadingSpinnerSVG>}
+          {(status === "pending" || (progress > 0 && progress < 90)) && (
+            <LoadingSpinnerSVG></LoadingSpinnerSVG>
+          )}
           Pokreni
         </Button>
         <Progress className="bg-blue-800" value={progress} />
