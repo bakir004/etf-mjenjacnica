@@ -1,0 +1,161 @@
+{
+    "id": 1275,
+    "name": "Algoritmi i strukture podataka (2016\/2017), Pripremna Zadaca Za Tutorijal 2, zadatak 1",
+    "languages": [
+        "C++"
+    ],
+    "tools": {
+        "compile": {
+            "require": "g++",
+            "features": [
+                "optimize",
+                "warn",
+                "pedantic",
+                "C++11"
+            ]
+        },
+        "compile[debug]": {
+            "require": "g++",
+            "features": [
+                "debug",
+                "C++11",
+                "asan"
+            ]
+        },
+        "execute": {
+            "require": "asan"
+        },
+        "debug": [],
+        "profile[asan]": {
+            "require": "asan",
+            "fast": true,
+            "input_file": "stderr.txt"
+        }
+    },
+    "tests": [
+        {
+            "id": 1276,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "Stek<int> s;\nfor (int i(1); i<=5; i++)\n\ts.stavi(i);\nstd::cout << s.brojElemenata() << \" \" << s.vrh() << \" \";\ns.brisi();\nfor (int i(1); i<=5; i++)\n\ts.stavi(i);\nstd::cout << s.brojElemenata() << \" \";\nfor (int i(1); i<=5; i++)\n\tstd::cout << s.skini() << \" \";\nstd::cout << s.brojElemenata() << \" \";\nfor (int i(1); i<=5; i++)\n\ts.stavi(i);\nstd::cout << s.brojElemenata() << \" \" << s.vrh();",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "5 5 5 5 4 3 2 1 0 5 5"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        },
+        {
+            "id": 1283,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "int brel;\nStek<int> s;\nfor (int i(1); i<=5; i++)\n\ts.stavi(i);\n{\n        \/\/ Konstruktor kopije\n\tStek<int> s2(s);\n\tStek<int> s3;\n        \/\/ Operator dodjele\n\t(s3=s).brojElemenata();\n        \/\/ Destruktivna samododjela\n        (s=s).brojElemenata();\n\n\ts.skini();\n\tbrel = s2.brojElemenata();\n\tfor (int i(0); i<brel; i++)\n\t\tstd::cout << s2.skini() << \" \";\n\tbrel = s3.brojElemenata();\n\tfor (int i(0); i<brel; i++)\n\t\tstd::cout << s3.skini() << \" \";\n}\nbrel = s.brojElemenata();\nfor (int i(0); i<brel; i++)\n\tstd::cout << s.skini() << \" \";",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "5 4 3 2 1 5 4 3 2 1 4 3 2 1"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        },
+        {
+            "id": 1284,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "\/\/ Test performansi (sve metode trebaju biti O(1) )\nStek<int> s;\nfor (int i(0); i<100000; i++)\ns.stavi(i);\nstd::cout << s.vrh() << std::endl;\nfor (int i(0); i<99999; i++)\ns.skini();\nstd::cout << s.vrh();",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "99999\n0"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        },
+        {
+            "id": 1285,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "    Stek<int> s;\nfor (int i(1); i<=5; i++)\n\ts.stavi(i);\n\ttry{\nfor (int i(0); i<=6;i++)\n    s.skini();\n\t}\n\tcatch(...){\n\t    cout<<\"Izuzetak\";   \n\t}",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "Izuzetak"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        },
+        {
+            "id": 1286,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "Stek<int> s;\nfor (int i(0); i<5; i++)\ns.stavi(i);\nstd::cout << s.vrh()<<\" \";\ns.vrh()++;\nstd::cout << s.vrh();",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "4 5"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        }
+    ],
+    "version": "3",
+    "prepare": [
+        "compile"
+    ]
+}
