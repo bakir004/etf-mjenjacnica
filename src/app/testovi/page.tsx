@@ -8,7 +8,7 @@ export default async function AspPage() {
       <HydrateClient>
         <main className="mx-auto max-w-[1280px] p-4 sm:mt-12">
           <h1 className="mb-4 text-lg font-bold sm:text-2xl">
-            Testovi za trenutnu zadaću iz ASP/NA
+            Testovi za zadaće iz ASP/NA
           </h1>
 
           <div className="font-bold text-blue-400">

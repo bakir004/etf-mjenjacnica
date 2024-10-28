@@ -25,15 +25,27 @@ export default function Navbar() {
       <Link href="/" className="font-black md:text-xl">
         Zmanger v0.4
       </Link>
-      <div className="ml-auto hidden items-center gap-4 sm:flex">
-        <Link href={"/ispomoc"}>
-          <QuestionMarkCircledIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></QuestionMarkCircledIcon>
+      <div className="ml-auto hidden items-center gap-2 sm:flex">
+        <Link
+          href={"/ispomoc"}
+          className="flex items-center gap-2 rounded bg-secondary px-2 py-1 text-sm transition hover:scale-110 hover:bg-secondary/80"
+        >
+          Pomoć
+          <QuestionMarkCircledIcon className="h-4 w-4"></QuestionMarkCircledIcon>
         </Link>
-        <Link href={"/graf"}>
-          <CommitIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></CommitIcon>
+        <Link
+          href={"/graf"}
+          className="flex items-center gap-2 rounded bg-secondary px-2 py-1 text-sm transition hover:scale-110 hover:bg-secondary/80"
+        >
+          Graf
+          <CommitIcon className="h-4 w-4"></CommitIcon>
         </Link>
-        <Link href={"/testovi"}>
-          <ReaderIcon className="h-6 w-6 cursor-pointer rounded bg-secondary p-0.5 text-white hover:bg-secondary/80"></ReaderIcon>
+        <Link
+          href={"/testovi"}
+          className="flex items-center gap-2 rounded bg-secondary px-2 py-1 text-sm transition hover:scale-110 hover:bg-secondary/80"
+        >
+          Testovi
+          <ReaderIcon className="h-4 w-4"></ReaderIcon>
         </Link>
         <SignedOut>
           <SignInButton>
