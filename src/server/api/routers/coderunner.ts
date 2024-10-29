@@ -41,7 +41,7 @@ export const coderunnerRouter = createTRPCRouter({
             data: {
               senderName: input.senderName,
               senderEmail: input.senderEmail,
-              code: input.codes[0]?.code || "",
+              code: input.codes[0]?.code ?? "",
             },
           });
         }

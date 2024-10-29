@@ -25,7 +25,7 @@ export function CodeForm({
       if (data) sendResults(data);
     },
   });
-  const { mutate, data, status, error } = mutation;
+  const { mutate, status, error } = mutation;
   const [progress, setProgress] = useState(0);
 
   const submit = (event: React.FormEvent) => {
@@ -79,8 +79,8 @@ export function CodeForm({
         const codeBatch = allCodes.slice(i, BATCH_SIZE + i);
         mutate({
           codes: codeBatch,
-          senderEmail: user.user?.emailAddresses[0]?.emailAddress || "NULL",
-          senderName: user.user?.fullName || "NULL",
+          senderEmail: user.user?.emailAddresses[0]?.emailAddress ?? "NULL",
+          senderName: user.user?.fullName ?? "NULL",
         });
         setProgress(((i + BATCH_SIZE) / allCodes.length) * 100);
       }, i * 400);
