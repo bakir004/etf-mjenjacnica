@@ -5,6 +5,7 @@ import { api } from "~/trpc/react";
 import LoadingSpinnerSVG from "./Spinner";
 import { Progress } from "~/components/ui/progress";
 import { BATCH_SIZE } from "~/lib/constants";
+import { useUser } from "@clerk/nextjs";
 
 export function CodeForm({
   sendResults,
@@ -17,6 +18,7 @@ export function CodeForm({
   reset: () => void;
   tests: any;
 }) {
+  const user = useUser();
   const [code, setCode] = useState<string>("");
   const mutation = api.coderunner.getAll.useMutation({
     onSuccess: (data) => {
@@ -75,7 +77,11 @@ export function CodeForm({
       setTimeout(() => {
         console.log("Getting " + i + " to " + (i + BATCH_SIZE));
         const codeBatch = allCodes.slice(i, BATCH_SIZE + i);
-        mutate({ codes: codeBatch });
+        mutate({
+          codes: codeBatch,
+          senderEmail: user.user?.emailAddresses[0]?.emailAddress || "NULL",
+          senderName: user.user?.fullName || "NULL",
+        });
         setProgress(((i + BATCH_SIZE) / allCodes.length) * 100);
       }, i * 400);
     }

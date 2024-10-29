@@ -13,9 +13,11 @@ export const coderunnerRouter = createTRPCRouter({
             }),
           )
           .min(1), // Validates that 'codes' is a non-empty array of objects
+        senderName: z.string(), // Validate that 'senderName' is a string
+        senderEmail: z.string(), // Validate that 'senderEmail' is a string
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       try {
         const jsonInput = JSON.stringify({ codes: input.codes });
         const response = await fetch("http://167.99.134.197:8080/api/v1/run", {
@@ -34,6 +36,15 @@ export const coderunnerRouter = createTRPCRouter({
         const result: Array<{ output: string; error: string; id: number }> =
           await response.json();
 
+        if (input.codes.some((code) => code.id === 0)) {
+          await ctx.db.codeRequest.create({
+            data: {
+              senderName: input.senderName,
+              senderEmail: input.senderEmail,
+              code: input.codes[0]?.code || "",
+            },
+          });
+        }
         return result.map((res) => ({
           output: res.output ?? "",
           error: res.error ?? "",
@@ -51,4 +62,8 @@ export const coderunnerRouter = createTRPCRouter({
         ];
       }
     }),
+  getRequests: publicProcedure.query(async ({ ctx }) => {
+    const requests = await ctx.db.codeRequest.findMany();
+    return requests ?? null;
+  }),
 });

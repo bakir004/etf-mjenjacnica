@@ -35,3 +35,11 @@ model Offer {
 
   @@index([creatorId])
 }
+
+model CodeRequest {
+  id          Int      @id @default(autoincrement())
+  code        String
+  senderName  String
+  senderEmail String
+  createdAt   DateTime @default(now())
+}

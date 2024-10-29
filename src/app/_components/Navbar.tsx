@@ -40,13 +40,15 @@ export default function Navbar() {
           Graf
           <CommitIcon className="h-4 w-4"></CommitIcon>
         </Link>
-        <Link
-          href={"/testovi"}
-          className="flex items-center gap-2 rounded bg-secondary px-2 py-1 text-sm transition hover:scale-110 hover:bg-secondary/80"
-        >
-          Testovi
-          <ReaderIcon className="h-4 w-4"></ReaderIcon>
-        </Link>
+        <SignedIn>
+          <Link
+            href={"/testovi"}
+            className="flex items-center gap-2 rounded bg-secondary px-2 py-1 text-sm transition hover:scale-110 hover:bg-secondary/80"
+          >
+            Testovi
+            <ReaderIcon className="h-4 w-4"></ReaderIcon>
+          </Link>
+        </SignedIn>
         <SignedOut>
           <SignInButton>
             <Button className="bg-blue-700 font-bold text-white hover:bg-blue-700/80">
