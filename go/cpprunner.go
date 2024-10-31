@@ -73,7 +73,7 @@ func runCppCode(id int, code string) CodeResponse {
 
 	// Step 3: Compile the C++ code
 	compiledFile := tmpFile.Name() + ".out"
-	compileCmd := exec.Command("g++", tmpFile.Name(), "-o", compiledFile)
+    compileCmd := exec.Command("g++", "-fsanitize=address", tmpFile.Name(), "-o", compiledFile)
 	var compileErrBuf bytes.Buffer
 	compileCmd.Stderr = &compileErrBuf
 

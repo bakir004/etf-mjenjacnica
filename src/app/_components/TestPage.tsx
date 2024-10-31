@@ -33,9 +33,6 @@ export function TestPage({}) {
               testovi mogu obilježiti kao execution timeout nakon 10s.
             </li>
             <li>
-              Ovaj kompajler ne detektuje curenje memorije kao na zamgeru.
-            </li>
-            <li>
               Vrlo moguć je compiler mismatch između ovog i zamgera, ali
               vjerovatno neće biti problem.
             </li>
