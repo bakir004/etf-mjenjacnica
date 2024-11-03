@@ -62,14 +62,27 @@ export default async function Logs() {
                       {logGroup.length}
                     </Badge>{" "}
                     <span className="text-slate-400">
-                      {logGroup[logGroup.length - 1].createdAt.toLocaleString()}{" "}
+                      {logGroup[
+                        logGroup.length - 1
+                      ].createdAt.toLocaleDateString("en-GB", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}{" "}
                       -{" "}
-                      {logGroup[0].createdAt.toLocaleDateString() ===
+                      {logGroup[0].createdAt.toLocaleDateString("en-GB") ===
                       logGroup[
                         logGroup.length - 1
-                      ].createdAt.toLocaleDateString()
-                        ? logGroup[0].createdAt.toLocaleTimeString()
-                        : logGroup[0].createdAt.toLocaleString()}
+                      ].createdAt.toLocaleDateString("en-GB")
+                        ? logGroup[0].createdAt.toLocaleTimeString("en-GB", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : logGroup[0].createdAt.toLocaleDateString("en-GB") +
+                          " " +
+                          logGroup[0].createdAt.toLocaleTimeString("en-GB", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                     </span>{" "}
                     <span className="ml-8">{logGroup[0].senderName}</span>
                   </span>
