@@ -67,6 +67,7 @@ export default async function Logs() {
                       ].createdAt.toLocaleDateString("en-GB", {
                         hour: "2-digit",
                         minute: "2-digit",
+                        second: "2-digit",
                       })}{" "}
                       -{" "}
                       {logGroup[0].createdAt.toLocaleDateString("en-GB") ===
@@ -76,12 +77,14 @@ export default async function Logs() {
                         ? logGroup[0].createdAt.toLocaleTimeString("en-GB", {
                             hour: "2-digit",
                             minute: "2-digit",
+                            second: "2-digit",
                           })
                         : logGroup[0].createdAt.toLocaleDateString("en-GB") +
                           " " +
                           logGroup[0].createdAt.toLocaleTimeString("en-GB", {
                             hour: "2-digit",
                             minute: "2-digit",
+                            second: "2-digit",
                           })}
                     </span>{" "}
                     <span className="ml-8">{logGroup[0].senderName}</span>
