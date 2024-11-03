@@ -16,6 +16,7 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { PersonIcon } from "@radix-ui/react-icons";
+import { Badge } from "~/components/ui/badge";
 
 const mergeConsecutiveLogs = (logs: any) => {
   const mergedLogs: any[] = [];
@@ -55,13 +56,12 @@ export default async function Logs() {
               <AccordionItem value={`item-${i}`} key={i}>
                 <AccordionTrigger>
                   <span>
-                    <span
-                      className={`mr-4 font-bold ${logGroup.length > 20 ? "text-red-600" : logGroup.length > 10 ? "text-orange-400" : logGroup.length === 1 ? "text-blue-400" : "text-green-400"}`}
+                    <Badge
+                      className={`mr-4 rounded-full px-1.5 font-bold text-white ${logGroup.length > 20 ? "bg-red-600" : logGroup.length > 10 ? "bg-orange-600" : logGroup.length === 1 ? "bg-blue-600" : "bg-green-700"}`}
                     >
-                      ({logGroup.length})
-                    </span>{" "}
+                      {logGroup.length}
+                    </Badge>{" "}
                     <span className="text-slate-400">
-                      [
                       {logGroup[logGroup.length - 1].createdAt.toLocaleString()}{" "}
                       -{" "}
                       {logGroup[0].createdAt.toLocaleDateString() ===
@@ -70,7 +70,6 @@ export default async function Logs() {
                       ].createdAt.toLocaleDateString()
                         ? logGroup[0].createdAt.toLocaleTimeString()
                         : logGroup[0].createdAt.toLocaleString()}
-                      ]
                     </span>{" "}
                     <span className="ml-8">{logGroup[0].senderName}</span>
                   </span>
