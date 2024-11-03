@@ -20,7 +20,7 @@ import { PersonIcon } from "@radix-ui/react-icons";
 const mergeConsecutiveLogs = (logs: any) => {
   const mergedLogs: any[] = [];
   let currentGroup: any[] = [];
-  logs.forEach((log: any, i: number) => {
+  logs.forEach((log: any) => {
     delete log.code;
     if (
       currentGroup.length === 0 ||

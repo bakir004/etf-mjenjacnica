@@ -40,6 +40,7 @@ const config = {
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-unused-expressions": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
   },
 };
 module.exports = config;
