@@ -10,6 +10,8 @@ import {
 } from "../../components/ui/table";
 import asp2Tests from "../../tests/asp2.json";
 import asp3Tests from "../../tests/asp3.json";
+import asp4Tests from "../../tests/asp4.json";
+import aspz1Tests from "../../tests/aspz1.json";
 import naTests from "../../tests/na.json";
 import { CodeForm } from "./CodeForm";
 import { SelectForm } from "./Select";
@@ -79,6 +81,8 @@ export function TestTable() {
     if (v === "NA") setTests(naTests.tests);
     else if (v === "ASP-PZ2") setTests(asp2Tests.tests);
     else if (v === "ASP-PZ3") setTests(asp3Tests.tests);
+    else if (v === "ASP-PZ4") setTests(asp4Tests.tests);
+    else if (v === "ASP-Z1") setTests(aspz1Tests.tests);
   };
   return (
     <div className="mt-2">
@@ -86,7 +90,7 @@ export function TestTable() {
         name="forma"
         onChange={(v) => handleSubjectChange(v)}
         placeholder="Predmet"
-        elements={["NA", "ASP-PZ2", "ASP-PZ3"]}
+        elements={["NA", "ASP-PZ2", "ASP-PZ3", "ASP-PZ4", "ASP-Z1"]}
       ></SelectForm>
       <CodeForm tests={tests} reset={resetOutputs} sendResults={getResults} />
       {outputs.length > 0 && (
