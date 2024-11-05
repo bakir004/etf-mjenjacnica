@@ -64,31 +64,60 @@ export default async function Logs() {
                       {logGroup.length}
                     </Badge>{" "}
                     <span className="text-slate-400">
-                      {logGroup[
-                        logGroup.length - 1
-                      ].createdAt.toLocaleDateString("en-GB", {
+                      {new Date(
+                        logGroup[logGroup.length - 1].createdAt.getTime() +
+                          logGroup[
+                            logGroup.length - 1
+                          ].createdAt.getTimezoneOffset() *
+                            60000 +
+                          3600000, // add 1 hour
+                      ).toLocaleDateString("en-GB", {
                         hour: "2-digit",
                         minute: "2-digit",
                         second: "2-digit",
                       })}{" "}
                       -{" "}
-                      {logGroup[0].createdAt.toLocaleDateString("en-GB") ===
-                      logGroup[
-                        logGroup.length - 1
-                      ].createdAt.toLocaleDateString("en-GB")
-                        ? logGroup[0].createdAt.toLocaleTimeString("en-GB", {
+                      {new Date(
+                        logGroup[0].createdAt.getTime() +
+                          logGroup[0].createdAt.getTimezoneOffset() * 60000 +
+                          3600000, // add 1 hour
+                      ).toLocaleDateString("en-GB") ===
+                      new Date(
+                        logGroup[logGroup.length - 1].createdAt.getTime() +
+                          logGroup[
+                            logGroup.length - 1
+                          ].createdAt.getTimezoneOffset() *
+                            60000 +
+                          3600000, // add 1 hour
+                      ).toLocaleDateString("en-GB")
+                        ? new Date(
+                            logGroup[0].createdAt.getTime() +
+                              logGroup[0].createdAt.getTimezoneOffset() *
+                                60000 +
+                              3600000, // add 1 hour
+                          ).toLocaleTimeString("en-GB", {
                             hour: "2-digit",
                             minute: "2-digit",
                             second: "2-digit",
                           })
-                        : logGroup[0].createdAt.toLocaleDateString("en-GB") +
+                        : new Date(
+                            logGroup[0].createdAt.getTime() +
+                              logGroup[0].createdAt.getTimezoneOffset() *
+                                60000 +
+                              3600000, // add 1 hour
+                          ).toLocaleDateString("en-GB") +
                           " " +
-                          logGroup[0].createdAt.toLocaleTimeString("en-GB", {
+                          new Date(
+                            logGroup[0].createdAt.getTime() +
+                              logGroup[0].createdAt.getTimezoneOffset() *
+                                60000 +
+                              3600000, // add 1 hour
+                          ).toLocaleTimeString("en-GB", {
                             hour: "2-digit",
                             minute: "2-digit",
                             second: "2-digit",
                           })}
-                    </span>{" "}
+                    </span>
                     <span className="ml-8">{logGroup[0].senderName}</span>
                   </span>
                 </AccordionTrigger>
