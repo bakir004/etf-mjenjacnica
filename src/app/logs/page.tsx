@@ -25,12 +25,14 @@ const mergeConsecutiveLogs = (logs: any) => {
     delete log.code;
     if (
       currentGroup.length === 0 ||
-      log.senderEmail === currentGroup[0].senderEmail
-    )
+      log.senderEmail === currentGroup[0]?.senderEmail ||
+      log.senderName === currentGroup[0]?.senderName
+    ) {
       currentGroup.push(log);
-    else {
+    } else {
       mergedLogs.push(currentGroup);
       currentGroup = [];
+      currentGroup.push(log);
     }
   });
   return mergedLogs;
