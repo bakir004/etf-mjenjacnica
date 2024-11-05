@@ -41,6 +41,7 @@ const config = {
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-unused-expressions": "off",
     "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
   },
 };
 module.exports = config;
