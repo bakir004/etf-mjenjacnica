@@ -1,0 +1,185 @@
+{
+    "id": 1442,
+    "name": "Algoritmi i strukture podataka (2016\/2017), Zadaca 2, zadatak 1",
+    "languages": [
+        "C++"
+    ],
+    "tools": {
+        "compile": {
+            "require": "g++",
+            "features": [
+                "optimize",
+                "warn",
+                "pedantic",
+                "C++11"
+            ]
+        },
+        "compile[debug]": {
+            "require": "g++",
+            "features": [
+                "debug",
+                "C++11",
+                "asan"
+            ]
+        },
+        "execute": {
+            "require": "asan"
+        },
+        "debug": [],
+        "profile[asan]": {
+            "require": "asan",
+            "fast": true,
+            "input_file": "stderr.txt"
+        }
+    },
+    "tests": [
+        {
+            "id": 1443,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "DvostraniRed<int> dr;\nfor (int i(10); i<=50; i+=10)\n\tdr.staviNaVrh(i);\nstd::cout << dr.brojElemenata() << \" \" << dr.vrh() << \" \";\ndr.brisi();\nfor (int i(10); i<=50; i+=10)\n\tdr.staviNaVrh(i);\nstd::cout << dr.brojElemenata() << \" \";\nfor (int i(1); i<=5; i++)\n\tstd::cout << dr.skiniSaVrha() << \" \";\nstd::cout << dr.brojElemenata();",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "5 50 5 50 40 30 20 10 0"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        },
+        {
+            "id": 1455,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "DvostraniRed<int> dr;\nfor (int i(10); i<=50; i+=10)\n\tdr.staviNaVrh(i);\nstd::cout << dr.brojElemenata() << \" \" << dr.celo() << \" \";\ndr.brisi();\nfor (int i(10); i<=50; i+=10)\n\tdr.staviNaVrh(i);\nstd::cout << dr.brojElemenata() << \" \";\nfor (int i(1); i<=5; i++)\n\tstd::cout << dr.skiniSaCela() << \" \";\nstd::cout << dr.brojElemenata();",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "5 10 5 10 20 30 40 50 0"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        },
+        {
+            "id": 1456,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "int brel;\nDvostraniRed<int> dr;\nfor (int i(1); i<=5; i++)\n\tdr.staviNaVrh(i);\nfor (int i(1); i<=5; i++)\n\tdr.staviNaCelo(i);\n{\n        \/\/ Konstruktor kopije\n\tDvostraniRed<int> dr2(dr);\n\tDvostraniRed<int> dr3;\n        dr3.staviNaVrh(150);\n        \/\/ Operator dodjele\n\tstd::cout << (dr3=dr).brojElemenata() << \" \";\n        \/\/ Destruktivna samododjela\n        std::cout << (dr=dr).brojElemenata() << std::endl;\n\n\tdr.skiniSaVrha();\n\tbrel = dr2.brojElemenata();\n\tfor (int i(0); i<brel; i++)\n\t\tstd::cout << dr2.skiniSaVrha() << \" \";\n\tstd::cout << std::endl;\n\tbrel = dr3.brojElemenata();\n\tfor (int i(0); i<brel; i++)\n\t\tstd::cout << dr3.skiniSaVrha() << \" \";\n\tstd::cout << std::endl;\n}\nbrel = dr.brojElemenata();\nfor (int i(0); i<brel; i++)\n\tstd::cout << dr.skiniSaVrha() << \" \";",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "10 10\n5 4 3 2 1 1 2 3 4 5 \n5 4 3 2 1 1 2 3 4 5 \n4 3 2 1 1 2 3 4 5"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        },
+        {
+            "id": 1457,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "\/\/ Test performansi (sve metode trebaju biti O(1) )\nDvostraniRed<int> dr;\nfor (int i(0); i<400000; i++)\ndr.staviNaVrh(i);\nstd::cout << dr.vrh() << std::endl;\nfor (int i(0); i<399999; i++)\ndr.skiniSaVrha();\nstd::cout << dr.vrh() << std::endl;\ndr.skiniSaVrha();\n\nfor (int i(0); i<400000; i++)\ndr.staviNaCelo(i);\nstd::cout << dr.celo() << std::endl;\nfor (int i(0); i<399999; i++)\ndr.skiniSaCela();\nstd::cout << dr.celo();",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "399999\n0\n399999\n0"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        },
+        {
+            "id": 1458,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "DvostraniRed<int> dr;\nfor (int i(100); i<110; i+=2) {\n\tdr.staviNaVrh(i);\n\tdr.staviNaCelo(i);\n}\nstd::cout << dr.brojElemenata() << \" \" << dr.vrh() << \" \" << dr.celo() << std::endl;\nfor (int i(0); i<10; i++)\n\tstd::cout << dr.skiniSaVrha() << \" \";\nstd::cout << std::endl;\ntry { dr.skiniSaVrha(); } catch(...) {\n\tstd::cout << \"ok \";\n}\ntry { dr.skiniSaCela(); } catch(...) {\n\tstd::cout << \"ok \";\n}\ntry { dr.vrh(); } catch(...) {\n\tstd::cout << \"ok \";\n}\ntry { dr.celo(); } catch(...) {\n\tstd::cout << \"ok \";\n}\nfor (int i(100); i<110; i+=2) {\n\tdr.staviNaVrh(i);\n\tdr.staviNaCelo(i);\n}\nstd::cout << dr.brojElemenata() << \" \" << dr.vrh() << \" \" << dr.celo();",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "10 108 108\n108 106 104 102 100 100 102 104 106 108 \nok ok ok ok 10 108 108"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        },
+        {
+            "id": 1459,
+            "tools": [
+                {
+                    "patch": [
+                        {
+                            "position": "main",
+                            "code": "DvostraniRed<int> dr;\nfor (int i(100); i<110; i+=2) {\n\tdr.staviNaVrh(i);\n\tdr.staviNaCelo(i);\n}\nfor (int i(0); i<10; i++)\n\tstd::cout << dr.skiniSaCela() << \" \";\nstd::cout << std::endl;\ntry { dr.skiniSaVrha(); } catch(...) {\n\tstd::cout << \"ok \";\n}\ntry { dr.skiniSaCela(); } catch(...) {\n\tstd::cout << \"ok \";\n}\ntry { dr.vrh(); } catch(...) {\n\tstd::cout << \"ok \";\n}\ntry { dr.celo(); } catch(...) {\n\tstd::cout << \"ok \";\n}\nfor (int i(100); i<110; i+=2) {\n\tdr.staviNaVrh(i);\n\tdr.staviNaCelo(i);\n}\nstd::cout << dr.brojElemenata() << \" \" << dr.vrh() << \" \" << dr.celo() << std::endl;",
+                            "use_markers": true
+                        }
+                    ]
+                },
+                "compile[debug]",
+                {
+                    "execute": {
+                        "expect": [
+                            "108 106 104 102 100 100 102 104 106 108 \nok ok ok ok 10 108 108"
+                        ]
+                    }
+                },
+                "debug",
+                "profile[asan]"
+            ]
+        }
+    ],
+    "version": "3",
+    "prepare": [
+        "compile"
+    ]
+}
