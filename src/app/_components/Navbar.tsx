@@ -76,10 +76,10 @@ export default function Navbar() {
               <SheetClose asChild>
                 <Link
                   className="flex items-center gap-2 rounded bg-neutral-900 px-2 py-1 text-sm"
-                  href={"/ispomoc"}
+                  href={"/about"}
                 >
                   <QuestionMarkCircledIcon className="h-4 w-4"></QuestionMarkCircledIcon>
-                  Pomoć
+                  About
                 </Link>
               </SheetClose>
               <SheetClose asChild>

@@ -47,39 +47,51 @@ export default async function AboutPage() {
           <em className="-mt-4 text-sm text-gray-400">- bc</em>
 
           <h1 className="text-xl font-bold">Patch notes</h1>
-          <ul className="ml-4 flex list-inside list-disc flex-col gap-2">
-            <li className="flex items-start gap-2">
-              <Badge className="grow-0 text-nowrap">31 Oct 2024</Badge>
-              <Badge className="bg-blue-700 text-white">0.4.1</Badge>
+          <ul className="flex list-inside flex-col gap-2">
+            <li className="items-start gap-2 sm:flex">
+              <div className="mb-1 flex items-center gap-2">
+                <Badge className="grow-0 text-nowrap">31 Oct 2024</Badge>
+                <Badge className="bg-blue-700 text-white">0.4.1</Badge>
+              </div>
               Detekcija curenja memorije.
             </li>
-            <li className="flex items-start gap-2">
-              <Badge className="grow-0 text-nowrap">29 Oct 2024</Badge>
-              <Badge className="bg-blue-700 text-white">0.4</Badge>
+            <li className="items-start gap-2 sm:flex">
+              <div className="mb-1 flex items-center gap-2">
+                <Badge className="grow-0 text-nowrap">29 Oct 2024</Badge>
+                <Badge className="bg-blue-700 text-white">0.4</Badge>
+              </div>
               Logovi. Onemogućen pristup testovima sa nefakultetskih emailova.
             </li>
-            <li className="flex items-start gap-2">
-              <Badge className="grow-0 text-nowrap">26 Oct 2024</Badge>
-              <Badge className="bg-blue-700 text-white">0.3.2</Badge>
+            <li className="items-start gap-2 sm:flex">
+              <div className="mb-1 flex items-center gap-2">
+                <Badge className="grow-0 text-nowrap">26 Oct 2024</Badge>
+                <Badge className="bg-blue-700 text-white">0.3.2</Badge>
+              </div>
               Testovi za NA. Testovi se šalju i vraćaju u batchevima u realnom
               vremenu. Poboljšan procesor na serveru. Popravljene
               nekonzistentnosti na frontendu.
             </li>
-            <li className="flex items-start gap-2">
-              <Badge className="grow-0 text-nowrap">25 Oct 2024</Badge>
-              <Badge className="bg-blue-700 text-white">0.3.1</Badge>
+            <li className="items-start gap-2 sm:flex">
+              <div className="mb-1 flex items-center gap-2">
+                <Badge className="grow-0 text-nowrap">25 Oct 2024</Badge>
+                <Badge className="bg-blue-700 text-white">0.3.1</Badge>
+              </div>
               Testiranje koda za ASP zadaće. Preimenovanje aplikacije u Zmanger.
             </li>
-            <li className="flex items-start gap-2">
-              <Badge className="grow-0 text-nowrap">9 Oct 2024</Badge>
-              <Badge className="bg-blue-700 text-white">0.2</Badge> Izborni
-              predmeti: SP i NA. Grafički prikaz za razmjene.
+            <li className="items-start gap-2 sm:flex">
+              <div className="mb-1 flex items-center gap-2">
+                <Badge className="grow-0 text-nowrap">9 Oct 2024</Badge>
+                <Badge className="bg-blue-700 text-white">0.2</Badge>
+              </div>
+              Izborni predmeti: SP i NA. Grafički prikaz za razmjene.
             </li>
-            <li className="flex items-start gap-2">
-              <Badge className="grow-0 text-nowrap">8 Oct 2024</Badge>{" "}
-              <Badge className="bg-blue-700 text-white">0.1</Badge> Prva verzija
-              aplikacije, mogućnost dodavanja termina uz uslov prijave. Upute za
-              korištenje aplikacije.
+            <li className="items-start gap-2 sm:flex">
+              <div className="mb-1 flex items-center gap-2">
+                <Badge className="grow-0 text-nowrap">8 Oct 2024</Badge>{" "}
+                <Badge className="bg-blue-700 text-white">0.1</Badge>
+              </div>
+              Prva verzija aplikacije, mogućnost dodavanja termina uz uslov
+              prijave. Upute za korištenje aplikacije.
             </li>
           </ul>
         </main>
