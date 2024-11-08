@@ -119,17 +119,17 @@ export function TestTable() {
       {outputs.length > 0 && (
         <Table className="mt-4 border-b border-neutral-500">
           <TableHeader>
-            <TableRow className="border border-neutral-500">
-              <TableHead className="border-r border-neutral-500">
+            <TableRow className="border border-neutral-500 font-extrabold">
+              <TableHead className="border-r border-neutral-500 font-extrabold">
                 Redni broj
               </TableHead>
-              <TableHead className="border-r border-neutral-500">
+              <TableHead className="border-r border-neutral-500 font-extrabold">
                 Kod testa
               </TableHead>
-              <TableHead className="w-[150px] border-r border-neutral-500">
+              <TableHead className="border-r border-neutral-500 font-extrabold">
                 Očekivani izlaz
               </TableHead>
-              <TableHead className="w-[150px]">Vaš izlaz</TableHead>
+              <TableHead className="font-extrabold">Vaš izlaz</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="font-mono">
