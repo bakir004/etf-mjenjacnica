@@ -1,0 +1,40 @@
+- frontend pakuje kod + svi testovi unutar templatea
+- uz template foreachom dodati handler za errore i wrappere za testove
+- delimiter je -~=O=~-
+- delimiter moze biti random (pls dont)
+- nakon sto frontend posalje kod + svaki main unutar templatea, backend kompajlira jednom i pokrece jednom
+- failsafe: ako padne n-ti test, dodaje se linija `goto test${n+1}` na vrh maina, te se opet pokrecu testovi
+- queue sistem:
+	- zbog vercelovog limita od 10s, ako se posalje request i bude cekao u queueu, bice timeout (koji treba skontat kako da se prepozna na frontendu, vjrv onError: ()=>{})
+	- stoga, prvi request treba dat informaciju koliko ljudi ima u queueu, pa pollingom provjeriti jel red prazan (problem ako vise requestova vidi prazan queue i udju odjednom).
+	- sinhronizacija?
+	- polling time 2s?
+- requestovi pri testiranju:
+	- GET checkQueue:
+		- vraca:
+			- broj poziva u redu
+	- POST sendTest:
+		- uzima:
+			- userId
+			- userName
+			- userEmail
+			- userCode
+			- testSubject
+			- timeSent
+		- vraca:
+			- outputList[]
+			- leaks
+			- success
+			- timeToProcessTesting
+		- u logs treba spasit:
+			- userId
+			- userName
+			- userEmail
+			- userCode
+			- testSubject
+			- timeSent
+			- timeToProcessTesting
+			- success
+- ako je outputList[] na responseu nepotpun (len != brojTestova), tada znamo da je neki segfault, i treba dodat na vrh maina goto
+- pitanje je: sta je brze: ubrzati kod sporim uklanjanjem template koda za prethodne testove, ili samo dodat goto?
+- 
