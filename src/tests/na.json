@@ -678,6 +678,7 @@
                 {
                     "patch": [
                         {
+                            "position": "main",
                             "code": "\/\/AT23: RREF 2\n    Matrix M2{{4,16,-8,-2,14,1,13,6},{-3,-12,6,1,-10,-1,-10,-5},{1,4,-2,-2,5,1,-2,3}};\n    Matrix M3(RREF(M2));\n    M3.Chop();\n    M3.Print(2);",
                             "use_markers": true
                         },
