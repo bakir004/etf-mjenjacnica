@@ -83,7 +83,7 @@ export function CodeForm({
           senderName: user.user?.fullName ?? "NULL",
         });
         setProgress(((i + BATCH_SIZE) / allCodes.length) * 100);
-      }, i * 600);
+      }, i * 800);
     }
   };
 
