@@ -1,430 +1,168 @@
 {
-    "id": 1287,
-    "name": "Algoritmi i strukture podataka (2016\/2017), Zadaca 1, zadatak 1",
-    "languages": [
-        "C++"
-    ],
-    "tools": {
-        "compile": {
-            "require": "g++",
-            "features": [
-                "optimize",
-                "warn",
-                "pedantic",
-                "C++11"
-            ]
-        },
-        "compile[debug]": {
-            "require": "g++",
-            "features": [
-                "debug",
-                "C++11",
-                "asan"
-            ]
-        },
-        "execute": {
-            "require": "asan"
-        },
-        "debug": [],
-        "profile[asan]": {
-            "require": "asan",
-            "fast": true,
-            "input_file": "stderr.txt"
+  "tests": [
+    {
+      "id": 0,
+      "patch": [
+        {
+          "position": "main",
+          "code": "Lista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(0); i<40000; i++)\n    l->dodajIspred(5);\nl->pocetak();\nl->dodajIspred(4);\nstd::cout << l->trenutni() << \" \";\nl->prethodni();\nstd::cout << l->trenutni();\ndelete l;"
         }
+      ],
+      "expect": "5 4"
     },
-    "tests": [
+    {
+      "id": 1,
+      "patch": [
         {
-            "id": 1288,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "Lista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(0); i<40000; i++)\n    l->dodajIspred(5);\nl->pocetak();\nl->dodajIspred(4);\nstd::cout << l->trenutni() << \" \";\nl->prethodni();\nstd::cout << l->trenutni();\ndelete l;",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "5 4"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
+          "position": "main",
+          "code": "Lista<std::string>* l;\nl = new DvostrukaLista<std::string>;\nl->dodajIza(\"abc\");\nstd::string s = l->trenutni();\t\nstd::cout << s;\ndelete l;"
         },
         {
-            "id": 1289,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "Lista<std::string>* l;\nl = new DvostrukaLista<std::string>;\nl->dodajIza(\"abc\");\nstd::string s = l->trenutni();\t\nstd::cout << s;\ndelete l;",
-                            "use_markers": true
-                        },
-                        {
-                            "position": "above_main",
-                            "code": "#include <string>",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "abc"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1290,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "Lista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(1); i<=5; i++)\n\tl->dodajIza(i);\ndo {\n\tstd::cout << l->trenutni() << \" \";\n} while(l->sljedeci());\nl->dodajIza(6);\nl->sljedeci();\nstd::cout << l->trenutni();\ndelete l;",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "1 5 4 3 2 6"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1291,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "Lista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(1); i<=5; i++)\n\tl->dodajIspred(i);\nfor (int i(0); i<5; i++)\n\tstd::cout << (*l)[i] << \" \";\ndelete l;",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "2 3 4 5 1"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1292,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "DvostrukaLista<int> lista;\nfor (int i(1); i<=10000; i++)\n\tlista.dodajIspred(i);\nstd::cout << lista.brojElemenata() << \" \";\nfor (int i(1); i<=10000; i++)\n\tlista.obrisi();\nstd::cout << lista.brojElemenata();",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "10000 0"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1293,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "DvostrukaLista<int> lista;\nfor (int i(1); i<=5; i++)\n\tlista.dodajIza(i);\nstd::cout << lista.brojElemenata() << \" \";\nfor (int i(1); i<=5; i++)\n\tlista.obrisi();\nstd::cout << lista.brojElemenata();",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "5 0"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1294,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "DvostrukaLista<int> lista;\nfor (int i(1); i<=5; i++)\n\tlista.dodajIspred(i);\n{\n    \/\/ Konstruktor kopije\n    DvostrukaLista<int> lista2(lista);\n    DvostrukaLista<int> lista3;\n    \/\/ Operator dodjele\n    (lista3=lista).brojElemenata();\n    \/\/ Destruktivna samododjela\n    (lista=lista).brojElemenata();\n\n    lista.obrisi();\n    std::cout << lista2.brojElemenata() << \" \" << lista2[2];\n    std::cout << \" \" << lista3.brojElemenata() << \" \" << lista3[2] << \" \";\n}\nstd::cout << lista.brojElemenata() << \" \" << lista[2];",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "5 4 5 4 4 4"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1295,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "DvostrukaLista<int> n;\nfor (int i(1); i<=5; i++) {\n\tn.dodajIza(i);\n\tn.sljedeci();\n}\nn.pocetak();\nn.sljedeci();\nn.sljedeci();\nn.obrisi();\nfor (int i(0); i<n.brojElemenata(); i++)\n\tstd::cout << n[i] << \" \";\nstd::cout << n.trenutni();",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "1 2 4 5 4"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1296,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "DvostrukaLista<int> lista;\nfor (int i(1); i<=5; i++)\n\tlista.dodajIspred(i);\nconst DvostrukaLista<int>& konst(lista);\nstd::cout << konst.brojElemenata() << \" \" << konst.trenutni();\nstd::cout << \" \" << konst[0] << std::endl;\nlista.trenutni() = 15;\nlista[0] = 20;\nstd::cout << konst.trenutni() << \" \" << konst[0] << std::endl;",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "5 1 2\n15 20"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1297,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "\/\/ Test performansi metoda pocetak() i kraj()\nLista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(0); i<40000; i++)\n    l->dodajIspred(5);\nfor (int i(0); i<100000; i++) {\n    l->pocetak();\n    l->kraj();\n}\ndelete l;\nstd::cout << \"OK\";",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "OK"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1298,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "\/\/ Test performansi metoda pocetak() i kraj()\nLista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(0); i<40000; i++)\n    l->dodajIspred(5);\nfor (int i(0); i<100000; i++) {\n    l->pocetak();\n    l->kraj();\n}\ndelete l;\nstd::cout << \"OK\";",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "OK"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1299,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "Lista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(0); i<100000; i++)\n    l->dodajIspred(i);\nstd::cout <<dajMaksimum(*l);\ndelete l;",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "99999"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1300,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "Lista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(0); i<100; i++)\n    l->dodajIspred(i);\nstd::cout <<dajMaksimum(*l);\ndelete l;",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "99"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1301,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "DvostrukaLista<int> l;\nfor (int i(0); i<=100000; i++)\n    l.dodajIspred(i);\nstd::cout <<dajMaksimum(l);",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "100000"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1302,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "DvostrukaLista<int> l;\nfor (int i(0); i<=100000; i++){\n    l.dodajIza(i);\n    l.sljedeci();\n}\nl.pocetak();\nfor (int i(0); i<500; i++)\n    l.sljedeci();\nstd::cout <<l.trenutni()<<\" \";\nstd::cout <<dajMaksimum(l)<<\" \";\nstd::cout <<l.trenutni();",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "500 100000 500"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1303,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "DvostrukaLista<int> l;\n    l.dodajIspred(1);\n    cout<<l.trenutni()<<\" \";\n    l.obrisi();\n    l.dodajIza(1);\n    l.dodajIza(2);\n    l.dodajIza(8);\n    cout<<l.trenutni()<<\" \";\n    l.dodajIza(3);\n    l.dodajIza(4);\n    l.dodajIza(5);\n    l.pocetak();\n    l.kraj();\n    cout<<l.trenutni()<<\" \";\n    l.pocetak();\n    cout<<l.trenutni()<<\" \";\n    l.sljedeci();\n    cout<<l.trenutni()<<\" \";\n    l.prethodni();\n    cout<<l.trenutni()<<\" \";\n    cout<<l[1]<<\" \";\n    cout<<l.brojElemenata()<<\" \";\n    l.pocetak();\n    for(int i=0;i<l.brojElemenata();i++){\n        cout<<l.trenutni()<<\" \";\n        l.sljedeci();\n    }",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "1 1 2 1 5 1 5 6 1 5 4 3 8 2"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
+          "position": "above_main",
+          "code": "#include <string>"
         }
-    ],
-    "version": "3",
-    "prepare": [
-        "compile"
-    ]
+      ],
+      "expect": "abc"
+    },
+    {
+      "id": 2,
+      "patch": [
+        {
+          "position": "main",
+          "code": "Lista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(1); i<=5; i++)\n\tl->dodajIza(i);\ndo {\n\tstd::cout << l->trenutni() << \" \";\n} while(l->sljedeci());\nl->dodajIza(6);\nl->sljedeci();\nstd::cout << l->trenutni();\ndelete l;"
+        }
+      ],
+      "expect": "1 5 4 3 2 6"
+    },
+    {
+      "id": 3,
+      "patch": [
+        {
+          "position": "main",
+          "code": "Lista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(1); i<=5; i++)\n\tl->dodajIspred(i);\nfor (int i(0); i<5; i++)\n\tstd::cout << (*l)[i] << \" \";\ndelete l;"
+        }
+      ],
+      "expect": "2 3 4 5 1"
+    },
+    {
+      "id": 4,
+      "patch": [
+        {
+          "position": "main",
+          "code": "DvostrukaLista<int> lista;\nfor (int i(1); i<=10000; i++)\n\tlista.dodajIspred(i);\nstd::cout << lista.brojElemenata() << \" \";\nfor (int i(1); i<=10000; i++)\n\tlista.obrisi();\nstd::cout << lista.brojElemenata();"
+        }
+      ],
+      "expect": "10000 0"
+    },
+    {
+      "id": 5,
+      "patch": [
+        {
+          "position": "main",
+          "code": "DvostrukaLista<int> lista;\nfor (int i(1); i<=5; i++)\n\tlista.dodajIza(i);\nstd::cout << lista.brojElemenata() << \" \";\nfor (int i(1); i<=5; i++)\n\tlista.obrisi();\nstd::cout << lista.brojElemenata();"
+        }
+      ],
+      "expect": "5 0"
+    },
+    {
+      "id": 6,
+      "patch": [
+        {
+          "position": "main",
+          "code": "DvostrukaLista<int> lista;\nfor (int i(1); i<=5; i++)\n\tlista.dodajIspred(i);\n{\n    // Konstruktor kopije\n    DvostrukaLista<int> lista2(lista);\n    DvostrukaLista<int> lista3;\n    // Operator dodjele\n    (lista3=lista).brojElemenata();\n    // Destruktivna samododjela\n    (lista=lista).brojElemenata();\n\n    lista.obrisi();\n    std::cout << lista2.brojElemenata() << \" \" << lista2[2];\n    std::cout << \" \" << lista3.brojElemenata() << \" \" << lista3[2] << \" \";\n}\nstd::cout << lista.brojElemenata() << \" \" << lista[2];"
+        }
+      ],
+      "expect": "5 4 5 4 4 4"
+    },
+    {
+      "id": 7,
+      "patch": [
+        {
+          "position": "main",
+          "code": "DvostrukaLista<int> n;\nfor (int i(1); i<=5; i++) {\n\tn.dodajIza(i);\n\tn.sljedeci();\n}\nn.pocetak();\nn.sljedeci();\nn.sljedeci();\nn.obrisi();\nfor (int i(0); i<n.brojElemenata(); i++)\n\tstd::cout << n[i] << \" \";\nstd::cout << n.trenutni();"
+        }
+      ],
+      "expect": "1 2 4 5 4"
+    },
+    {
+      "id": 8,
+      "patch": [
+        {
+          "position": "main",
+          "code": "DvostrukaLista<int> lista;\nfor (int i(1); i<=5; i++)\n\tlista.dodajIspred(i);\nconst DvostrukaLista<int>& konst(lista);\nstd::cout << konst.brojElemenata() << \" \" << konst.trenutni();\nstd::cout << \" \" << konst[0] << std::endl;\nlista.trenutni() = 15;\nlista[0] = 20;\nstd::cout << konst.trenutni() << \" \" << konst[0] << std::endl;"
+        }
+      ],
+      "expect": "5 1 2\n15 20"
+    },
+    {
+      "id": 9,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Test performansi metoda pocetak() i kraj()\nLista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(0); i<40000; i++)\n    l->dodajIspred(5);\nfor (int i(0); i<100000; i++) {\n    l->pocetak();\n    l->kraj();\n}\ndelete l;\nstd::cout << \"OK\";"
+        }
+      ],
+      "expect": "OK"
+    },
+    {
+      "id": 10,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Test performansi metoda pocetak() i kraj()\nLista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(0); i<40000; i++)\n    l->dodajIspred(5);\nfor (int i(0); i<100000; i++) {\n    l->pocetak();\n    l->kraj();\n}\ndelete l;\nstd::cout << \"OK\";"
+        }
+      ],
+      "expect": "OK"
+    },
+    {
+      "id": 11,
+      "patch": [
+        {
+          "position": "main",
+          "code": "Lista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(0); i<100000; i++)\n    l->dodajIspred(i);\nstd::cout <<dajMaksimum(*l);\ndelete l;"
+        }
+      ],
+      "expect": "99999"
+    },
+    {
+      "id": 12,
+      "patch": [
+        {
+          "position": "main",
+          "code": "Lista<int>* l;\nl = new DvostrukaLista<int>;\nfor (int i(0); i<100; i++)\n    l->dodajIspred(i);\nstd::cout <<dajMaksimum(*l);\ndelete l;"
+        }
+      ],
+      "expect": "99"
+    },
+    {
+      "id": 13,
+      "patch": [
+        {
+          "position": "main",
+          "code": "DvostrukaLista<int> l;\nfor (int i(0); i<=100000; i++)\n    l.dodajIspred(i);\nstd::cout <<dajMaksimum(l);"
+        }
+      ],
+      "expect": "100000"
+    },
+    {
+      "id": 14,
+      "patch": [
+        {
+          "position": "main",
+          "code": "DvostrukaLista<int> l;\nfor (int i(0); i<=100000; i++){\n    l.dodajIza(i);\n    l.sljedeci();\n}\nl.pocetak();\nfor (int i(0); i<500; i++)\n    l.sljedeci();\nstd::cout <<l.trenutni()<<\" \";\nstd::cout <<dajMaksimum(l)<<\" \";\nstd::cout <<l.trenutni();"
+        }
+      ],
+      "expect": "500 100000 500"
+    },
+    {
+      "id": 15,
+      "patch": [
+        {
+          "position": "main",
+          "code": "DvostrukaLista<int> l;\n    l.dodajIspred(1);\n    cout<<l.trenutni()<<\" \";\n    l.obrisi();\n    l.dodajIza(1);\n    l.dodajIza(2);\n    l.dodajIza(8);\n    cout<<l.trenutni()<<\" \";\n    l.dodajIza(3);\n    l.dodajIza(4);\n    l.dodajIza(5);\n    l.pocetak();\n    l.kraj();\n    cout<<l.trenutni()<<\" \";\n    l.pocetak();\n    cout<<l.trenutni()<<\" \";\n    l.sljedeci();\n    cout<<l.trenutni()<<\" \";\n    l.prethodni();\n    cout<<l.trenutni()<<\" \";\n    cout<<l[1]<<\" \";\n    cout<<l.brojElemenata()<<\" \";\n    l.pocetak();\n    for(int i=0;i<l.brojElemenata();i++){\n        cout<<l.trenutni()<<\" \";\n        l.sljedeci();\n    }"
+        }
+      ],
+      "expect": "1 1 2 1 5 1 5 6 1 5 4 3 8 2"
+    }
+  ]
 }

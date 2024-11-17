@@ -1,0 +1,704 @@
+{
+  "tests": [
+    {
+      "id": 0,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT1: Testiranje izuzetaka LeftDiv - Matrice\n    try\n    {\n        Matrix M1 {{1,1,1},{2,2,2}}, M2 {{1,2},{1,2}};\n        Matrix M=LeftDiv(M1,M2);\n        //Divisor matrix is not square\n    }\n    catch (std::domain_error e)\n    {\n        std::cout << \"'\" << e.what() << \"'\\n\";\n    }\n    catch (...)\n    {\n        std::cout << \"Pogresan tip izuzetka\";\n    }\n    try\n    {\n        Matrix M1 {{1,1},{2,2}}, M2 {{1,2}};\n        Matrix M=LeftDiv(M1,M2);\n        //Incompatible formats\n    }\n    catch (std::domain_error e)\n    {\n        std::cout << \"'\" << e.what() << \"'\\n\";\n    }\n    catch (...)\n    {\n        std::cout << \"Pogresan tip izuzetka\";\n    }\n    try\n    {\n        Matrix M1 {{1,1,1},{2,2,2},{3,3,3}}, M2 {{1,2},{1,2},{1,2}};\n        Matrix M=LeftDiv(M1,M2);\n        //Divisor matrix is singular\n    }\n    catch (std::domain_error e)\n    {\n        std::cout << \"'\" << e.what() << \"'\";\n    }\n    catch (...)\n    {\n        std::cout << \"Pogresan tip izuzetka\";\n    }"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Divisor matrix is not square'\n'Incompatible formats'\n'Divisor matrix is singular'"
+    },
+    {
+      "id": 1,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT2: Testiranje izuzetaka LeftDiv - Vektor\n    try\n    {\n        Matrix M1 {{1,1,1},{2,2,2}};\n        Vector V2 {1,2};\n        Vector V=LeftDiv(M1,V2);\n        //Divisor matrix is not square\n    }\n    catch (std::domain_error e)\n    {\n        std::cout << \"'\" << e.what() << \"'\\n\";\n    }\n    catch (...)\n    {\n        std::cout << \"Pogresan tip izuzetka\";\n    }\n    try\n    {\n        Matrix M1 {{1,1},{2,2}};\n        Vector V2 {1};\n        Vector V=LeftDiv(M1,V2);\n        //Incompatible formats\n    }\n    catch (std::domain_error e)\n    {\n        std::cout << \"'\" << e.what() << \"'\\n\";\n    }\n    catch (...)\n    {\n        std::cout << \"Pogresan tip izuzetka\";\n    }\n    try\n    {\n        Matrix M1 {{1,1,1},{2,2,2},{3,3,3}};\n        Vector V2 {1,2,3};\n        Vector V=LeftDiv(M1,V2);\n        //Divisor matrix is singular\n    }\n    catch (std::domain_error e)\n    {\n        std::cout << \"'\" << e.what() << \"'\";\n    }\n    catch (...)\n    {\n        std::cout << \"Pogresan tip izuzetka\";\n    }"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Divisor matrix is not square'\n'Incompatible formats'\n'Divisor matrix is singular'"
+    },
+    {
+      "id": 2,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT3: Testiranje izuzetaka operator /= i / - 0\n    try{\n            Matrix M1 {{1,1,1},{2,2,2}};\n            M1=M1/0;\n            //Division by zero\n        }\n        catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n        catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n        try{\n            Matrix M1 {{1,1,1},{2,2,2}};\n            M1/=0;\n            //Division by zero\n        }        \n        catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n        catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Division by zero'\n'Division by zero'"
+    },
+    {
+      "id": 3,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT4: Testiranje izuzetaka operator / - Matrica\n    try\n    {\n        Matrix M1 {{1,1,1},{2,2,2},{3,3,3}}, M2 {{1,2,3},{1,2,3}};\n        Matrix M=M1/M2;\n        //Divisor matrix is not square\n    }\n    catch (std::domain_error e)\n    {\n        std::cout << \"'\" << e.what() << \"'\\n\";\n    }\n    catch (...)\n    {\n        std::cout << \"Pogresan tip izuzetka\";\n    }\n    try\n    {\n        Matrix M1 {{1,1},{2,2}}, M2 {{1}};\n        Matrix M=M1/M2;\n        //Incompatible formats\n    }\n    catch (std::domain_error e)\n    {\n        std::cout << \"'\" << e.what() << \"'\\n\";\n    }\n    catch (...)\n    {\n        std::cout << \"Pogresan tip izuzetka\";\n    }\n    try\n    {\n        Matrix M1 {{1,2},{2,2},{3,3}}, M2 {{1,2},{1,2}};\n        Matrix M=M1/M2;\n        //Divisor matrix is singular\n    }\n    catch (std::domain_error e)\n    {\n        std::cout << \"'\" << e.what() << \"'\";\n    }\n    catch (...)\n    {\n        std::cout << \"Pogresan tip izuzetka\";\n    }"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Divisor matrix is not square'\n'Incompatible formats'\n'Divisor matrix is singular'"
+    },
+    {
+      "id": 4,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT5: Testiranje izuzetaka operator /= - Matrica\n    try{\n        Matrix M1 {{1,1,1},{2,2,2},{3,3,3}}, M2{{1,2,3},{1,2,3}};\n         M1/=M2;\n        //Divisor matrix is not square\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n        Matrix M1 {{1,1},{2,2}}, M2{{1}};\n         M1/=M2;\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n        Matrix M1 {{1,2},{2,2},{3,3}}, M2{{1,2},{1,2}};\n        M1/=M2;\n        //Divisor matrix is singular\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Divisor matrix is not square'\n'Incompatible formats'\n'Divisor matrix is singular'"
+    },
+    {
+      "id": 5,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT6: Testiranje izuzetaka - Det\n    try{\n        Matrix M1 {{1,1,1},{2,2,2}};\n        std::cout<<Det(M1);\n        //Matrix is not square\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n        Matrix M1 {{1,1,1},{2,2,2}};\n        std::cout<<M1.Det();\n        //Matrix is not square\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Matrix is not square'\n'Matrix is not square'"
+    },
+    {
+      "id": 6,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT7: Testiranje izuzetaka - Invert i Inverse\n    try{\n        Matrix M1 {{1,1,1},{2,2,2}};\n        Inverse(M1).Print();\n        //Matrix is not square\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n\n    try{\n        Matrix M1 {{1,1,1},{2,2,2}};\n        M1.Invert();\n        //Matrix is not square\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Matrix is not square'\n'Matrix is not square'"
+    },
+    {
+      "id": 7,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT8: Testiranje izuzetaka - Invert i Inverse\n    try{\n        Matrix M1 {{1,1,1},{2,2,2},{3,3,3}};\n        Inverse(M1).Print();\n        //Matrix is singular\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n\n    try{\n        Matrix M1 {{1,1,1},{2,2,2},{3,3,3}};\n        M1.Invert();\n        //Matrix is singular\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Matrix is singular'\n'Matrix is singular'"
+    },
+    {
+      "id": 8,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT9: Testiranje izuzetaka LU - konstruktor\n    try{\n        Matrix M1 {{1,1,1},{2,2,2}};\n        LUDecomposer lu(M1);\n        //Matrix is not square\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n        Matrix M1 {{1,1,1},{2,2,2},{3,3,3}};\n        LUDecomposer lu(M1);\n        //Matrix is singular\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Matrix is not square'\n'Matrix is singular'"
+    },
+    {
+      "id": 9,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT10: Testiranje izuzetaka LU - Solve - Matrice\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Matrix b{{4,1,5},{1,2,1}};\n        LUDecomposer lu(A);\n        lu.Solve(b).Print();\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Matrix b{{4,1,5},{1,2,1}};\n        Matrix c{{4,1,5},{1,2,1},{1,2,3}};\n        LUDecomposer lu(A);\n        lu.Solve(c,b);;\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Matrix b{{4,1,5},{1,2,1}};\n        Matrix c{{4,1,5},{1,2,1},{1,2,3}};\n        LUDecomposer lu(A);\n        lu.Solve(b,c);\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Matrix b{{4,1,5,6},{1,2,1,1},{1,2,1,1}};\n        Matrix c{{4,1,5},{1,2,1},{1,2,1}};\n        LUDecomposer lu(A);\n        lu.Solve(b,c);\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Incompatible formats'\n'Incompatible formats'\n'Incompatible formats'\n'Incompatible formats'"
+    },
+    {
+      "id": 10,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT11: Testiranje izuzetaka LU - Solve - Vektor\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Vector b{4,1};\n        LUDecomposer lu(A);\n        lu.Solve(b).Print();\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Vector b{4,1,3};\n        Vector c{2,3};\n        LUDecomposer lu(A);\n        lu.Solve(b,c);\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Vector b{4,1,3};\n        Vector c{2,3};\n        LUDecomposer lu(A);\n        lu.Solve(c,b);\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Incompatible formats'\n'Incompatible formats'\n'Incompatible formats'"
+    },
+    {
+      "id": 11,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT12: Testiranje izuzetaka QR - konstruktor\n    try{\n         Matrix A{{0,3,2},{4,6,1}};\n        QRDecomposer qr(A);\n        //Invalid matrix format\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{1,1,1},{2,2,2},{3,3,3}};\n        QRDecomposer qr(A);\n        //Matrix is singular\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Invalid matrix format'\n'Matrix is singular'"
+    },
+    {
+      "id": 12,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT13: Testiranje izuzetaka QR - Solve - Vektor\n    try{\n         Matrix A{{0,3},{4,6},{3,1}};\n        Vector b{4,1,3};\n        Vector c{2,3,2};\n        QRDecomposer qr(A);\n        qr.Solve(c,b);\n        //Matrix is not square\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Vector b{4,1,3};\n        Vector c{2,3};\n        QRDecomposer qr(A);\n        qr.Solve(c,b);\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Vector b{4,1,3};\n        Vector c{2,3};\n        QRDecomposer qr(A);\n        qr.Solve(b,c);\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Matrix is not square'\n'Incompatible formats'\n'Incompatible formats'"
+    },
+    {
+      "id": 13,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT14: Testiranje izuzetaka QR - Solve - Matrice\n    try{\n         Matrix A{{0,3},{4,6},{3,1}};\n        Matrix b{{4,1,5,6},{1,2,1,1},{1,2,1,1}};\n        Matrix c(Transpose(b));\n        QRDecomposer qr(A);\n        qr.Solve(c);\n        //Matrix is not square\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Matrix b{{4,1,5,6},{1,2,1,1},{1,2,1,1}};\n        Matrix c{{4,1,5},{1,2,1},{1,2,1}};\n        QRDecomposer qr(A);\n        qr.Solve(b,c);\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n     try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Matrix b{{4,1,5},{1,2,1}};\n        Matrix c{{4,1,5},{1,2,1},{1,2,3}};\n        QRDecomposer qr(A);\n        qr.Solve(b,c);\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Matrix b{{4,1,5},{1,2,1}};\n        Matrix c{{4,1,5},{1,2,1},{1,2,3}};\n        QRDecomposer qr(A);\n        qr.Solve(c,b);\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Matrix is not square'\n'Incompatible formats'\n'Incompatible formats'\n'Incompatible formats'"
+    },
+    {
+      "id": 14,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT15: Testiranje izuzetaka QR - MulQ i MulQT - Matrice\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Matrix b{{4,1,5},{1,2,1}};\n        QRDecomposer qr(A);\n        qr.MulQTWith(b).Print();\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Matrix b{{4,1,5},{1,2,1}};\n        QRDecomposer qr(A);\n        qr.MulQWith(b).Print();\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Incompatible formats'\n'Incompatible formats'"
+    },
+    {
+      "id": 15,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT16: Testiranje izuzetaka QR - MulQ i MulQT - Vektor\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Vector b{4,1};\n        QRDecomposer qr(A);\n        qr.MulQTWith(b).Print();\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\\n\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}\n    try{\n         Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n        Vector b{4,1};\n        QRDecomposer qr(A);\n        qr.MulQWith(b).Print();\n        //Incompatible formats\n    }\n    catch (std::domain_error e) {std::cout << \"'\" << e.what() << \"'\";}\n    catch (...) {std::cout << \"Pogresan tip izuzetka\";}"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "'Incompatible formats'\n'Incompatible formats'"
+    },
+    {
+      "id": 16,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT17: Testiranje LeftDiv s provjerama pivotizacije - vektor\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Vector v{1,2,4};\n    Vector rez=A*v;\n    std::cout<<v.EqualTo(LeftDiv(A,rez),-10)<<std::endl;\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}};\n    rez=B*v;\n    std::cout<<v.EqualTo(LeftDiv(B,rez));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 17,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT18: Testiranje LeftDiv s provjerama pivotizacije - matrica\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Matrix x{{4,1,5},{1,2,1},{8,7,9}};\n    Matrix rez=A*x;\n    std::cout<<x.EqualTo(LeftDiv(A,rez),-5)<<std::endl;\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}};\n    rez=B*x;\n    std::cout<<x.EqualTo(LeftDiv(B,rez));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 18,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT19: Testiranje dijeljenja sa skalarom\n    Matrix A{{0,4,2},{4,6,2},{8,6,2}};\n    (A/2).Print(2);\n    std::cout<<\"\\n\\n\";\n    A/=2;\n    A.Print(2);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": " 0 2 1\n 2 3 1\n 4 3 1\n\n 0 2 1\n 2 3 1\n 4 3 1"
+    },
+    {
+      "id": 19,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT20: Testiranje desnog matricnog dijeljenja\n      Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n      Matrix b{{4,1,5},{1,2,1}};\n      Matrix rez=b * Inverse(A);\n      std::cout << rez.EqualTo(b/A)<<std::endl;\n      Matrix C{{2,3,5},{2,3,7},{4,1,8}};\n      rez=b * Inverse(C);\n      std::cout << rez.EqualTo(b/C);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 20,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT21: Testiranje operatora /=\n    Matrix A {{0,3,2},{4,6,1},{3,1,7}};\n    Matrix b {{4,1,5},{1,2,1}};\n    Matrix rez=b * Inverse(A);\n    b/=A;\n    std::cout << b.EqualTo(rez)<<std::endl;\n    Matrix C {{2,3,5},{2,3,7},{4,1,8}};\n    rez=b * Inverse(C);\n    b/=C;\n    std::cout << b.EqualTo(rez);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 21,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT22: RREF 1\n    Matrix M1{{3,4,18,34,0,2,31},{1,-3,-7,-6,2,4,26},{2,1,7,16,3,-1,27},{5,11,43,74,2,0,56},{3,-3,-3,6,-1,14,55},{-2,0,-4,-12,1,5,6},{1,-6,-16,-18,4,4,33}};\n    M1.ReduceToRREF();\n    M1.Chop(-5);\n    M1.Print(2);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": " 1 0 2 6 0 0 7\n 0 1 3 4 0 0 1\n 0 0 0 0 1 0 5\n 0 0 0 0 0 1 3\n 0 0 0 0 0 0 0\n 0 0 0 0 0 0 0\n 0 0 0 0 0 0 0"
+    },
+    {
+      "id": 22,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT23: RREF 2\n    Matrix M2{{4,16,-8,-2,14,1,13,6},{-3,-12,6,1,-10,-1,-10,-5},{1,4,-2,-2,5,1,-2,3}};\n    Matrix M3(RREF(M2));\n    M3.Chop();\n    M3.Print(2);"
+        },
+        {
+          "position": "above_main_class",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": " 1 4 -2 0 3 0 5 1\n 0 0 0 1 -1 0 2 0\n 0 0 0 0 0 1 -3 2"
+    },
+    {
+      "id": 23,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT24: Determinanta\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    std::cout<<Det(A)<<std::endl;\n    std::cout<<A.Det()<<std::endl;\n    Matrix C{{2,3,5},{2,3,7},{4,1,8}};\n    std::cout<<Det(C)<<std::endl;\n    std::cout<<C.Det();"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "-103\n-103\n20\n20"
+    },
+    {
+      "id": 24,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT25: Determinanta singular\n    Matrix A{{1,1,1},{2,2,2},{3,3,3}};\n    std::cout<<Det(A)<<std::endl;\n    std::cout<<A.Det();"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "0\n0"
+    },
+    {
+      "id": 25,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT26: Inverzna 1\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}}, jedinicna{{1,0,0},{0,1,0},{0,0,1}};\n    std::cout<<jedinicna.EqualTo(Inverse(A)*A)<<std::endl;\n    Matrix B=A;\n    A.Invert();\n    std::cout<<jedinicna.EqualTo(A*B);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 26,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT27: Inverzna 2\n    Matrix C{{2,3,5},{2,3,7},{4,1,8}}, jedinicna{{1,0,0},{0,1,0},{0,0,1}};\n    std::cout<<jedinicna.EqualTo(Inverse(C)*C)<<std::endl;\n    Matrix B=C;\n    C.Invert();\n    std::cout<<jedinicna.EqualTo(C*B);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 27,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT28: Rang\n    Matrix M1{{3,4,18,34,0,2,31},\n        {1,-3,-7,-6,2,4,26},\n        {2,1,7,16,3,-1,27},\n        {5,11,43,74,2,0,56},\n        {3,-3,-3,6,-1,14,55},\n        {-2,0,-4,-12,1,5,6},\n        {1,-6,-16,-18,4,4,33}\n    };\n    std::cout<<Rank(M1)<<std::endl;\n    std::cout<<M1.Rank();"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "4\n4"
+    },
+    {
+      "id": 28,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT29: Rang 2\n    Matrix M2{{1,2},{2,3}};\n    std::cout<<Rank(M2)<<std::endl;\n    std::cout<<M2.Rank();"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "2\n2"
+    },
+    {
+      "id": 29,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT30: LU Solve isti vektor\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Vector x{1,2,4};\n    Vector rez=A*x;\n    LUDecomposer lu(A);\n    lu.Solve(rez,rez);\n    std::cout<<x.EqualTo(rez);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 30,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT31: LU Solve vektor\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}};\n    LUDecomposer lu2(B);\n    Vector x{1,2,4};\n    Vector rez=B*x;\n    lu2.Solve(rez,x);\n    std::cout<<x.EqualTo(LeftDiv(B,rez));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 31,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT32: LU Solve vektor\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Vector x{1,2,4};\n    Vector rez=A*x;\n    LUDecomposer lu(A);\n    std::cout<<x.EqualTo(lu.Solve(rez))<<std::endl;\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}};\n    LUDecomposer lu2(B);\n    rez=B*x;\n    std::cout<<lu2.Solve(rez).EqualTo(LeftDiv(B,rez));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 32,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT33: LU Solve matrica\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Matrix x{{4,1,5},{1,2,1},{8,7,9}};\n    Matrix rez=A*x;\n    LUDecomposer lu(A);\n    lu.Solve(rez,rez);\n    std::cout<<x.EqualTo(rez);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 33,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT34: LU Solve matrica\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}};\n    LUDecomposer lu2(B);\n    Matrix x{{4,1,5},{1,2,1},{8,7,9}};\n    Matrix rez=B*x;\n    lu2.Solve(rez,x);\n    std::cout<<x.EqualTo(LeftDiv(B,rez));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 34,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT35: LU Solve matrica\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Matrix x{{4,1,5},{1,2,1},{8,7,9}};\n    Matrix rez=A*x;\n    LUDecomposer lu(A);\n    std::cout<<x.EqualTo(lu.Solve(rez))<<std::endl;\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}};\n    LUDecomposer lu2(B);\n    rez=B*x;\n    std::cout<<lu2.Solve(rez).EqualTo(LeftDiv(B,rez));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 35,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT36: LU solve permutacije\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    LUDecomposer lu(A);\n    std::cout<<lu.GetPermuation().NElems();"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "3"
+    },
+    {
+      "id": 36,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT37: L+U - CompactLU\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}},jedinicna{{1,0,0},{0,1,0},{0,0,1}};\n    LUDecomposer lu(A);\n    std::cout<<lu.GetCompactLU().EqualTo(lu.GetL()+lu.GetU()-jedinicna);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 37,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT38: L+U - CompactLU\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}},jedinicna{{1,0,0},{0,1,0},{0,0,1}};\n    LUDecomposer lu2(B);\n    std::cout<<lu2.GetCompactLU().EqualTo(lu2.GetL()+lu2.GetU()-jedinicna);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 38,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT39: QR Solve\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Vector x{1,2,4};\n    Vector rez=A*x;\n    QRDecomposer qr(A);\n    qr.Solve(rez,rez);\n    std::cout<<x.EqualTo(rez);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 39,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT40: QR Solve\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}};\n    QRDecomposer qr2(B);\n    Vector x{1,2,4};\n    Vector rez=B*x;\n    qr2.Solve(rez,x);\n    std::cout<<x.EqualTo(LeftDiv(B,rez));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 40,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT41: QR Solve\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Vector x{1,2,4};\n    Vector rez=A*x;\n    QRDecomposer qr(A);\n    std::cout<<x.EqualTo(qr.Solve(rez))<<std::endl;\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}};\n    QRDecomposer qr2(B);\n    rez=B*x;\n    std::cout<<qr2.Solve(rez).EqualTo(LeftDiv(B,rez));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 41,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT42: QR Solve\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Matrix x{{4,1,5},{1,2,1},{8,7,9}};\n    Matrix rez=A*x;\n    QRDecomposer qr(A);\n    qr.Solve(rez,rez);\n    std::cout<<x.EqualTo(rez);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 42,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT43: QR Solve\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}};\n    QRDecomposer qr2(B);\n    Matrix x{{4,1,5},{1,2,1},{8,7,9}};\n    Matrix rez=B*x;\n    qr2.Solve(rez,x);\n    std::cout<<x.EqualTo(LeftDiv(B,rez));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 43,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT44: QR Solve\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Matrix x{{4,1,5},{1,2,1},{8,7,9}};\n    Matrix rez=A*x;\n    QRDecomposer qr(A);\n    std::cout<<x.EqualTo(qr.Solve(rez))<<std::endl;\n    Matrix B{{2,3,5},{2,3,7},{4,1,8}};\n    QRDecomposer qr2(B);\n    rez=B*x;\n    std::cout<<qr2.Solve(rez).EqualTo(LeftDiv(B,rez));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 44,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT45: Q*R=A\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    QRDecomposer qr(A);\n    std::cout<<A.EqualTo(qr.GetQ() * qr.GetR())<<std::endl;\n    Matrix B{{0,3},{4,6},{3,1}};\n    QRDecomposer qr2(B);\n    std::cout<<B.EqualTo(qr2.GetQ() * qr2.GetR());;"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1\n1"
+    },
+    {
+      "id": 45,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT46: Q*QT\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}},jedinicna{{1,0,0},{0,1,0},{0,0,1}};\n    QRDecomposer qr(A);\n    std::cout<<jedinicna.EqualTo(qr.GetQ() * Transpose(qr.GetQ()));"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 46,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT47: MulQ\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Vector x{1,2,4};\n    QRDecomposer qr(A);\n    Matrix Q=qr.MulQWith(x);\n    std::cout<<Q.EqualTo(qr.GetQ() * x);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 47,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT48: MulQT\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Vector x{1,2,4};\n    QRDecomposer qr(A);\n    Matrix Q=qr.MulQTWith(x);\n    std::cout<<Q.EqualTo(Transpose(qr.GetQ())* x);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 48,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT49 MulQ\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Matrix x{{4,1,5},{1,2,1},{8,7,9}};\n    QRDecomposer qr(A);\n    Matrix Q=qr.MulQWith(x);\n    std::cout<<Q.EqualTo(qr.GetQ() * x);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    },
+    {
+      "id": 49,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT50: MulQT\n    Matrix A{{0,3,2},{4,6,1},{3,1,7}};\n    Matrix x{{4,1,5},{1,2,1},{8,7,9}};\n    QRDecomposer qr(A);\n    Matrix Q=qr.MulQTWith(x);\n    std::cout<<Q.EqualTo(Transpose(qr.GetQ())* x);"
+        },
+        {
+          "position": "top_of_file",
+          "code": "\t\n#include <cmath>"
+        }
+      ],
+      "expect": "1"
+    }
+  ]
+}

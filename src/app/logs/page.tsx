@@ -70,7 +70,7 @@ export default async function Logs() {
                             logGroup.length - 1
                           ].createdAt.getTimezoneOffset() *
                             60000 +
-                          3600000, // add 1 hour
+                          3600000,
                       ).toLocaleDateString("en-GB", {
                         hour: "2-digit",
                         minute: "2-digit",

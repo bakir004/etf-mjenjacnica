@@ -1,161 +1,54 @@
 {
-    "id": 1304,
-    "name": "Algoritmi i strukture podataka (2016\/2017), Pripremna Zadaca Za Vjezbu 4, zadatak 1",
-    "languages": [
-        "C++"
-    ],
-    "tools": {
-        "compile": {
-            "require": "g++",
-            "features": [
-                "optimize",
-                "warn",
-                "pedantic",
-                "C++11"
-            ]
-        },
-        "compile[debug]": {
-            "require": "g++",
-            "features": [
-                "debug",
-                "C++11",
-                "asan"
-            ]
-        },
-        "execute": {
-            "require": "asan"
-        },
-        "debug": [],
-        "profile[asan]": {
-            "require": "asan",
-            "fast": true,
-            "input_file": "stderr.txt"
+  "tests": [
+    {
+      "id": 0,
+      "patch": [
+        {
+          "position": "main",
+          "code": "Red<int> r;\nfor (int i(1); i<=5; i++)\n\tr.stavi(i);\nstd::cout << r.brojElemenata() << \" \" << r.celo() << \" \";\nr.brisi();\nfor (int i(1); i<=5; i++)\n\tr.stavi(i);\nstd::cout << r.brojElemenata() << \" \";\nfor (int i(1); i<=5; i++)\n\tstd::cout << r.skini() << \" \";\nstd::cout << r.brojElemenata() << \" \";\nfor (int i(1); i<=5; i++)\n\tr.stavi(i);\nstd::cout << r.brojElemenata() << \" \" << r.celo();"
         }
+      ],
+      "expect": "5 1 5 1 2 3 4 5 0 5 1"
     },
-    "tests": [
+    {
+      "id": 1,
+      "patch": [
         {
-            "id": 1305,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "Red<int> r;\nfor (int i(1); i<=5; i++)\n\tr.stavi(i);\nstd::cout << r.brojElemenata() << \" \" << r.celo() << \" \";\nr.brisi();\nfor (int i(1); i<=5; i++)\n\tr.stavi(i);\nstd::cout << r.brojElemenata() << \" \";\nfor (int i(1); i<=5; i++)\n\tstd::cout << r.skini() << \" \";\nstd::cout << r.brojElemenata() << \" \";\nfor (int i(1); i<=5; i++)\n\tr.stavi(i);\nstd::cout << r.brojElemenata() << \" \" << r.celo();",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "5 1 5 1 2 3 4 5 0 5 1"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1306,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "\t\nint brel;\nRed<int> r;\nfor (int i(1); i<=5; i++)\n\tr.stavi(i);\n{\n        \/\/ Konstruktor kopije\n\tRed<int> r2(r);\n\tRed<int> r3;\n        \/\/ Operator dodjele\n\t(r3=r).brojElemenata();\n        \/\/ Destruktivna samododjela\n        (r=r).brojElemenata();\n\n\tr.skini();\n\tbrel = r2.brojElemenata();\n\tfor (int i(0); i<brel; i++)\n\t\tstd::cout << r2.skini() << \" \";\n\tbrel = r3.brojElemenata();\n\tfor (int i(0); i<brel; i++)\n\t\tstd::cout << r3.skini() << \" \";\n}\nbrel = r.brojElemenata();\nfor (int i(0); i<brel; i++)\n\tstd::cout << r.skini() << \" \";",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "1 2 3 4 5 1 2 3 4 5 2 3 4 5"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1307,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "\/\/ Test performansi (sve metode trebaju biti O(1) )\nRed<int> r;\nfor (int i(0); i<100000; i++)\nr.stavi(i);\nstd::cout << r.celo() << std::endl;\nfor (int i(0); i<99999; i++)\nr.skini();\nstd::cout << r.celo();",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "0\n99999"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1308,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "Red<int> r;\nfor (int i(1); i<=5; i++)\n    r.stavi(i);\n    try{\nfor (int i(0); i<=6;i++)\n    r.skini();\n    }\n    catch(...){\n        cout<<\"Izuzetak\";   \n    }",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "Izuzetak"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1309,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "Red<int> r;\nfor (int i(0); i<5; i++)\nr.stavi(i);\nstd::cout << r.celo()<<\" \";\nr.celo()++;\nstd::cout << r.celo();",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "0 1"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
+          "position": "main",
+          "code": "\t\nint brel;\nRed<int> r;\nfor (int i(1); i<=5; i++)\n\tr.stavi(i);\n{\n        // Konstruktor kopije\n\tRed<int> r2(r);\n\tRed<int> r3;\n        // Operator dodjele\n\t(r3=r).brojElemenata();\n        // Destruktivna samododjela\n        (r=r).brojElemenata();\n\n\tr.skini();\n\tbrel = r2.brojElemenata();\n\tfor (int i(0); i<brel; i++)\n\t\tstd::cout << r2.skini() << \" \";\n\tbrel = r3.brojElemenata();\n\tfor (int i(0); i<brel; i++)\n\t\tstd::cout << r3.skini() << \" \";\n}\nbrel = r.brojElemenata();\nfor (int i(0); i<brel; i++)\n\tstd::cout << r.skini() << \" \";"
         }
-    ],
-    "version": "3",
-    "prepare": [
-        "compile"
-    ]
+      ],
+      "expect": "1 2 3 4 5 1 2 3 4 5 2 3 4 5"
+    },
+    {
+      "id": 2,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Test performansi (sve metode trebaju biti O(1) )\nRed<int> r;\nfor (int i(0); i<100000; i++)\nr.stavi(i);\nstd::cout << r.celo() << std::endl;\nfor (int i(0); i<99999; i++)\nr.skini();\nstd::cout << r.celo();"
+        }
+      ],
+      "expect": "0\n99999"
+    },
+    {
+      "id": 3,
+      "patch": [
+        {
+          "position": "main",
+          "code": "Red<int> r;\nfor (int i(1); i<=5; i++)\n    r.stavi(i);\n    try{\nfor (int i(0); i<=6;i++)\n    r.skini();\n    }\n    catch(...){\n        cout<<\"Izuzetak\";   \n    }"
+        }
+      ],
+      "expect": "Izuzetak"
+    },
+    {
+      "id": 4,
+      "patch": [
+        {
+          "position": "main",
+          "code": "Red<int> r;\nfor (int i(0); i<5; i++)\nr.stavi(i);\nstd::cout << r.celo()<<\" \";\nr.celo()++;\nstd::cout << r.celo();"
+        }
+      ],
+      "expect": "0 1"
+    }
+  ]
 }

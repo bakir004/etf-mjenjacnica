@@ -2,12 +2,13 @@
 import React from "react";
 import { TestTable } from "./TestTable";
 import { useUser } from "@clerk/nextjs";
-export function TestPage({}) {
+
+export async function TestPage({ fileNames }: { fileNames: string[] }) {
   const user = useUser();
   const email = user.user?.emailAddresses[0]?.emailAddress;
-  console.log(user);
+
   return (
-    <main className="mx-auto max-w-[1280px] p-4 sm:mt-12">
+    <main className="mx-auto max-w-[1600px] p-4 sm:mt-12">
       {email?.endsWith("@etf.unsa.ba") ||
       user.user?.fullName === "Bakir Cinjarevic" ||
       user.user?.fullName === "Danijal Alibegovic" ? (
@@ -23,7 +24,7 @@ export function TestPage({}) {
               (Nemojte unositi funkciju main!)
             </p>
           </div>
-          <TestTable />
+          <TestTable fileNames={fileNames} />
           <p className="mt-2 font-bold italic">
             Napomene: Ovi testovi nisu 100% mjerodavni iz sljedećih razloga:
           </p>

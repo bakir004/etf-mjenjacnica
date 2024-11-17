@@ -1,137 +1,34 @@
 {
-    "id": 1460,
-    "name": "Algoritmi i strukture podataka (2016\/2017), Pripremna Zadaca Za Vjezbu 5, zadatak 1",
-    "languages": [
-        "C++"
-    ],
-    "tools": {
-        "compile": {
-            "require": "g++",
-            "features": [
-                "optimize",
-                "warn",
-                "pedantic",
-                "C++11"
-            ]
-        },
-        "compile[debug]": {
-            "require": "g++",
-            "features": [
-                "debug",
-                "C++11",
-                "asan"
-            ]
-        },
-        "execute": {
-            "require": "asan"
-        },
-        "debug": [],
-        "profile[asan]": {
-            "require": "asan",
-            "fast": true,
-            "input_file": "stderr.txt"
+  "tests": [
+    {
+      "id": 0,
+      "patch": [
+        {
+          "position": "main",
+          "code": "cout << nzd(101,12);"
         }
+      ],
+      "expect": "1"
     },
-    "tests": [
+    {
+      "id": 1,
+      "patch": [
         {
-            "id": 1461,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "cout << nzd(101,12);",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "1"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1462,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "cout << fib2_0(20);",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "6765"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 1463,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "cout << nzd(6, 561);",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            "3"
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
-        },
-        {
-            "id": 3379,
-            "tools": [
-                {
-                    "patch": [
-                        {
-                            "position": "main",
-                            "code": "",
-                            "use_markers": true
-                        }
-                    ]
-                },
-                "compile[debug]",
-                {
-                    "execute": {
-                        "expect": [
-                            ""
-                        ]
-                    }
-                },
-                "debug",
-                "profile[asan]"
-            ]
+          "position": "main",
+          "code": "cout << fib2_0(20);"
         }
-    ],
-    "version": "3",
-    "prepare": [
-        "compile"
-    ]
+      ],
+      "expect": "6765"
+    },
+    {
+      "id": 2,
+      "patch": [
+        {
+          "position": "main",
+          "code": "cout << nzd(6, 561);"
+        }
+      ],
+      "expect": "3"
+    }
+  ]
 }

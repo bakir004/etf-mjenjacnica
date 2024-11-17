@@ -4,87 +4,60 @@ import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import LoadingSpinnerSVG from "./Spinner";
 import { Progress } from "~/components/ui/progress";
-import { BATCH_SIZE } from "~/lib/constants";
 import { useUser } from "@clerk/nextjs";
+import { delimiter } from "~/lib/test";
 
 export function CodeForm({
   sendResults,
   reset,
-  tests,
+  subject,
 }: {
-  sendResults: (
-    results: Array<{ output: string; error: string; id: number }>,
-  ) => void;
+  sendResults: (results: string[]) => void;
   reset: () => void;
-  tests: any;
+  subject: string;
 }) {
   const user = useUser();
   const [code, setCode] = useState<string>("");
-  const mutation = api.coderunner.getAll.useMutation({
-    onSuccess: (data) => {
-      if (data) sendResults(data);
+  const [runtimeError, setRuntimeError] = useState<string>("");
+  const codeRunner = api.coderunner.run.useMutation({
+    onSuccess: (data: { output: string; error: string }) => {
+      if (data?.error) {
+        setRuntimeError(data.error);
+      } else {
+        const results = data?.output?.split(delimiter);
+        results.pop();
+        results.forEach((result, index) => {
+          results[index] = result.trim();
+          results[index] = results[index].replace(/\r/g, "");
+        });
+        if (data) sendResults(results);
+      }
+    },
+    onError: (error) => {
+      console.error("Error:", error);
     },
   });
-  const { mutate, status, error } = mutation;
+  const { mutate, status, error } = codeRunner;
   const [progress, setProgress] = useState(0);
 
-  const submit = (event: React.FormEvent) => {
+  const submit = async (event: React.FormEvent) => {
     setProgress(0);
     reset();
     event.preventDefault();
+    setRuntimeError("");
 
     if (!code || code.length === 0) {
       alert("Unesite Vaš C++ kod!");
       return;
     }
 
-    const allCodes: { id: number; code: string }[] = [];
-    tests.forEach((item: any, i: number) => {
-      let currentCode = "";
-      (item?.tools[0] &&
-        typeof item.tools[0] !== "string" &&
-        item.tools[0].patch?.[1]?.position === "above_main") ||
-      (item?.tools[0] &&
-        typeof item.tools[0] !== "string" &&
-        item.tools[0].patch?.[1]?.position === "top_of_file")
-        ? (currentCode +=
-            item?.tools[0] &&
-            typeof item.tools[0] !== "string" &&
-            item.tools[0].patch?.[1]?.code + "\n")
-        : "";
-
-      currentCode += code;
-
-      item?.tools[0] &&
-      typeof item.tools[0] !== "string" &&
-      item.tools[0].patch?.[0]?.position === "main"
-        ? (currentCode += "\nint main() {\n")
-        : "";
-      currentCode +=
-        item?.tools[0] &&
-        typeof item.tools[0] !== "string" &&
-        item.tools[0].patch?.[0]?.code;
-
-      item?.tools[0] &&
-      typeof item.tools[0] !== "string" &&
-      item.tools[0].patch?.[0]?.position === "main"
-        ? (currentCode += "\n}")
-        : "";
-      allCodes.push({ id: i, code: currentCode });
+    mutate({
+      userId: user.user?.id ?? "null",
+      email: user.user?.emailAddresses[0]?.emailAddress ?? "null",
+      username: user.user?.fullName ?? "nepoznat",
+      userCode: code,
+      subject: subject,
     });
-
-    for (let i = 0; i < allCodes.length; i += BATCH_SIZE) {
-      setTimeout(() => {
-        console.log("Getting " + i + " to " + (i + BATCH_SIZE));
-        const codeBatch = allCodes.slice(i, BATCH_SIZE + i);
-        mutate({
-          codes: codeBatch,
-          senderEmail: user.user?.emailAddresses[0]?.emailAddress ?? "NULL",
-          senderName: user.user?.fullName ?? "NULL",
-        });
-        setProgress(((i + BATCH_SIZE) / allCodes.length) * 100);
-      }, i * 800);
-    }
   };
 
   return (
@@ -111,6 +84,11 @@ export function CodeForm({
         <Progress className="bg-blue-800" value={progress} />
         {error && <div className="text-sm text-red-700">{error.message}</div>}
       </div>
+      {runtimeError && (
+        <div className="mt-2 rounded bg-neutral-800 p-4 font-mono text-sm text-red-500">
+          {runtimeError}
+        </div>
+      )}
     </form>
   );
 }
