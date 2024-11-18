@@ -18,6 +18,7 @@ export const getTestFileNames = async () => {
         resolve(files);
       });
     });
+    // ok
     files.forEach((file, index) => {
       files[index] = file.replace(".json", "");
     });
