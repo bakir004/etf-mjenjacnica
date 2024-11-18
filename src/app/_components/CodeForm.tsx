@@ -85,7 +85,7 @@ export function CodeForm({
       i.toString(),
     );
     const batchSize = 4;
-    const delay = 2000;
+    const delay = 3000;
 
     for (let i = 0; i < allTestIds.length; i += batchSize) {
       const testIdsBatch = allTestIds.slice(i, i + batchSize); // Get the next batch of test IDs
