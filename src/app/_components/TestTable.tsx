@@ -10,21 +10,49 @@ import {
 } from "../../components/ui/table";
 import { CodeForm } from "./CodeForm";
 import { SelectForm } from "./Select";
-import asp5 from "../../tests/asp5.json";
+import aspz1 from "../../tests/aspz1.json";
 import { Tests } from "~/lib/test";
 import { api } from "~/trpc/react";
 
 export function TestTable({ fileNames }: { fileNames: string[] }) {
-  const [outputs, setOutputs] = useState<string[]>([]);
-  const [selectedSubject, setSelectedSubject] = useState<string>("asp5");
-  const [tests, setTests] = useState<Tests>(asp5);
+  const [outputs, setOutputs] = useState<
+    { output: string; id: number; error: string }[]
+  >([]);
+  const [selectedSubject, setSelectedSubject] = useState<string>("aspz1");
+  const [tests, setTests] = useState<Tests>(aspz1);
   const [subjects, setSubjects] = useState<string[]>([]);
 
   const resetOutputs = () => {
     setOutputs([]);
   };
   const getResults = (results: string[]) => {
-    setOutputs(results);
+    const newOutputs = results.map((result, index) => ({
+      output: result,
+      id: index,
+      error: "",
+    }));
+
+    setOutputs([...newOutputs]);
+  };
+  const getBatchResults = (
+    results: { mainCodeId: string; output: string; error: string }[],
+  ) => {
+    const newOutputs = results.map((result) =>
+      result.output.length > 0
+        ? {
+            output: result.output.replace(/\r/g, ""),
+            id: Number(result.mainCodeId),
+            error: "",
+          }
+        : { error: result.error, id: Number(result.mainCodeId), output: "" },
+    );
+    setOutputs((prevOutputs) => {
+      const unsortedOutputs = [...prevOutputs, ...newOutputs];
+      const sortedOutputs = unsortedOutputs.sort((a, b) =>
+        a.id > b.id ? 1 : a.id < b.id ? -1 : 0,
+      );
+      return sortedOutputs;
+    });
   };
   useEffect(() => {
     setSubjects(fileNames);
@@ -54,17 +82,19 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
         elements={subjects}
       ></SelectForm>
       <CodeForm
+        sendBatchResults={getBatchResults}
         subject={selectedSubject}
         reset={resetOutputs}
         sendResults={getResults}
+        tests={tests.tests}
       />
       {outputs.length > 0 && (
         <div className={`mt-4`}>
           Prošlo:{" "}
           {
             outputs.filter(
-              (output: string, i) =>
-                output.trim() === tests.tests[i]?.expect.trim(),
+              (output: { output: string; id: number }, i) =>
+                output.output.trim() === tests.tests[i]?.expect.trim(),
             ).length
           }
           /{tests.tests.length}
@@ -87,56 +117,61 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
             </TableRow>
           </TableHeader>
           <TableBody className="font-mono">
-            {outputs.map((item: any, i: number) => (
-              <TableRow
-                key={i}
-                className={`border-b border-neutral-500 ${
-                  tests.tests[i]?.expect.trim() === item.trim()
-                    ? "bg-green-800/40 hover:bg-green-800/50"
-                    : "bg-red-600/40 hover:bg-red-600/50"
-                }`}
-              >
-                <TableCell className="border-l border-r border-neutral-500 font-medium">
-                  {i + 1}
-                </TableCell>
-                <TableCell
-                  className="border-r border-neutral-500 text-xs"
-                  style={{
-                    whiteSpace: "pre-wrap",
-                  }}
+            {outputs.map(
+              (
+                item: { output: string; id: number; error: string },
+                i: number,
+              ) => (
+                <TableRow
+                  key={i}
+                  className={`border-b border-neutral-500 ${
+                    tests.tests[i]?.expect.trim() === item.output.trim()
+                      ? "bg-green-800/40 hover:bg-green-800/50"
+                      : "bg-red-600/40 hover:bg-red-600/50"
+                  }`}
                 >
-                  {"int main() {\n"}
-                  <span className="ml-[4ch]">
-                    {tests.tests[i]?.patch[0]
-                      ? tests.tests[i].patch[0].code
-                      : ""}
-                    {tests.tests[i]?.patch[1]
-                      ? tests.tests[i].patch[1].code
-                      : ""}
-                    {tests.tests[i]?.patch[2]
-                      ? tests.tests[i].patch[2].code
-                      : ""}
-                  </span>
-                  {"\n    return 0;\n}\n"}
-                </TableCell>
-                <TableCell
-                  className="border-r border-neutral-500"
-                  style={{
-                    whiteSpace: "pre-wrap",
-                  }}
-                >
-                  {tests.tests[i]?.expect}
-                </TableCell>
-                <TableCell
-                  className="border-r border-neutral-500"
-                  style={{
-                    whiteSpace: "pre-wrap",
-                  }}
-                >
-                  {item}
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell className="border-l border-r border-neutral-500 font-medium">
+                    {i + 1}
+                  </TableCell>
+                  <TableCell
+                    className="border-r border-neutral-500 text-xs"
+                    style={{
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
+                    {"int main() {\n"}
+                    <span className="ml-[4ch]">
+                      {tests.tests[i]?.patch[0]
+                        ? tests.tests[i].patch[0].code
+                        : ""}
+                      {tests.tests[i]?.patch[1]
+                        ? tests.tests[i].patch[1].code
+                        : ""}
+                      {tests.tests[i]?.patch[2]
+                        ? tests.tests[i].patch[2].code
+                        : ""}
+                    </span>
+                    {"\n    return 0;\n}\n"}
+                  </TableCell>
+                  <TableCell
+                    className="border-r border-neutral-500"
+                    style={{
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
+                    {tests.tests[i]?.expect}
+                  </TableCell>
+                  <TableCell
+                    className="border-r border-neutral-500"
+                    style={{
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
+                    {item.output.length > 0 ? item.output : item.error}
+                  </TableCell>
+                </TableRow>
+              ),
+            )}
           </TableBody>
         </Table>
       )}

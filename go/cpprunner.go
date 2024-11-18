@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -21,7 +22,7 @@ type CodeRequest struct {
 type BatchRequest struct {
 	UserID    string      `json:"userId"`
 	UserCode  string      `json:"userCode"`
-	MainCodes []MainCode `json:"mainCodes"`
+	MainCodes []MainCode  `json:"mainCodes"`
 }
 
 type MainCode struct {
@@ -45,26 +46,22 @@ type BatchResult struct {
 }
 
 type CacheEntry struct {
-	UserID     string
 	UserCode   string
 	HeaderPath string
 }
 
 type Cache struct {
 	mu      sync.Mutex
-	entries []CacheEntry
+	entries map[string]string
 }
 
 func (c *Cache) GetHeaderPath(userID, userCode string) (string, bool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	for _, entry := range c.entries {
-		if entry.UserID == userID && entry.UserCode == userCode {
-			return entry.HeaderPath, true
-		}
-	}
-	return "", false
+	key := userID + ":" + userCode
+	path, exists := c.entries[key]
+	return path, exists
 }
 
 func (c *Cache) AddEntry(userID, userCode, headerPath string) {
@@ -72,16 +69,27 @@ func (c *Cache) AddEntry(userID, userCode, headerPath string) {
 	defer c.mu.Unlock()
 
 	if len(c.entries) == 10 {
-		os.Remove(c.entries[0].HeaderPath)
-		c.entries = c.entries[1:]
+		for key, path := range c.entries {
+			os.Remove(path)
+			delete(c.entries, key)
+			break
+		}
 	}
 
-	c.entries = append(c.entries, CacheEntry{userID, userCode, headerPath})
+	key := userID + ":" + userCode
+	c.entries[key] = headerPath
 }
 
-var headerCache = &Cache{}
+var headerCache = &Cache{entries: make(map[string]string)}
+
+func logDuration(start time.Time, operation string) {
+	elapsed := time.Since(start)
+	log.Printf("%s took %s", operation, elapsed)
+}
 
 func runCppCode(userID, userCode, mainCode string) CodeResponse {
+	defer logDuration(time.Now(), "runCppCode")
+
 	headerPath, cached := headerCache.GetHeaderPath(userID, userCode)
 	if !cached {
 		headerFile, err := os.CreateTemp("", "*.h")
@@ -96,9 +104,9 @@ func runCppCode(userID, userCode, mainCode string) CodeResponse {
 		}
 
 		headerCache.AddEntry(userID, userCode, headerPath)
-		fmt.Println("Added to cache")
+		log.Println("Cache miss: added new entry")
 	} else {
-		fmt.Println("Not added to cache")
+		log.Println("Cache hit")
 	}
 
 	mainFile, err := os.CreateTemp("", "*.cpp")
@@ -111,6 +119,7 @@ func runCppCode(userID, userCode, mainCode string) CodeResponse {
 	if _, err := mainFile.WriteString(includeDirective + mainCode); err != nil {
 		return CodeResponse{"", fmt.Sprintf("Failed to write main code to file: %v", err)}
 	}
+
 	if err := mainFile.Close(); err != nil {
 		return CodeResponse{"", fmt.Sprintf("Failed to close temp main file: %v", err)}
 	}
@@ -148,9 +157,11 @@ func runCppCode(userID, userCode, mainCode string) CodeResponse {
 }
 
 func handleCodeExecution(w http.ResponseWriter, r *http.Request) {
+	start := time.Now()
+	defer logDuration(start, "handleCodeExecution")
+
 	var req CodeRequest
-	err := json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
@@ -162,53 +173,60 @@ func handleCodeExecution(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleBatchExecution(w http.ResponseWriter, r *http.Request) {
+	start := time.Now()
+	defer logDuration(start, "handleBatchExecution")
+
 	var req BatchRequest
-	err := json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
 
-	// Semaphore to limit concurrency to 2
-	const maxConcurrency = 2
-	semaphore := make(chan struct{}, maxConcurrency)
+	const maxConcurrency = 4 // Number of threads to run concurrently
+	semaphore := make(chan struct{}, maxConcurrency) // Concurrency control
+	resultsChan := make(chan BatchResult, len(req.MainCodes))
 
-	var results []BatchResult
 	var wg sync.WaitGroup
-	var mu sync.Mutex // To protect shared slice `results`
 
+	// Loop through each main code and process it in a separate goroutine
 	for _, mainCode := range req.MainCodes {
 		wg.Add(1)
 
-		// Acquire semaphore
+		// Acquire a semaphore slot to limit concurrency
 		semaphore <- struct{}{}
+
 		go func(mainCode MainCode) {
 			defer wg.Done()
-			defer func() { <-semaphore }() // Release semaphore
+			defer func() { <-semaphore }() // Release semaphore slot when done
 
+			// Process the code and send the result
 			result := runCppCode(req.UserID, req.UserCode, mainCode.MainCode)
-
-			mu.Lock()
-			results = append(results, BatchResult{
-				MainCodeID: mainCode.ID,
-				Output:     result.Output,
-				Error:      result.Error,
-			})
-			mu.Unlock()
+			resultsChan <- BatchResult{MainCodeID: mainCode.ID, Output: result.Output, Error: result.Error}
 		}(mainCode)
 	}
 
 	// Wait for all goroutines to finish
-	wg.Wait()
+	go func() {
+		wg.Wait()
+		close(resultsChan)
+	}()
 
+	// Collect results from the channel
+	var results []BatchResult
+	for result := range resultsChan {
+		results = append(results, result)
+	}
+
+	// Respond with the aggregated results
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(BatchResponse{Results: results})
 }
+
 
 func main() {
 	http.HandleFunc("/api/v1/run", handleCodeExecution)
 	http.HandleFunc("/api/v1/batch-run", handleBatchExecution)
 
-	fmt.Println("Server started at :8080")
+	log.Println("Server started at :8080")
 	http.ListenAndServe(":8080", nil)
 }

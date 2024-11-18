@@ -87,7 +87,7 @@ export const coderunnerRouter = createTRPCRouter({
         }
 
         const result: { output: string; error: string } = await response.json();
-        console.log(result);
+        // console.log(result);
         return result;
       } catch (error: any) {
         console.error("API call error:", error.message || error);
@@ -157,7 +157,6 @@ export const coderunnerRouter = createTRPCRouter({
         let mainCodes: { id: string; mainCode: string }[] = [];
         testJson.tests.forEach((test: Test, i: number) => {
           if (input.testIds.includes(test.id.toString())) {
-            console.log(test.id + " . " + input.testIds);
             const mainCodeForThisTest = test.patch.find(
               (patch) => patch.position === "main",
             )?.code;
@@ -197,13 +196,15 @@ export const coderunnerRouter = createTRPCRouter({
           throw new Error(`Failed to call external API: ${errorText}`);
         }
 
-        const result: { output: string; error: string } = await response.json();
-        console.log(result);
-        return result;
+        const results: {
+          results: { output: string; error: string; mainCodeId: string }[];
+        } = await response.json();
+        // console.log(results.results);
+        return results.results;
       } catch (error: any) {
         console.error("API call error:", error.message || error);
 
-        return { output: "", error: error.message || error };
+        return [{ output: "", error: error.message || error, mainCodeId: "" }];
       }
     }),
 });
