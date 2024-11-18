@@ -51,12 +51,45 @@ export function CodeForm({
       return;
     }
 
-    mutate({
+    // mutate({
+    //   userId: user.user?.id ?? "null",
+    //   email: user.user?.emailAddresses[0]?.emailAddress ?? "null",
+    //   username: user.user?.fullName ?? "nepoznat",
+    //   userCode: code,
+    //   subject: subject,
+    // });
+  };
+
+  const batchCodeRunner = api.coderunner.runBatch.useMutation({
+    onSuccess: (data: { output: string; error: string }) => {
+      if (data?.error) {
+        setRuntimeError(data.error);
+      } else {
+        console.log(data);
+        // results.forEach((result, index) => {
+        //   results[index] = result.trim();
+        //   results[index] = results[index].replace(/\r/g, "");
+        // });
+        // if (data) sendResults(results);
+      }
+    },
+    onError: (error) => {
+      console.error("Error:", error);
+    },
+  });
+
+  const batchRun = () => {
+    setProgress(0);
+    setRuntimeError("");
+
+    batchCodeRunner.mutate({
       userId: user.user?.id ?? "null",
       email: user.user?.emailAddresses[0]?.emailAddress ?? "null",
       username: user.user?.fullName ?? "nepoznat",
       userCode: code,
       subject: subject,
+      // testIds: ["1", "2", "3", "4", "5"],
+      testIds: ["6", "7", "8", "9", "10"],
     });
   };
 
@@ -84,6 +117,7 @@ export function CodeForm({
         <Progress className="bg-blue-800" value={progress} />
         {error && <div className="text-sm text-red-700">{error.message}</div>}
       </div>
+      <Button onClick={batchRun}>pokren</Button>
       {runtimeError && (
         <div className="mt-2 rounded bg-neutral-800 p-4 font-mono text-sm text-red-500">
           {runtimeError}
