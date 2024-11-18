@@ -11,7 +11,7 @@ import {
 import { CodeForm } from "./CodeForm";
 import { SelectForm } from "./Select";
 import aspz1 from "../../tests/aspz1.json";
-import { Tests } from "~/lib/test";
+import { type Tests } from "~/lib/test";
 import { api } from "~/trpc/react";
 
 export function TestTable({ fileNames }: { fileNames: string[] }) {
@@ -56,7 +56,7 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
   };
   useEffect(() => {
     setSubjects(fileNames);
-  }, []);
+  }, [fileNames]);
   const { data } = api.coderunner.getTestData.useQuery(
     { subject: selectedSubject },
     {
@@ -68,7 +68,7 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
     if (data && data !== tests) {
       setTests(data);
     }
-  }, [data]);
+  }, [data, tests]);
 
   const handleSubjectChange = (v: string) => {
     setSelectedSubject(v);

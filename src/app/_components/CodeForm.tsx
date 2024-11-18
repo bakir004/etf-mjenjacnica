@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import LoadingSpinnerSVG from "./Spinner";
 import { Progress } from "~/components/ui/progress";
 import { useUser } from "@clerk/nextjs";
-import { delimiter, Test } from "~/lib/test";
+import { delimiter, type Test } from "~/lib/test";
 
 export function CodeForm({
   sendResults,

@@ -4,8 +4,8 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import fs from "fs";
 import path from "path";
 import {
-  Test,
-  Tests,
+  type Test,
+  type Tests,
   testsJsonToCodeParts,
   wrapMainCodeInMainFunction,
 } from "~/lib/test";
@@ -15,11 +15,7 @@ export const getTestFileNames = async () => {
   try {
     const files = await new Promise<string[]>((resolve, reject) => {
       fs.readdir(folderPath, (err, files) => {
-        if (err) {
-          reject("Failed to read directory: " + err);
-        } else {
-          resolve(files);
-        }
+        resolve(files);
       });
     });
     files.forEach((file, index) => {
@@ -43,7 +39,7 @@ export const coderunnerRouter = createTRPCRouter({
         subject: z.string(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       try {
         const codeRunnerUrl =
           env.NODE_ENV === "production"
@@ -99,12 +95,12 @@ export const coderunnerRouter = createTRPCRouter({
     const requests = await ctx.db.codeRequest.findMany();
     return requests ?? null;
   }),
-  getTestFileNames: publicProcedure.query(async ({ ctx }) => {
+  getTestFileNames: publicProcedure.query(async ({}) => {
     return getTestFileNames();
   }),
   getTestData: publicProcedure
     .input(z.object({ subject: z.string() })) // Takes a subject name as input
-    .query(async ({ ctx, input }) => {
+    .query(async ({ input }) => {
       const testJsonFileName = `${input.subject}.json`;
       const testJsonFilePath = path.join(
         process.cwd(),
@@ -133,7 +129,7 @@ export const coderunnerRouter = createTRPCRouter({
         testIds: z.array(z.string()),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       try {
         console.time("myCodeBlock");
         const codeRunnerUrl =
@@ -154,8 +150,8 @@ export const coderunnerRouter = createTRPCRouter({
           fs.readFileSync(testJsonFilePath, "utf-8"),
         );
 
-        let mainCodes: { id: string; mainCode: string }[] = [];
-        testJson.tests.forEach((test: Test, i: number) => {
+        const mainCodes: { id: string; mainCode: string }[] = [];
+        testJson.tests.forEach((test: Test) => {
           if (input.testIds.includes(test.id.toString())) {
             const mainCodeForThisTest = test.patch.find(
               (patch) => patch.position === "main",
