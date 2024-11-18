@@ -25,7 +25,7 @@ const testJsonFormatter = (filePath: string) => {
         expect: "",
       };
       const patchArray = item.tools[0].patch;
-      let newPatchArray: Array<{ position: string; code: string }> = [];
+      const newPatchArray: Array<{ position: string; code: string }> = [];
       patchArray.forEach((patch: any) => {
         newPatchArray.push({
           position: patch.position,

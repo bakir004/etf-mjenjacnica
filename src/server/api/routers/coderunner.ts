@@ -13,7 +13,7 @@ import {
 export const getTestFileNames = async () => {
   const folderPath = path.join(process.cwd(), "src", "tests"); // Safer way to build the path
   try {
-    const files = await new Promise<string[]>((resolve, reject) => {
+    const files = await new Promise<string[]>((resolve) => {
       fs.readdir(folderPath, (err, files) => {
         resolve(files);
       });
