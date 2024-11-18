@@ -182,7 +182,7 @@ func handleBatchExecution(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	const maxConcurrency = 8 // Number of threads to run concurrently
+	const maxConcurrency = 8 // Number of thads to run concurrently
 	semaphore := make(chan struct{}, maxConcurrency) // Concurrency control
 	resultsChan := make(chan BatchResult, len(req.MainCodes))
 
