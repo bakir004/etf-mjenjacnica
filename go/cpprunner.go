@@ -135,7 +135,7 @@ func runCppCode(userID, userCode, mainCode string) CodeResponse {
 
 	defer os.Remove(compiledFile)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 6*time.Second)
 	defer cancel()
 
 	runCmd := exec.CommandContext(ctx, compiledFile)
@@ -146,7 +146,7 @@ func runCppCode(userID, userCode, mainCode string) CodeResponse {
 	err = runCmd.Run()
 
 	if ctx.Err() == context.DeadlineExceeded {
-		return CodeResponse{"", "Execution timed out after 8 seconds"}
+		return CodeResponse{"", "Execution timed out after 6 seconds"}
 	}
 
 	if err != nil {
@@ -182,7 +182,7 @@ func handleBatchExecution(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	const maxConcurrency = 4 // Number of threads to run concurrently
+	const maxConcurrency = 8 // Number of threads to run concurrently
 	semaphore := make(chan struct{}, maxConcurrency) // Concurrency control
 	resultsChan := make(chan BatchResult, len(req.MainCodes))
 
