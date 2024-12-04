@@ -10,9 +10,7 @@ export default async function GraphPage() {
   const offers = await api.offer.getAll();
   return (
     <SuspenseWrapper>
-      <HydrateClient>
-        <GraphViewNoSSR offers={offers}></GraphViewNoSSR>
-      </HydrateClient>
+      <GraphViewNoSSR offers={offers}></GraphViewNoSSR>
     </SuspenseWrapper>
   );
 }

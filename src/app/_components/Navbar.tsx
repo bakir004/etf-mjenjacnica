@@ -41,6 +41,7 @@ export default function Navbar() {
         </Link>
         <SignedIn>
           <Link
+            prefetch={true}
             href={"/testovi"}
             className="flex items-center gap-2 rounded bg-secondary px-2 py-1 text-sm transition hover:scale-110 hover:bg-secondary/80"
           >
