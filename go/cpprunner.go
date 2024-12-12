@@ -125,7 +125,7 @@ func runCppCode(userID, userCode, mainCode string) CodeResponse {
 	}
 
 	compiledFile := mainFile.Name() + ".out"
-	compileCmd := exec.Command("g++", "-O0", mainFile.Name(), "-o", compiledFile)
+	compileCmd := exec.Command("g++", "-fsanitize=leak", mainFile.Name(), "-o", compiledFile)
 	var compileErrBuf bytes.Buffer
 	compileCmd.Stderr = &compileErrBuf
 

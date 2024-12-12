@@ -1,0 +1,27 @@
+import java.util.*; // ovo se ne radi u praksi, nego se importa sta treba
+
+public class Main {
+    public static void main(String args[]) {
+        Scanner s = new Scanner(System.in);
+        int m = s.nextInt();
+        List<Integer> l = new ArrayList();
+        for(int i = 0; i < m; i++) {
+            int n = s.nextInt();
+            l.add(n);
+        }
+        int maxSum = 0;
+        int currentSum = 0;
+        for(int i = 0; i < l.size(); i++) {
+            if(l.get(i) % 2 == 1) {
+                if(currentSum > maxSum)
+                    maxSum = currentSum;
+                currentSum = 0;
+            } else {
+                currentSum += l.get(i);
+            }
+        }
+        if(currentSum > maxSum)
+            maxSum = currentSum;
+        System.out.print(maxSum);
+    }
+}
