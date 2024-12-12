@@ -44,6 +44,7 @@
     "react-vis-network-graph": "^3.0.1",
     "reagraph": "^4.19.3",
     "server-only": "^0.0.1",
+    "socket.io-client": "^4.8.1",
     "sonner": "^1.5.0",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.5.3",

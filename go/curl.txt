@@ -1,0 +1,62 @@
+curl -X POST http://localhost:8080/api/v1/batch-run   -H "Content-Type: application/json"   -d '{
+    "userId": "69",
+    "userCode": "#include<iostream>\n#include<string>\n\nconst float FAKTOR_PROSIRENJA = 1.5;\nconst int POCETNA_VELICINA = 10;\nusing namespace std;\n\ntemplate <typename K, typename V>\nclass Mapa {\npublic:\n    virtual ~Mapa() {}\n    virtual void obrisi() = 0;\n    virtual void obrisi(const K& kljuc) = 0;\n    virtual int brojElemenata() const = 0;\n    virtual V& operator[] (const K& kljuc) = 0;\n    virtual V operator[] (const K& kljuc) const = 0;\n};\n\ntemplate <typename K, typename V>\nclass NizMapa : public Mapa<K, V> {\n    std::pair<K, V>** niz;\n    int broj_el;\n    int kapacitet;\npublic:\n    NizMapa() : niz(new std::pair<K, V>*[POCETNA_VELICINA]{}), broj_el(0), kapacitet(POCETNA_VELICINA) {}\n    ~NizMapa() {\n        for (int i = 0; i < broj_el; i++)\n            delete niz[i];\n        delete[] niz;\n    }\n    NizMapa(const NizMapa& nm) : niz(new std::pair<K, V>*[nm.kapacitet]{}), broj_el(nm.broj_el), kapacitet(nm.kapacitet) {\n        for (int i = 0; i < nm.kapacitet; i++)\n            if (nm.niz[i] != nullptr)\n                niz[i] = new std::pair<K, V>(*nm.niz[i]);\n    }\n    NizMapa& operator=(const NizMapa& nm) {\n        if (this == &nm)\n            return *this;\n        for (int i = 0; i < kapacitet; i++)\n            delete niz[i];\n        delete[] niz;\n\n        broj_el = nm.broj_el;\n        kapacitet = nm.kapacitet;\n        niz = new std::pair<K, V>*[kapacitet]{};\n        for (int i = 0; i < kapacitet; i++)\n            if (nm.niz[i] != nullptr)\n                niz[i] = new std::pair<K, V>(*nm.niz[i]);\n        return *this;\n    }\n    V operator[](const K& kljuc) const {\n        for (int i = 0; i < kapacitet; i++) {\n            if (niz[i] != nullptr && niz[i]->first == kljuc)\n                return niz[i]->second;\n        }\n        return V();\n    }\n    V& operator[](const K& kljuc) {\n        for (int i = 0; i < kapacitet; i++) {\n            if (niz[i] != nullptr && niz[i]->first == kljuc)\n                return niz[i]->second;\n        }\n\n        for (int i = 0; i < kapacitet; i++) {\n            if (niz[i] == nullptr) {\n                niz[i] = new std::pair<K, V>(kljuc, V());\n                broj_el++;\n                return niz[i]->second;\n            }\n        }\n\n        int novi_kapacitet = kapacitet * FAKTOR_PROSIRENJA;\n        std::pair<K, V>** temp = new std::pair<K, V>*[novi_kapacitet]{};\n        for (int i = 0; i < kapacitet; i++)\n            temp[i] = niz[i];\n\n        delete[] niz;\n        niz = temp;\n        kapacitet = novi_kapacitet;\n\n        niz[broj_el] = new std::pair<K, V>(kljuc, V());\n        broj_el++;\n        return niz[broj_el - 1]->second;\n    }\n    void obrisi() {\n        for (int i = 0; i < kapacitet; i++) {\n            delete niz[i];\n            niz[i] = nullptr;\n        }\n        broj_el = 0;\n    }\n    void obrisi(const K& kljuc) {\n        for (int i = 0; i < kapacitet; i++) {\n            if (niz[i] != nullptr && niz[i]->first == kljuc) {\n                delete niz[i];\n                niz[i] = nullptr;\n                broj_el--;\n                return;\n            }\n        }\n    }\n    int brojElemenata() const { return broj_el; }\n};",
+    "mainCodes": [
+      {
+        "id": "1",
+        "mainCode": " int main() {\n int a=0;  for(int i = 0; i < 1000000000;i++){a++;}  return 0;\n}"
+      },
+      {
+        "id": "2",
+        "mainCode": " int main() {\n    NizMapa<int, int> m1;\n    m1[1] = 3;\n    std::cout << m1[1] << std::endl;\n    return 0;\n}"
+      },
+            {
+        "id": "3",
+        "mainCode": " int main() {\n    NizMapa<int, int> m1;\n    m1[1] = 3;\n    std::cout << m1[1] << std::endl;\n    return 0;\n}"
+      },
+      {
+        "id": "4",
+        "mainCode": " int main() {\n    NizMapa<int, int> m1;\n    m1[1] = 3;\n    std::cout << m1[1] << std::endl;\n    return 0;\n}"
+      },
+      {
+        "id": "5",
+        "mainCode": " int main() {\n    NizMapa<int, int> m1;\n    m1[1] = 3;\n    std::cout << m1[1] << std::endl;\n    return 0;\n}"
+      },
+      {
+        "id": "6",
+        "mainCode": " int main() {\n    NizMapa<int, int> m1;\n    m1[1] = 3;\n    std::cout << m1[1] << std::endl;\n    return 0;\n}"
+      },
+      {
+        "id": "7",
+        "mainCode": " int main() {\n    NizMapa<int, int> m1;\n    m1[1] = 3;\n    std::cout << m1[1] << std::endl;\n    return 0;\n}"
+      },
+      {
+        "id": "8",
+        "mainCode": " int main() {\n    NizMapa<int, int> m1;\n    m1[1] = 3;\n    std::cout << m1[1] << std::endl;\n    return 0;\n}"
+      },
+      {
+        "id": "9",
+        "mainCode": " int main() {\n    NizMapa<int, int> m1;\n    m1[1] = 3;\n    std::cout << m1[1] << std::endl;\n    return 0;\n}"
+      },
+      {
+        "id": "10",
+        "mainCode": " int main() {\n    NizMapa<int, int> m1;\n    m1[1] = 3;\n    std::cout << m1[1] << std::endl;\n    return 0;\n}"
+      }
+    ]
+}'
+
+curl -X POST http://localhost:8080/api/v1/batch-run   -H "Content-Type: application/json"   -d '{
+    "userId": "69",
+    "userCode": "#include<iostream>",
+    "mainCodes": [
+      {
+        "id": "2",
+        "mainCode": " int main() {\n int a=0;  for(int i = 0; i < 1000000000;i++){a++;}  return 0;\n}"
+      },
+      {
+        "id": "3",
+        "mainCode": " int main() {\n std::cout<<\"ok\";  return 0;\n}"
+      }
+    ]
+}'
+

@@ -3,7 +3,7 @@ import React from "react";
 import { TestTable } from "./TestTable";
 import { useUser } from "@clerk/nextjs";
 
-export async function TestPage({ fileNames }: { fileNames: string[] }) {
+export function TestPage({ fileNames }: { fileNames: string[] }) {
   const user = useUser();
   const email = user.user?.emailAddresses[0]?.emailAddress;
 

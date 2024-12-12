@@ -87,8 +87,9 @@ func logDuration(start time.Time, operation string) {
 	log.Printf("%s took %s", operation, elapsed)
 }
 
-func runCppCode(userID, userCode, mainCode string) CodeResponse {
+func runCppCode(userID, userCode, mainCode string, mainCodeID string) CodeResponse {
 	defer logDuration(time.Now(), "runCppCode")
+	compileStart := time.Now()
 
 	headerPath, cached := headerCache.GetHeaderPath(userID, userCode)
 	if !cached {
@@ -125,17 +126,26 @@ func runCppCode(userID, userCode, mainCode string) CodeResponse {
 	}
 
 	compiledFile := mainFile.Name() + ".out"
-	compileCmd := exec.Command("g++", "-fsanitize=leak", mainFile.Name(), "-o", compiledFile)
+	compileCmd := exec.Command("g++", "-O3", "-fsanitize=leak", mainFile.Name(), "-o", compiledFile)
 	var compileErrBuf bytes.Buffer
 	compileCmd.Stderr = &compileErrBuf
 
+	// Ensure a fresh buffer and unique log entry
+	compileErrBuf.Reset() // Reset the buffer to avoid accumulation
 	if err := compileCmd.Run(); err != nil {
-		return CodeResponse{"", fmt.Sprintf("Compilation Error: %s", compileErrBuf.String())}
+		// Log error with unique ID
+		return CodeResponse{"", fmt.Sprintf("Compilation Error [ID %s]: %s", mainCodeID, compileErrBuf.String())}
 	}
+
+	compileDuration := time.Since(compileStart)
+	log.Printf("Compilation of ID %s took %s", mainCodeID, compileDuration)
 
 	defer os.Remove(compiledFile)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 6*time.Second)
+	runStart := time.Now()
+
+	// Execute with timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	runCmd := exec.CommandContext(ctx, compiledFile)
@@ -146,12 +156,16 @@ func runCppCode(userID, userCode, mainCode string) CodeResponse {
 	err = runCmd.Run()
 
 	if ctx.Err() == context.DeadlineExceeded {
-		return CodeResponse{"", "Execution timed out after 6 seconds"}
+		return CodeResponse{"", "Execution timed out after 5 seconds"}
 	}
 
 	if err != nil {
-		return CodeResponse{"", fmt.Sprintf("Execution Error: %s", errBuf.String())}
+		// Log execution error with unique ID
+		return CodeResponse{"", fmt.Sprintf("Execution Error [ID %s]: %s", mainCodeID, errBuf.String())}
 	}
+
+	runtime := time.Since(runStart)
+	log.Printf("Execution of %s took %s", mainCodeID, runtime)
 
 	return CodeResponse{outBuf.String(), ""}
 }
@@ -166,7 +180,7 @@ func handleCodeExecution(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := runCppCode(req.UserID, req.UserCode, req.MainCode)
+	result := runCppCode(req.UserID, req.UserCode, req.MainCode, "1")
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)
@@ -182,42 +196,37 @@ func handleBatchExecution(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	const maxConcurrency = 8 // Number of thads to run concurrently
+	const maxConcurrency = 4 // Number of thads to run concurrently
 	semaphore := make(chan struct{}, maxConcurrency) // Concurrency control
 	resultsChan := make(chan BatchResult, len(req.MainCodes))
 
 	var wg sync.WaitGroup
 
-	// Loop through each main code and process it in a separate goroutine
 	for _, mainCode := range req.MainCodes {
 		wg.Add(1)
 
-		// Acquire a semaphore slot to limit concurrency
 		semaphore <- struct{}{}
 
 		go func(mainCode MainCode) {
 			defer wg.Done()
 			defer func() { <-semaphore }() // Release semaphore slot when done
-
-			// Process the code and send the result
-			result := runCppCode(req.UserID, req.UserCode, mainCode.MainCode)
+            println("Running code for main code id: ", mainCode.ID)
+			result := runCppCode(req.UserID, req.UserCode, mainCode.MainCode, mainCode.ID)
 			resultsChan <- BatchResult{MainCodeID: mainCode.ID, Output: result.Output, Error: result.Error}
 		}(mainCode)
 	}
 
-	// Wait for all goroutines to finish
 	go func() {
 		wg.Wait()
 		close(resultsChan)
 	}()
 
-	// Collect results from the channel
 	var results []BatchResult
 	for result := range resultsChan {
 		results = append(results, result)
 	}
 
-	// Respond with the aggregated results
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(BatchResponse{Results: results})
 }
