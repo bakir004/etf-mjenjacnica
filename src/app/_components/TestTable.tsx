@@ -18,7 +18,7 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
   const [outputs, setOutputs] = useState<
     { output: string; id: number; error: string }[]
   >([]);
-  const [selectedSubject, setSelectedSubject] = useState<string>("aspz1");
+  const [selectedSubject, setSelectedSubject] = useState<string>("asp6");
   const [tests, setTests] = useState<Tests>(asp6);
   const [subjects, setSubjects] = useState<string[]>([]);
 
