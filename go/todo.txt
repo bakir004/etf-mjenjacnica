@@ -37,4 +37,7 @@
 			- success
 - ako je outputList[] na responseu nepotpun (len != brojTestova), tada znamo da je neki segfault, i treba dodat na vrh maina goto
 - pitanje je: sta je brze: ubrzati kod sporim uklanjanjem template koda za prethodne testove, ili samo dodat goto?
-- 
+
+IDEMO DALJE:
+
+- isChanged na frontendu detektuje promjene i salje bool 'changed' za brze cachiranje
