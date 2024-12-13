@@ -26,7 +26,7 @@ export function CodeForm({
   const [code, setCode] = useState<string>("");
   const [runtimeError, setRuntimeError] = useState<string>("");
   const [batchSize, setBatchSize] = useState<number>(4);
-  const [delay, setDelay] = useState<number>(2000);
+  const [delay, setDelay] = useState<number>(2500);
   const codeRunner = api.coderunner.run.useMutation({
     onSuccess: (data: { output: string; error: string }) => {
       if (data?.error) {
