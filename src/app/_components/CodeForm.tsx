@@ -25,6 +25,8 @@ export function CodeForm({
   const user = useUser();
   const [code, setCode] = useState<string>("");
   const [runtimeError, setRuntimeError] = useState<string>("");
+  const [batchSize, setBatchSize] = useState<number>(4);
+  const [delay, setDelay] = useState<number>(1500);
   const codeRunner = api.coderunner.run.useMutation({
     onSuccess: (data: { output: string; error: string }) => {
       if (data?.error) {
@@ -84,8 +86,6 @@ export function CodeForm({
     const allTestIds = Array.from({ length: tests.length }, (_, i) =>
       i.toString(),
     );
-    const batchSize = 5;
-    const delay = 2000;
 
     for (let i = 0; i < allTestIds.length; i += batchSize) {
       const testIdsBatch = allTestIds.slice(i, i + batchSize); // Get the next batch of test IDs
