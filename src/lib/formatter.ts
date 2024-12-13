@@ -45,4 +45,4 @@ const testJsonFormatter = (filePath: string) => {
     console.error("An error occurred:", e);
   }
 };
-testJsonFormatter("src/tests/asp6.json");
+testJsonFormatter("src/tests/na2test.json");
