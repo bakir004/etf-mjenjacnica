@@ -1,0 +1,74 @@
+{
+  "tests": [
+    {
+      "id": 0,
+      "patch": [
+        {
+          "position": "main",
+          "code": "int niz[5] = {3, 2, 8, 1, 5};\nbubble_sort(niz, 5);\nfor (int i(0); i<5; i++)\n    cout << niz[i] << \" \";"
+        }
+      ],
+      "expect": "1 2 3 5 8"
+    },
+    {
+      "id": 1,
+      "patch": [
+        {
+          "position": "main",
+          "code": "int niz[5] = {3, 2, 8, 1, 5};\nselection_sort(niz, 5);\nfor (int i(0); i<5; i++)\n    cout << niz[i] << \" \";"
+        }
+      ],
+      "expect": "1 2 3 5 8"
+    },
+    {
+      "id": 2,
+      "patch": [
+        {
+          "position": "main",
+          "code": "int niz[5] = {3, 2, 8, 1, 5};\nquick_sort(niz, 5);\nfor (int i(0); i<5; i++)\n    cout << niz[i] << \" \";"
+        }
+      ],
+      "expect": "1 2 3 5 8"
+    },
+    {
+      "id": 3,
+      "patch": [
+        {
+          "position": "main",
+          "code": "int niz[5] = {3, 2, 8, 1, 5};\nmerge_sort(niz, 5);\nfor (int i(0); i<5; i++)\n    cout << niz[i] << \" \";"
+        }
+      ],
+      "expect": "1 2 3 5 8"
+    },
+    {
+      "id": 4,
+      "patch": [
+        {
+          "position": "main",
+          "code": "int vel(10000000);\nint* niz = new int[vel];\nfor (int i(0); i<vel; i++)\n\tniz[i] = rand();\nquick_sort(niz, vel);\nfor(int i(0); i<vel-1; i++) \n\tif(niz[i] > niz[i+1]) {\n\t\tcout << \"NOT \";\n\t\tbreak;\n\t}\ncout << \"OK\";\ndelete[] niz;"
+        }
+      ],
+      "expect": "OK"
+    },
+    {
+      "id": 5,
+      "patch": [
+        {
+          "position": "main",
+          "code": "int vel(10000000);\nint* niz = new int[vel];\nfor (int i(0); i<vel; i++)\n\tniz[i] = rand();\nquick_sort(niz, vel);\nfor(int i(0); i<vel-1; i++) \n\tif(niz[i] > niz[i+1]) {\n\t\tcout << \"Greska: i=\"<<i<<\" \"<<niz[i]<<\">\"<<niz[i+1]<<endl;\n\t\tbreak;\n\t}\ncout << \"OK\";\ndelete[] niz;"
+        }
+      ],
+      "expect": "OK"
+    },
+    {
+      "id": 6,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Testovi da li funkcije rade sa tipom razlicitim od int\nstd::string niz[5] = {\"ddd\", \"abc\", \"abc\", \"zzz\", \"aaa\"};\nbubble_sort(niz, 5);\nfor (int i(0); i<5; i++)\n    cout << niz[i] << \" \";\ncout << endl;\n\nstd::string niz2[5] = {\"ddd\", \"abc\", \"abc\", \"zzz\", \"aaa\"};\nselection_sort(niz2, 5);\nfor (int i(0); i<5; i++)\n    cout << niz2[i] << \" \";\ncout << endl;\n\nstd::string niz3[5] = {\"ddd\", \"abc\", \"abc\", \"zzz\", \"aaa\"};\nquick_sort(niz3, 5);\nfor (int i(0); i<5; i++)\n    cout << niz3[i] << \" \";\ncout << endl;\n\nstd::string niz4[5] = {\"ddd\", \"abc\", \"abc\", \"zzz\", \"aaa\"};\nmerge_sort(niz4, 5);\nfor (int i(0); i<5; i++)\n    cout << niz4[i] << \" \";"
+        }
+      ],
+      "expect": "aaa abc abc ddd zzz \naaa abc abc ddd zzz \naaa abc abc ddd zzz \naaa abc abc ddd zzz"
+    }
+  ]
+}
