@@ -91,7 +91,7 @@ func logDuration(start time.Time, operation string) {
 const TIMEOUT_SECONDS = 5
 const OPTIMIZATION_LEVEL = "-O3"
 
-func runCppCode(userID, userCode, mainCode string, mainCodeID string) CodeResponse {
+func runCppCodeOriginal(userID, userCode, mainCode string, mainCodeID string) CodeResponse {
 	defer logDuration(time.Now(), "runCppCode")
 	compileStart := time.Now()
 
@@ -181,7 +181,7 @@ func handleCodeExecution(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := runCppCode(req.UserID, req.UserCode, req.MainCode, "bax")
+	result := runCppCodeOriginal(req.UserID, req.UserCode, req.MainCode, "bax")
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)
@@ -211,7 +211,7 @@ func handleBatchExecution(w http.ResponseWriter, r *http.Request) {
 			defer wg.Done()
 			defer func() { <-semaphore }()
             println("Running code for main code id: ", mainCode.ID)
-			result := runCppCode(req.UserID, req.UserCode, mainCode.MainCode, mainCode.ID)
+			result := runCppCodeOriginal(req.UserID, req.UserCode, mainCode.MainCode, mainCode.ID)
 			resultsChan <- BatchResult{MainCodeID: mainCode.ID, Output: result.Output, Error: result.Error}
 		}(mainCode)
 	}
