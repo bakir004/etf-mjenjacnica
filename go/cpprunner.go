@@ -55,6 +55,9 @@ type Cache struct {
 	mu      sync.Mutex
 	entries map[string]string
 }
+const MAX_CACHE_SIZE = 10
+const TIMEOUT_SECONDS = 5
+const OPTIMIZATION_LEVEL = "-O3"
 
 func (c *Cache) GetHeaderPath(userID, userCode string) (string, bool) {
 	c.mu.Lock()
@@ -69,7 +72,7 @@ func (c *Cache) AddEntry(userID, userCode, headerPath string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	if len(c.entries) == 10 {
+	if len(c.entries) == MAX_CACHE_SIZE {
 		for key, path := range c.entries {
 			os.Remove(path)
 			delete(c.entries, key)
@@ -88,8 +91,6 @@ func logDuration(start time.Time, operation string) {
 	log.Printf("%s took %s", operation, elapsed)
 }
 
-const TIMEOUT_SECONDS = 5
-const OPTIMIZATION_LEVEL = "-O3"
 
 func runCppCodeOriginal(userID, userCode, mainCode string, mainCodeID string) CodeResponse {
 	defer logDuration(time.Now(), "runCppCode")
@@ -130,8 +131,9 @@ func runCppCodeOriginal(userID, userCode, mainCode string, mainCodeID string) Co
 	}
 
 	compiledFile := mainFile.Name() + ".out"
-	// compileCmd := exec.Command("g++", OPTIMIZATION_LEVEL, "-fsanitize=leak", mainFile.Name(), "-o", compiledFile)
-	compileCmd := exec.Command("g++", OPTIMIZATION_LEVEL, mainFile.Name(), "-o", compiledFile)
+	compileCmd := exec.Command("ccache","g++", OPTIMIZATION_LEVEL, "-fsanitize=leak", mainFile.Name(), "-o", compiledFile)
+    // compileCmd := exec.Command("g++", OPTIMIZATION_LEVEL, mainFile.Name(), "-o", compiledFile)
+	// compileCmd := exec.Command("ccache", "g++", OPTIMIZATION_LEVEL, mainFile.Name(), "-o", compiledFile)
 	var compileErrBuf bytes.Buffer
 	compileCmd.Stderr = &compileErrBuf
 
