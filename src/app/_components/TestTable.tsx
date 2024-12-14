@@ -46,6 +46,7 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
           }
         : { error: result.error, id: Number(result.mainCodeId), output: "" },
     );
+    console.log(newOutputs);
     setOutputs((prevOutputs) => {
       const unsortedOutputs = [...prevOutputs, ...newOutputs];
       const sortedOutputs = unsortedOutputs.sort((a, b) =>
