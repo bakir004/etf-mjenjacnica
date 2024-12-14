@@ -131,7 +131,7 @@ func runCppCodeOriginal(userID, userCode, mainCode string, mainCodeID string) Co
 	}
 
 	compiledFile := mainFile.Name() + ".out"
-	compileCmd := exec.Command("ccache","g++", OPTIMIZATION_LEVEL, "-fsanitize=leak", mainFile.Name(), "-o", compiledFile)
+	compileCmd := exec.Command("g++", OPTIMIZATION_LEVEL, "-fsanitize=leak", mainFile.Name(), "-o", compiledFile)
     // compileCmd := exec.Command("g++", OPTIMIZATION_LEVEL, mainFile.Name(), "-o", compiledFile)
 	// compileCmd := exec.Command("ccache", "g++", OPTIMIZATION_LEVEL, mainFile.Name(), "-o", compiledFile)
 	var compileErrBuf bytes.Buffer
@@ -240,5 +240,5 @@ func main() {
 
 	log.Println("Server started at :8080")
     println("Max concurrency set to:", runtime.NumCPU())
-	http.ListenAndServe("127.0.0.1:8080", nil)
+	http.ListenAndServe("0.0.0.0:8080", nil)
 }
