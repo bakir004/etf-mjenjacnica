@@ -181,7 +181,6 @@ export const coderunnerRouter = createTRPCRouter({
         };
         // console.log(requestBody);
         console.timeEnd("myCodeBlock");
-        console.time("timeToFetch");
         const response = await fetch(codeRunnerUrl, {
           method: "POST",
           headers: {
@@ -189,7 +188,6 @@ export const coderunnerRouter = createTRPCRouter({
           },
           body: JSON.stringify(requestBody),
         });
-        console.timeEnd("timeToFetch");
 
         if (!response.ok) {
           const errorText = await response.text();
@@ -366,7 +364,8 @@ export const coderunnerRouter = createTRPCRouter({
           timeout: 5,
         };
         console.timeEnd("myCodeBlock");
-        console.time("timeToFetch");
+        console.log(codeRunnerUrl);
+        console.log(singleSubmission);
         const response = await fetch(codeRunnerUrl, {
           method: "POST",
           headers: {
@@ -374,7 +373,6 @@ export const coderunnerRouter = createTRPCRouter({
           },
           body: JSON.stringify(singleSubmission),
         });
-        console.timeEnd("timeToFetch");
 
         if (!response.ok) {
           const errorText = await response.text();
