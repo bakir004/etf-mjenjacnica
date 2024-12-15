@@ -14,7 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { PersonIcon } from "@radix-ui/react-icons";
+import { PersonIcon, TimerIcon } from "@radix-ui/react-icons";
 import { Badge } from "~/components/ui/badge";
 
 const mergeConsecutiveLogs = (logs: any) => {
@@ -55,7 +55,7 @@ export default async function Logs() {
           {mergedLogs.map((logGroup: any, i: number) => (
             <AccordionItem value={`item-${i}`} key={i}>
               <AccordionTrigger>
-                <span>
+                <span className="flex items-center">
                   <Badge
                     className={`mr-4 rounded-full px-1.5 font-bold text-white ${logGroup.length > 20 ? "bg-red-600" : logGroup.length > 10 ? "bg-orange-600" : logGroup.length === 1 ? "bg-blue-600" : "bg-green-700"}`}
                   >
@@ -113,12 +113,21 @@ export default async function Logs() {
                           second: "2-digit",
                         })}
                   </span>
-                  <span className="ml-8">{logGroup[0].senderName}</span>
-                  <span className="ml-8">{logGroup[0].subject}</span>
-                  <span className="ml-8">{logGroup[0].timeToRun}</span>
+                  <span className="ml-2">{logGroup[0].senderName}</span>
+                  <span className="ml-4">
+                    <Badge
+                      className={`mr-2 rounded-full bg-blue-600 px-1.5 font-bold text-white`}
+                    >
+                      {logGroup[0].subject}
+                    </Badge>
+                  </span>
+                  <span className="ml-2 flex items-center gap-2">
+                    <TimerIcon></TimerIcon>
+                    {logGroup[0].timeToRun}s
+                  </span>
                 </span>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="pb-0">
                 <Table>
                   <TableHeader>
                     <TableRow>
