@@ -123,7 +123,13 @@ export default async function Logs() {
                   </span>
                   <span className="ml-2 flex items-center gap-2">
                     <TimerIcon></TimerIcon>
-                    {logGroup[0].timeToRun}s
+                    {(
+                      logGroup.reduce(
+                        (acc: number, element: any) => acc + element.timeToRun,
+                        0,
+                      ) / logGroup.length
+                    ).toFixed(2)}
+                    s
                   </span>
                 </span>
               </AccordionTrigger>
@@ -134,6 +140,9 @@ export default async function Logs() {
                       <TableHead className="w-[50px]">Id</TableHead>
                       <TableHead>Vakat</TableHead>
                       <TableHead>Email</TableHead>
+                      <TableHead>Predmet</TableHead>
+                      <TableHead>Izvršavanje</TableHead>
+                      <TableHead>Tačni testovi</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -142,6 +151,9 @@ export default async function Logs() {
                         <TableCell>{log.id}</TableCell>
                         <TableCell>{log.createdAt.toLocaleString()}</TableCell>
                         <TableCell>{log.senderEmail}</TableCell>
+                        <TableCell>{log.subject}</TableCell>
+                        <TableCell>{log.timeToRun}s</TableCell>
+                        <TableCell>{log.testsPassed}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
