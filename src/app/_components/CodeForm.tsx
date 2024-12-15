@@ -17,18 +17,21 @@ export function CodeForm({
   tests,
   appendOutput,
   numOutputs,
+  passed,
 }: {
   reset: () => void;
   subject: string;
   tests: Test[];
   appendOutput: (output: { output: string; error: string; id: number }) => void;
   numOutputs: number;
+  passed: number;
 }) {
   const user = useUser();
   const [code, setCode] = useState<string>("");
   const [isRunning, setIsRunning] = useState(false);
   const [batchSize, setBatchSize] = useState<number>(3);
   const [delay, setDelay] = useState<number>(2000);
+  const [timer, setTimer] = useState<Date>(new Date());
 
   const judgeSingleCodeRunner = api.coderunner.runSingle.useMutation({
     onSuccess: (data: {
@@ -60,6 +63,7 @@ export function CodeForm({
   });
 
   const judgeRun1po1 = () => {
+    setTimer(new Date());
     reset();
     let i = 0;
     setIsRunning(true);
@@ -101,6 +105,7 @@ export function CodeForm({
       setIsRunning(false);
     }
   };
+  const sendLogs = api.coderunner.sendLog.useMutation();
 
   const batchCodeRunner = api.coderunner.runBatch.useMutation({
     onSuccess: (
@@ -145,7 +150,20 @@ export function CodeForm({
   };
 
   useEffect(() => {
-    if (numOutputs === tests.length) setIsRunning(false);
+    if (numOutputs === tests.length) {
+      setIsRunning(false);
+      const now = new Date();
+      const timeToRun = now.getTime() - timer.getTime();
+      sendLogs.mutate({
+        userId: user.user?.id ?? "null",
+        email: user.user?.emailAddresses[0]?.emailAddress ?? "null",
+        username: user.user?.fullName ?? "nepoznat",
+        userCode: code ?? "",
+        subject: subject,
+        timeToRun: timeToRun,
+        passed: passed + 1,
+      });
+    }
   }, [numOutputs]);
 
   return (

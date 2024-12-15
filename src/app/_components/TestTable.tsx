@@ -61,12 +61,11 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
   }, [data, tests]);
 
   useEffect(() => {
-    setPassed(
-      outputs.filter(
-        (output: { output: string; id: number }, i) =>
-          output.output.trim() === tests.tests[i]?.expect.trim(),
-      ).length,
-    );
+    const passedTests = outputs.filter(
+      (output: { output: string; id: number }, i) =>
+        output.output.trim() === tests.tests[i]?.expect.trim(),
+    ).length;
+    setPassed(passedTests);
   }, [outputs]);
 
   const handleSubjectChange = (v: string) => {
@@ -86,6 +85,7 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
         reset={resetOutputs}
         tests={tests.tests}
         appendOutput={appendOutput}
+        passed={passed}
       />
       {outputs.length > 0 && (
         <div className={`mt-4 font-bold`}>

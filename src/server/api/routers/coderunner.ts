@@ -122,6 +122,36 @@ export const coderunnerRouter = createTRPCRouter({
         throw new Error("Failed to fetch test data.");
       }
     }),
+  sendLog: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        email: z.string(),
+        username: z.string(),
+        userCode: z.string(),
+        subject: z.string(),
+        timeToRun: z.number(),
+        passed: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        return await ctx.db.codeRequest.create({
+          data: {
+            code: input.userCode,
+            senderName: input.username,
+            senderEmail: input.email,
+            createdAt: new Date(),
+            timeToRun: input.timeToRun,
+            testsPassed: input.passed,
+            subject: input.subject,
+          },
+        });
+      } catch (error: any) {
+        console.error(error);
+      }
+      return true;
+    }),
   runBatch: publicProcedure
     .input(
       z.object({
@@ -364,8 +394,6 @@ export const coderunnerRouter = createTRPCRouter({
           timeout: 5,
         };
         console.timeEnd("myCodeBlock");
-        console.log(codeRunnerUrl);
-        console.log(singleSubmission);
         const response = await fetch(codeRunnerUrl, {
           method: "POST",
           headers: {

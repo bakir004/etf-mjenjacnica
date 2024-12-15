@@ -1,4 +1,3 @@
-import { HydrateClient } from "~/trpc/server";
 import SuspenseWrapper from "../_components/LoadingSuspenseWrapper";
 import { api } from "~/trpc/server";
 import {
@@ -115,6 +114,8 @@ export default async function Logs() {
                         })}
                   </span>
                   <span className="ml-8">{logGroup[0].senderName}</span>
+                  <span className="ml-8">{logGroup[0].subject}</span>
+                  <span className="ml-8">{logGroup[0].timeToRun}</span>
                 </span>
               </AccordionTrigger>
               <AccordionContent>
