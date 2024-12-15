@@ -1,87 +1,127 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import LoadingSpinnerSVG from "./Spinner";
 import { Progress } from "~/components/ui/progress";
 import { useUser } from "@clerk/nextjs";
-import { delimiter, type Test } from "~/lib/test";
+import { type Test } from "~/lib/test";
+import { fromBase64 } from "~/lib/base64";
+
+let sendingInterval: NodeJS.Timeout | null = null;
+const DELAY_BETWEEN_SINGLE_SUBMISSIONS = 400;
 
 export function CodeForm({
-  sendResults,
-  sendBatchResults,
   reset,
   subject,
   tests,
+  appendOutput,
+  numOutputs,
 }: {
-  sendResults: (results: string[]) => void;
-  sendBatchResults: (
-    results: { mainCodeId: string; output: string; error: string }[],
-  ) => void;
   reset: () => void;
   subject: string;
   tests: Test[];
+  appendOutput: (output: { output: string; error: string; id: number }) => void;
+  numOutputs: number;
 }) {
   const user = useUser();
   const [code, setCode] = useState<string>("");
-  const [runtimeError, setRuntimeError] = useState<string>("");
-  const [batchSize, setBatchSize] = useState<number>(4);
-  const [delay, setDelay] = useState<number>(3000);
-  const codeRunner = api.coderunner.run.useMutation({
-    onSuccess: (data: { output: string; error: string }) => {
-      if (data?.error) {
-        setRuntimeError(data.error);
-      } else {
-        const results = data?.output?.split(delimiter);
-        results.pop();
-        results.forEach((result, index) => {
-          results[index] = result.trim();
-          results[index] = results[index].replace(/\r/g, "");
-        });
-        if (data) sendResults(results);
-      }
+  const [isRunning, setIsRunning] = useState(false);
+  const [batchSize, setBatchSize] = useState<number>(3);
+  const [delay, setDelay] = useState<number>(2000);
+
+  const judgeSingleCodeRunner = api.coderunner.runSingle.useMutation({
+    onSuccess: (data: {
+      id: number;
+      stdout: string;
+      time: string;
+      memory: number;
+      stderr: string | null;
+      token: string;
+      compile_output: string | null;
+      message: string | null;
+      status: { id: number; description: string };
+    }) => {
+      appendOutput({
+        output:
+          fromBase64(data.stdout) ??
+          fromBase64(data.message ?? "") ??
+          "UNDEFINED",
+        error:
+          fromBase64(data.compile_output ?? "") ??
+          fromBase64(data.stderr ?? "") ??
+          "UNDEFINED",
+        id: data.id,
+      });
     },
     onError: (error) => {
       console.error("Error:", error);
     },
   });
-  const { mutate, status, error } = codeRunner;
-  const [progress, setProgress] = useState(0);
+
+  const judgeRun1po1 = () => {
+    reset();
+    let i = 0;
+    setIsRunning(true);
+
+    sendingInterval = setInterval(() => {
+      const requestBody = {
+        userId: user.user?.id ?? "null",
+        email: user.user?.emailAddresses[0]?.emailAddress ?? "null",
+        username: user.user?.fullName ?? "nepoznat",
+        userCode: code ?? "",
+        subject: subject,
+        testId: i,
+      };
+      judgeSingleCodeRunner.mutate(requestBody);
+      i++;
+      if (i >= tests.length) {
+        clearInterval(sendingInterval!);
+        sendingInterval = null;
+      }
+    }, DELAY_BETWEEN_SINGLE_SUBMISSIONS);
+  };
 
   const submit = async (event: React.FormEvent) => {
-    setProgress(0);
     reset();
     event.preventDefault();
-    setRuntimeError("");
 
     if (!code || code.length === 0) {
       alert("Unesite Vaš C++ kod!");
       return;
     }
+    judgeRun1po1();
+  };
 
-    mutate({
-      userId: user.user?.id ?? "null",
-      email: user.user?.emailAddresses[0]?.emailAddress ?? "null",
-      username: user.user?.fullName ?? "nepoznat",
-      userCode: code,
-      subject: subject,
-    });
+  const clear = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (sendingInterval) {
+      clearInterval(sendingInterval);
+      sendingInterval = null;
+      setIsRunning(false);
+    }
   };
 
   const batchCodeRunner = api.coderunner.runBatch.useMutation({
     onSuccess: (
       data: { output: string; error: string; mainCodeId: string }[],
     ) => {
-      sendBatchResults(data);
+      data.forEach((output) => {
+        appendOutput({
+          output: output.output,
+          error: output.error,
+          id: parseInt(output.mainCodeId),
+        });
+      });
     },
     onError: (error) => {
       console.error("Error:", error);
     },
   });
 
-  const batchRun = async () => {
-    setProgress(0);
-    setRuntimeError("");
+  const batchRun = async (event: React.FormEvent) => {
+    setIsRunning(true);
+    event.preventDefault();
     reset();
     const allTestIds = Array.from({ length: tests.length }, (_, i) =>
       i.toString(),
@@ -97,13 +137,16 @@ export function CodeForm({
         subject: subject,
         testIds: testIdsBatch,
       });
-      setProgress(((i + batchSize) / allTestIds.length) * 100);
 
       if (i + batchSize < allTestIds.length) {
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
   };
+
+  useEffect(() => {
+    if (numOutputs === tests.length) setIsRunning(false);
+  }, [numOutputs]);
 
   return (
     <>
@@ -120,51 +163,29 @@ export function CodeForm({
           <Button
             type="submit"
             className="flex items-center gap-1 bg-blue-900 text-white hover:bg-blue-800"
-            disabled={
-              status === "pending" ||
-              batchCodeRunner.status === "pending" ||
-              (progress > 0 && progress < 90)
-            }
+            disabled={isRunning}
           >
-            {(status === "pending" ||
-              batchCodeRunner.status === "pending" ||
-              (progress > 0 && progress < 90)) && (
-              <LoadingSpinnerSVG></LoadingSpinnerSVG>
-            )}
+            {isRunning && <LoadingSpinnerSVG></LoadingSpinnerSVG>}
             Pokreni
           </Button>
-          <Progress className="bg-blue-800" value={progress} />
-          {error && <div className="text-sm text-red-700">{error.message}</div>}
+          <Button
+            onClick={batchRun}
+            className="flex items-center gap-1 bg-orange-600 text-white hover:bg-orange-600"
+            disabled={isRunning}
+          >
+            {isRunning && <LoadingSpinnerSVG></LoadingSpinnerSVG>}
+            Pokreni (sa memory leak testom)
+          </Button>
+          <Button
+            onClick={clear}
+            className="flex items-center gap-1 bg-red-700 text-white hover:bg-red-600"
+            disabled={!isRunning}
+          >
+            Otkaži
+          </Button>
+          <Progress value={(numOutputs / tests.length) * 100}></Progress>
         </div>
-        {runtimeError && (
-          <div className="mt-2 rounded bg-neutral-800 p-4 font-mono text-sm text-red-500">
-            {runtimeError}
-          </div>
-        )}
       </form>
-      <div className="flex items-center gap-2">
-        <Button
-          onClick={batchRun}
-          className="mt-2 flex items-center gap-1 bg-orange-700 text-white hover:bg-orange-600"
-          disabled={
-            batchCodeRunner.status === "pending" ||
-            status === "pending" ||
-            (progress > 0 && progress < 90)
-          }
-        >
-          {(batchCodeRunner.status === "pending" ||
-            status === "pending" ||
-            (progress > 0 && progress < 90)) && (
-            <LoadingSpinnerSVG></LoadingSpinnerSVG>
-          )}
-          Batch pokretanje
-        </Button>
-        <p className="grow text-sm italic">
-          Batch pokretanje radi kao staro, dok novo pokreće sve testove
-          odjednom, i ako se desi greška u jednom, svi će pasti. Ako imate sve
-          implementirano, preporučujemo novo pokretanje.
-        </p>
-      </div>
     </>
   );
 }

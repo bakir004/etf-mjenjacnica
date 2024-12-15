@@ -21,34 +21,23 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
   const [selectedSubject, setSelectedSubject] = useState<string>("asp6");
   const [tests, setTests] = useState<Tests>(asp6);
   const [subjects, setSubjects] = useState<string[]>([]);
+  const [passed, setPassed] = useState(0);
 
   const resetOutputs = () => {
     setOutputs([]);
   };
-  const getResults = (results: string[]) => {
-    const newOutputs = results.map((result, index) => ({
-      output: result,
-      id: index,
-      error: "",
-    }));
-
-    setOutputs([...newOutputs]);
-  };
-  const getBatchResults = (
-    results: { mainCodeId: string; output: string; error: string }[],
-  ) => {
-    const newOutputs = results.map((result) =>
-      result.output.length > 0
-        ? {
-            output: result.output.replace(/\r/g, ""),
-            id: Number(result.mainCodeId),
-            error: "",
-          }
-        : { error: result.error, id: Number(result.mainCodeId), output: "" },
-    );
-    console.log(newOutputs);
+  const appendOutput = (output: {
+    output: string;
+    error: string;
+    id: number;
+  }): void => {
     setOutputs((prevOutputs) => {
-      const unsortedOutputs = [...prevOutputs, ...newOutputs];
+      const newOutput = {
+        output: output.output,
+        error: output.error,
+        id: output.id,
+      };
+      const unsortedOutputs = [...prevOutputs, newOutput];
       const sortedOutputs = unsortedOutputs.sort((a, b) =>
         a.id > b.id ? 1 : a.id < b.id ? -1 : 0,
       );
@@ -71,6 +60,15 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
     }
   }, [data, tests]);
 
+  useEffect(() => {
+    setPassed(
+      outputs.filter(
+        (output: { output: string; id: number }, i) =>
+          output.output.trim() === tests.tests[i]?.expect.trim(),
+      ).length,
+    );
+  }, [outputs]);
+
   const handleSubjectChange = (v: string) => {
     setSelectedSubject(v);
   };
@@ -83,22 +81,21 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
         elements={subjects}
       ></SelectForm>
       <CodeForm
-        sendBatchResults={getBatchResults}
+        numOutputs={outputs.length}
         subject={selectedSubject}
         reset={resetOutputs}
-        sendResults={getResults}
         tests={tests.tests}
+        appendOutput={appendOutput}
       />
       {outputs.length > 0 && (
-        <div className={`mt-4`}>
-          Prošlo:{" "}
-          {
-            outputs.filter(
-              (output: { output: string; id: number }, i) =>
-                output.output.trim() === tests.tests[i]?.expect.trim(),
-            ).length
-          }
-          /{tests.tests.length}
+        <div className={`mt-4 font-bold`}>
+          <span className="text-violet-300">Testirano</span>/
+          <span className="text-green-300">Prošlo</span>/
+          <span className="text-red-400">Palo</span>/Ukupno:{" "}
+          <span className="text-violet-300">{outputs.length}</span>/
+          <span className="text-green-300">{passed}</span>/
+          <span className="text-red-400">{outputs.length - passed}</span>/
+          {tests.tests.length}
         </div>
       )}
       {outputs.length > 0 && (
