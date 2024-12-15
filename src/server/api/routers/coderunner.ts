@@ -136,6 +136,7 @@ export const coderunnerRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
+        console.log(input.username + " sent a request");
         return await ctx.db.codeRequest.create({
           data: {
             code: input.userCode,

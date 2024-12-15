@@ -153,7 +153,7 @@ export function CodeForm({
     if (numOutputs === tests.length) {
       setIsRunning(false);
       const now = new Date();
-      const timeToRun = now.getTime() - timer.getTime();
+      const timeToRun = (now.getTime() - timer.getTime()) / 1000;
       sendLogs.mutate({
         userId: user.user?.id ?? "null",
         email: user.user?.emailAddresses[0]?.emailAddress ?? "null",
