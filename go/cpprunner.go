@@ -57,7 +57,7 @@ type Cache struct {
 }
 const MAX_CACHE_SIZE = 10
 const TIMEOUT_SECONDS = 5
-const OPTIMIZATION_LEVEL = "-O3"
+const OPTIMIZATION_LEVEL = "-O0"
 
 func (c *Cache) GetHeaderPath(userID, userCode string) (string, bool) {
 	c.mu.Lock()
@@ -96,6 +96,7 @@ func runCppCodeOriginal(userID, userCode, mainCode string, mainCodeID string) Co
 	defer logDuration(time.Now(), "runCppCode")
 	compileStart := time.Now()
 
+	// Handle header caching
 	headerPath, cached := headerCache.GetHeaderPath(userID, userCode)
 	if !cached {
 		headerFile, err := os.CreateTemp("", "*.h")
@@ -115,6 +116,7 @@ func runCppCodeOriginal(userID, userCode, mainCode string, mainCodeID string) Co
 		log.Println("Cache hit")
 	}
 
+	// Create the main file
 	mainFile, err := os.CreateTemp("", "*.cpp")
 	if err != nil {
 		return CodeResponse{"", fmt.Sprintf("Failed to create temp main file: %v", err)}
@@ -130,14 +132,12 @@ func runCppCodeOriginal(userID, userCode, mainCode string, mainCodeID string) Co
 		return CodeResponse{"", fmt.Sprintf("Failed to close temp main file: %v", err)}
 	}
 
+	// Compile the code with AddressSanitizer enabled
 	compiledFile := mainFile.Name() + ".out"
-	compileCmd := exec.Command("g++", OPTIMIZATION_LEVEL, "-fsanitize=leak", mainFile.Name(), "-o", compiledFile)
-    // compileCmd := exec.Command("g++", OPTIMIZATION_LEVEL, mainFile.Name(), "-o", compiledFile)
-	// compileCmd := exec.Command("ccache", "g++", OPTIMIZATION_LEVEL, mainFile.Name(), "-o", compiledFile)
+	compileCmd := exec.Command("g++", OPTIMIZATION_LEVEL, "-fsanitize=address", mainFile.Name(), "-o", compiledFile)
 	var compileErrBuf bytes.Buffer
 	compileCmd.Stderr = &compileErrBuf
 
-	compileErrBuf.Reset()
 	if err := compileCmd.Run(); err != nil {
 		return CodeResponse{"", fmt.Sprintf("Compilation Error [ID %s]: %s", mainCodeID, compileErrBuf.String())}
 	}
@@ -145,8 +145,7 @@ func runCppCodeOriginal(userID, userCode, mainCode string, mainCodeID string) Co
 	compileDuration := time.Since(compileStart)
 	log.Printf("Compilation of ID %s took %s", mainCodeID, compileDuration)
 
-	defer os.Remove(compiledFile)
-
+	// Execute the compiled binary with AddressSanitizer runtime
 	runStart := time.Now()
 
 	ctx, cancel := context.WithTimeout(context.Background(), TIMEOUT_SECONDS*time.Second)
@@ -157,22 +156,32 @@ func runCppCodeOriginal(userID, userCode, mainCode string, mainCodeID string) Co
 	runCmd.Stdout = &outBuf
 	runCmd.Stderr = &errBuf
 
-	err = runCmd.Run()
+	// Add ASAN options to capture memory leaks and stack traces
+	runCmd.Env = append(os.Environ(), "ASAN_OPTIONS=detect_leaks=1:print_stacktrace=1")
 
+	err = runCmd.Run()
+	defer os.Remove(compiledFile)
+
+	// Capture AddressSanitizer output
+	sanitizerOutput := errBuf.String()
+	log.Printf("Sanitizer output for ID %s: %s", mainCodeID, sanitizerOutput)
+
+	// Check for execution timeout
 	if ctx.Err() == context.DeadlineExceeded {
 		return CodeResponse{"", fmt.Sprintf("Execution timed out after %d seconds", TIMEOUT_SECONDS)}
 	}
 
-	if err != nil {
-		return CodeResponse{"", fmt.Sprintf("Execution Error [ID %s]: %s", mainCodeID, errBuf.String())}
+	// Include memory leak reports in the error response if present
+	if err != nil || sanitizerOutput != "" {
+		return CodeResponse{"", fmt.Sprintf("Execution Error [ID %s]: %s\nSanitizer Output:\n%s", mainCodeID, errBuf.String(), sanitizerOutput)}
 	}
 
+	// Return execution output if no errors
 	runtime := time.Since(runStart)
 	log.Printf("Execution of %s took %s", mainCodeID, runtime)
 
 	return CodeResponse{outBuf.String(), ""}
 }
-
 func handleCodeExecution(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	defer logDuration(start, "handleCodeExecution")
