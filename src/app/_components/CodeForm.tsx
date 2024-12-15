@@ -174,7 +174,7 @@ export function CodeForm({
             disabled={isRunning}
           >
             {isRunning && <LoadingSpinnerSVG></LoadingSpinnerSVG>}
-            Pokreni (sa memory leak testom)
+            Pokreni (sa address sanitizerom)
           </Button>
           <Button
             onClick={clear}
