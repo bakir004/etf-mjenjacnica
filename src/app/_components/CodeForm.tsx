@@ -45,17 +45,17 @@ export function CodeForm({
       message: string | null;
       status: { id: number; description: string };
     }) => {
-      appendOutput({
-        output:
-          fromBase64(data.stdout) ??
-          fromBase64(data.message ?? "") ??
-          "UNDEFINED",
-        error:
-          fromBase64(data.compile_output ?? "") ??
-          fromBase64(data.stderr ?? "") ??
-          "UNDEFINED",
-        id: data.id,
-      });
+        appendOutput({
+          output:
+            (data.stdout ? fromBase64(data.stdout) : null) ??
+            (data.message ? fromBase64(data.message) : null) ??
+            "UNDEFINED",
+          error:
+            (data.compile_output ? fromBase64(data.compile_output) : null) ??
+            (data.stderr ? fromBase64(data.stderr) : null) ??
+            "UNDEFINED",
+          id: data.id,
+        });
     },
     onError: (error) => {
       console.error("Error:", error);

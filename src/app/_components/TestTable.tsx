@@ -165,7 +165,7 @@ export function TestTable({ fileNames }: { fileNames: string[] }) {
                       whiteSpace: "pre-wrap",
                     }}
                   >
-                    {item.output.length > 0 ? item.output : item.error}
+                    {item.error ? item.error : item.output}
                   </TableCell>
                 </TableRow>
               ),

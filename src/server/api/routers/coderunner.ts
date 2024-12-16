@@ -9,7 +9,7 @@ import {
   testsJsonToCodeParts,
   wrapMainCodeInMainFunction,
 } from "~/lib/test";
-import { toBase64 } from "~/lib/base64";
+import { toBase64, fromBase64 } from "~/lib/base64";
 
 export const getTestFileNames = async () => {
   const folderPath = path.join(process.cwd(), "src", "tests"); // Safer way to build the path
@@ -395,6 +395,7 @@ export const coderunnerRouter = createTRPCRouter({
           timeout: 5,
         };
         console.timeEnd("myCodeBlock");
+        console.log("Fetching...")
         const response = await fetch(codeRunnerUrl, {
           method: "POST",
           headers: {
@@ -402,6 +403,7 @@ export const coderunnerRouter = createTRPCRouter({
           },
           body: JSON.stringify(singleSubmission),
         });
+        console.log("Fetched")
 
         if (!response.ok) {
           const errorText = await response.text();
@@ -419,6 +421,10 @@ export const coderunnerRouter = createTRPCRouter({
           message: string | null;
           status: { id: number; description: string };
         } = await response.json();
+        console.log(result);
+        if(result.compile_output) {
+            console.log("Compile output: " + fromBase64(result.compile_output));
+        }
         result.id = input.testId;
 
         return result;
