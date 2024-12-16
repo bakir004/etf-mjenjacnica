@@ -49,11 +49,11 @@ export function CodeForm({
           output:
             (data.stdout ? fromBase64(data.stdout) : null) ??
             (data.message ? fromBase64(data.message) : null) ??
-            "UNDEFINED",
+            "",
           error:
             (data.compile_output ? fromBase64(data.compile_output) : null) ??
             (data.stderr ? fromBase64(data.stderr) : null) ??
-            "UNDEFINED",
+            "",
           id: data.id,
         });
     },
