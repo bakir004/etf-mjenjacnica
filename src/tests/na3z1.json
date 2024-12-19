@@ -1,0 +1,144 @@
+{
+  "tests": [
+    {
+      "id": 0,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT1 - Limit test: Limes (tan(x)-sin(x))/(x*x*x) x->0:\nauto limes = Limit([](double x) {return (std::tan(x)-std::sin(x))/(x*x*x);},0);\nstd::cout<<limes.first<<\" \"<<limes.second;"
+        }
+      ],
+      "expect": "0.5 1"
+    },
+    {
+      "id": 1,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT2 - Limit test: Limes (sin(x))/(x) x->0:\nauto limes = Limit([](double x) {return std::sin(x)/x;},0);\nstd::cout<<limes.first<<\" \"<<limes.second;"
+        }
+      ],
+      "expect": "1 1"
+    },
+    {
+      "id": 2,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT3 - Limit test: Limes ln(x)/(x-1) x->1:\nauto limes = Limit([](double x) {return std::log(x)/(x-1);},1);\nstd::cout<<limes.first<<\" \"<<limes.second;"
+        }
+      ],
+      "expect": "1 1"
+    },
+    {
+      "id": 3,
+      "patch": [
+        {
+          "position": "main",
+          "code": "\t\n//AT4 - Limit test: Limes (exp(x)-1)/x x->0:\nauto limes = Limit([](double x) {return (std::exp(x)-1)/x;},0);\nstd::cout<<limes.first<<\" \"<<limes.second;"
+        }
+      ],
+      "expect": "1 1"
+    },
+    {
+      "id": 4,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT5 - Limit - Nije dostignuta tačnost\nauto limes = Limit([](double x) {return std::pow(x,1./3);},0,0,1e-12,4);\nstd::cout<<limes.first<<\" \"<<limes.second;\n\n"
+        }
+      ],
+      "expect": "0.0325429 0"
+    },
+    {
+      "id": 5,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT6 - Bacanje izuzetaka limit\ntry\n{\n    auto limes = Limit([](double x) {return std::pow(x,1./3);},0,0,1e-12,2);\n    //Invalid parameters\n}\ncatch (std::domain_error e)\n{\n    std::cout << \"'\" << e.what() << \"'\";\n}\ncatch (...)\n{\n    std::cout << \"Pogresan tip izuzetka\";\n}"
+        }
+      ],
+      "expect": "'Invalid parameters'"
+    },
+    {
+      "id": 6,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT7 - Bacanje izuzetaka limit\ntry\n{\n    auto limes = Limit([](double x) {return std::pow(x,1./3);},0,0,1e-12,50);\n    //Invalid parameters\n}\ncatch (std::domain_error e)\n{\n    std::cout << \"'\" << e.what() << \"'\";\n}\ncatch (...)\n{\n    std::cout << \"Pogresan tip izuzetka\";\n}"
+        }
+      ],
+      "expect": "'Invalid parameters'"
+    },
+    {
+      "id": 7,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT8 - Bacanje izuzetaka limit\ntry\n{\n    auto limes = Limit([](double x) {return std::pow(x,1./3);},0,0,0,5);\n    //Invalid parameters\n}\ncatch (std::domain_error e)\n{\n    std::cout << \"'\" << e.what() << \"'\";\n}\ncatch (...)\n{\n    std::cout << \"Pogresan tip izuzetka\";\n}"
+        }
+      ],
+      "expect": "'Invalid parameters'"
+    },
+    {
+      "id": 8,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT9 - Bacanje izuzetaka limit\ntry\n{\n    auto limes = Limit([](double x) {return std::pow(x,1./3);},0,0,-10,5);\n    //Invalid parameters\n}\ncatch (std::domain_error e)\n{\n    std::cout << \"'\" << e.what() << \"'\";\n}\ncatch (...)\n{\n    std::cout << \"Pogresan tip izuzetka\";\n}"
+        }
+      ],
+      "expect": "'Invalid parameters'"
+    },
+    {
+      "id": 9,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT10 - Limit test: Limes atan(x) x->inf:\ndouble inf = std::numeric_limits<double>::infinity();\nauto limes=Limit([](double x) { return atan(x); }, inf);\nstd::cout<<limes.first<<\" \"<<limes.second;"
+        }
+      ],
+      "expect": "1.5708 1"
+    },
+    {
+      "id": 10,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT11 - Limit test: Limes atan(x) x->-inf:\ndouble inf = std::numeric_limits<double>::infinity();\nauto limes =  Limit([](double x) { return atan(x); }, -inf);\nstd::cout<<limes.first<<\" \"<<limes.second;"
+        }
+      ],
+      "expect": "-1.5708 1"
+    },
+    {
+      "id": 11,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT12- Limit test: Limes atan(1/x) x->0, h=1:\nauto limes = Limit([](double x) { return atan(1 / x); }, 0, 1);\nstd::cout<<limes.first<<\" \"<<limes.second;"
+        }
+      ],
+      "expect": "1.5708 1"
+    },
+    {
+      "id": 12,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT13- Limit test: Limes atan(1/x) x->0, h=-1:\nauto limes = Limit([](double x) { return atan(1 / x); }, 0, -1);\nstd::cout<<limes.first<<\" \"<<limes.second;"
+        }
+      ],
+      "expect": "-1.5708 1"
+    },
+    {
+      "id": 13,
+      "patch": [
+        {
+          "position": "main",
+          "code": "//AT14 - Provjera koraka h Limit\nauto limes=  Limit([](double x) { return sin(x) / x; }, 0, 0, 1e-15, 8);\nstd::cout<<limes.first<<\" \"<<limes.second;"
+        }
+      ],
+      "expect": "1 1"
+    }
+  ]
+}
