@@ -5,106 +5,70 @@
       "patch": [
         {
           "position": "main",
-          "code": "UsmjereniGraf<bool> *g = new MatricaGraf<bool>(6);\n  g->dodajGranu(0, 1, 2.5);\n  g->dodajGranu(1, 2, 1.2);\n  g->dodajGranu(1, 3, 0.1);\n  g->dodajGranu(3, 3, -4.0);\n  g->dodajGranu(2, 4, 3.14);\n  g->dodajGranu(2, 3, 2.73);\n  g->dodajGranu(3, 5, 1);\n  g->dodajGranu(5, 2, -5.0);\n  for (int i = 0; i < 6; i++)\n    for (int j = 0; j < 6; j++)\n      cout << g->postojiGrana(i, j);\n  delete g;"
+          "code": "int niz[5] = {3, 2, 8, 1, 5};\nbubble_sort(niz, 5);\nfor (int i(0); i<5; i++)\n    cout << niz[i] << \" \";"
         }
       ],
-      "expect": "010000001100000110000101000000001000"
+      "expect": "1 2 3 5 8"
     },
     {
       "id": 1,
       "patch": [
         {
           "position": "main",
-          "code": " UsmjereniGraf<bool> *g = new MatricaGraf<bool>(6);\n  g->dodajGranu(0, 1, 2.5);\n  g->dodajGranu(1, 2, 1.2);\n  g->dodajGranu(1, 3, 0.1);\n  g->dodajGranu(3, 3, -4.0);\n  g->dodajGranu(2, 4, 3.14);\n  g->dodajGranu(2, 3, 2.73);\n  g->dodajGranu(3, 5, 1);\n  g->dodajGranu(5, 2, -5.0);\n  g->obrisiGranu(1,2);\n  g->obrisiGranu(3,5);\n  for (int i = 0; i < 6; i++)\n    for (int j = 0; j < 6; j++)\n      cout << g->postojiGrana(i, j);\n  delete g;"
+          "code": "int niz[5] = {3, 2, 8, 1, 5};\nselection_sort(niz, 5);\nfor (int i(0); i<5; i++)\n    cout << niz[i] << \" \";"
         }
       ],
-      "expect": "010000000100000110000100000000001000"
+      "expect": "1 2 3 5 8"
     },
     {
       "id": 2,
       "patch": [
         {
           "position": "main",
-          "code": " UsmjereniGraf<bool> *g = new MatricaGraf<bool>(4);\n  g->dodajGranu(0, 1, 2.5);\n  g->dodajGranu(1, 2, 1.2);\n  g->dodajGranu(1, 3, 0.1);\n  g->dodajGranu(3, 3, -4.0);\n  g->postaviTezinuGrane(1, 2, 0.2);\n  for (int i = 0; i < 4; i++)\n    for (int j = 0; j < 4; j++)\n      if (g->postojiGrana(i,j))\n        cout << \"(\" << i << \",\" << j << \") -> \" << g->dajTezinuGrane(i, j) << \"; \";\n  delete g;"
+          "code": "int niz[5] = {3, 2, 8, 1, 5};\nquick_sort(niz, 5);\nfor (int i(0); i<5; i++)\n    cout << niz[i] << \" \";"
         }
       ],
-      "expect": "(0,1) -> 2.5; (1,2) -> 0.2; (1,3) -> 0.1; (3,3) -> -4;"
+      "expect": "1 2 3 5 8"
     },
     {
       "id": 3,
       "patch": [
         {
           "position": "main",
-          "code": "UsmjereniGraf<std::string> *g = new MatricaGraf<std::string>(4);\n  g->dodajGranu(0, 1, 2.5);\n  g->dodajGranu(1, 2, 1.2);\n  g->dodajGranu(1, 3, 0.1);\n  g->dodajGranu(3, 3, -4.0);\n  g->postaviOznakuGrane(1, 3, \"aa\");\n  for (int i = 0; i < 4; i++)\n    for (int j = 0; j < 4; j++)\n      if (g->postojiGrana(i,j))\n        cout << \"(\" << i << \",\" << j << \") -> '\" << g->dajOznakuGrane(i, j) << \"'; \";\n  delete g;"
-        },
-        {
-          "position": "above_main",
-          "code": "#include<string>"
+          "code": "int niz[5] = {3, 2, 8, 1, 5};\nmerge_sort(niz, 5);\nfor (int i(0); i<5; i++)\n    cout << niz[i] << \" \";"
         }
       ],
-      "expect": "(0,1) -> ''; (1,2) -> ''; (1,3) -> 'aa'; (3,3) -> '';"
+      "expect": "1 2 3 5 8"
     },
     {
       "id": 4,
       "patch": [
         {
           "position": "main",
-          "code": " UsmjereniGraf<std::string> *g = new MatricaGraf<std::string>(4);\n  g->postaviOznakuCvora(0,\"a\");\n  g->postaviOznakuCvora(1,\"bcd\");\n  for (int i = 0; i < 4; i++)\n      cout << \"(\" << i << \") -> '\" << g->dajOznakuCvora(i) << \"'; \";\n  delete g;"
-        },
-        {
-          "position": "above_main",
-          "code": "#include<string>"
+          "code": "int vel(10000000);\nint* niz = new int[vel];\nfor (int i(0); i<vel; i++)\n\tniz[i] = rand();\nquick_sort(niz, vel);\nfor(int i(0); i<vel-1; i++) \n\tif(niz[i] > niz[i+1]) {\n\t\tcout << \"NOT \";\n\t\tbreak;\n\t}\ncout << \"OK\";\ndelete[] niz;"
         }
       ],
-      "expect": "(0) -> 'a'; (1) -> 'bcd'; (2) -> ''; (3) -> '';"
+      "expect": "OK"
     },
     {
       "id": 5,
       "patch": [
         {
           "position": "main",
-          "code": "UsmjereniGraf<std::string> *g = new MatricaGraf<std::string>(4);\n  cout << g->dajCvor(0).dajRedniBroj() << \"; \";\n  g->postaviOznakuCvora(1, \"aaa\");\n  g->dajCvor(2).postaviOznaku(\"bbb\");\n  for (int i = 0; i < 4; i++)\n      cout << \"(\" << i << \") -> '\" << g->dajOznakuCvora(i) << \"','\" << g->dajCvor(i).dajOznaku() << \"'; \";\n  delete g;"
-        },
-        {
-          "position": "above_main",
-          "code": "#include<string>"
+          "code": "int vel(10000000);\nint* niz = new int[vel];\nfor (int i(0); i<vel; i++)\n\tniz[i] = rand();\nquick_sort(niz, vel);\nfor(int i(0); i<vel-1; i++) \n\tif(niz[i] > niz[i+1]) {\n\t\tcout << \"Greska: i=\"<<i<<\" \"<<niz[i]<<\">\"<<niz[i+1]<<endl;\n\t\tbreak;\n\t}\ncout << \"OK\";\ndelete[] niz;"
         }
       ],
-      "expect": "0; (0) -> '',''; (1) -> 'aaa','aaa'; (2) -> 'bbb','bbb'; (3) -> '','';"
+      "expect": "OK"
     },
     {
       "id": 6,
       "patch": [
         {
           "position": "main",
-          "code": " UsmjereniGraf<std::string> *g = new MatricaGraf<std::string>(4);\n  g->dodajGranu(0, 1, 2.5);\n  g->dodajGranu(1, 2, 1.2);\n  g->dodajGranu(1, 3, 0.1);\n  g->dodajGranu(3, 3, -4.0);\n  g->postaviOznakuGrane(3, 3, \"aa\");\n  g->dajGranu(0,1).postaviOznaku(\"bb\");\n  for (int i = 0; i < 4; i++)\n    for (int j = 0; j < 4; j++)\n      if (g->postojiGrana(i,j))\n        cout << \"(\" << i << \",\" << j << \") -> '\" << g->dajOznakuGrane(i, j) << \"','\" << g->dajGranu(i, j).dajOznaku() << \"'; \";\n  delete g;"
-        },
-        {
-          "position": "above_main",
-          "code": "#include<string>"
+          "code": "// Testovi da li funkcije rade sa tipom razlicitim od int\nstd::string niz[5] = {\"ddd\", \"abc\", \"abc\", \"zzz\", \"aaa\"};\nbubble_sort(niz, 5);\nfor (int i(0); i<5; i++)\n    cout << niz[i] << \" \";\ncout << endl;\n\nstd::string niz2[5] = {\"ddd\", \"abc\", \"abc\", \"zzz\", \"aaa\"};\nselection_sort(niz2, 5);\nfor (int i(0); i<5; i++)\n    cout << niz2[i] << \" \";\ncout << endl;\n\nstd::string niz3[5] = {\"ddd\", \"abc\", \"abc\", \"zzz\", \"aaa\"};\nquick_sort(niz3, 5);\nfor (int i(0); i<5; i++)\n    cout << niz3[i] << \" \";\ncout << endl;\n\nstd::string niz4[5] = {\"ddd\", \"abc\", \"abc\", \"zzz\", \"aaa\"};\nmerge_sort(niz4, 5);\nfor (int i(0); i<5; i++)\n    cout << niz4[i] << \" \";"
         }
       ],
-      "expect": "(0,1) -> 'bb','bb'; (1,2) -> '',''; (1,3) -> '',''; (3,3) -> 'aa','aa';"
-    },
-    {
-      "id": 7,
-      "patch": [
-        {
-          "position": "main",
-          "code": " UsmjereniGraf<bool> *g = new MatricaGraf<bool>(6);\n    g->dodajGranu(0, 1, 2.5);\n    g->dodajGranu(1, 0, 1.2);\n    g->dodajGranu(1, 2, 0.1);\n    g->dodajGranu(0, 0, 3.14);\n    for (GranaIterator<bool> iter = g->dajGranePocetak();\n         iter != g->dajGraneKraj(); ++iter)\n      cout << \"(\" << (*iter).dajPolazniCvor().dajRedniBroj() << \",\"\n           << (*iter).dajDolazniCvor().dajRedniBroj() << \") -> \"\n           << (*iter).dajTezinu() << \"; \";\n  delete g;"
-        }
-      ],
-      "expect": "(0,0) -> 3.14; (0,1) -> 2.5; (1,0) -> 1.2; (1,2) -> 0.1;"
-    },
-    {
-      "id": 8,
-      "patch": [
-        {
-          "position": "main",
-          "code": "MatricaGraf<bool> g(6);\ng.dodajGranu(0, 1, 0);\ncout << g.postojiGrana(0,1);\ncout << g.postojiGrana(0,2);"
-        }
-      ],
-      "expect": "10"
+      "expect": "aaa abc abc ddd zzz \naaa abc abc ddd zzz \naaa abc abc ddd zzz \naaa abc abc ddd zzz"
     }
   ]
 }
