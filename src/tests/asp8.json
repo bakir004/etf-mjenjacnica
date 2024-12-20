@@ -1,0 +1,88 @@
+{
+  "tests": [
+    {
+      "id": 0,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Osnovni test funkcionalnosti HashMapa\nHashMapa<std::string,std::string> m;\nm.definisiHashFunkciju(djbhash);\nm[\"Sarajevo\"] = \"BiH\";\nm[\"Zagreb\"] = \"Hrvatska\";\ncout << m.brojElemenata() << \" \" << m[\"Zagreb\"] << \" '\"; // 2 Hrvatska\n\n// Test praznih elemenata\ncout << m[\"Beograd\"] <<\"' '\"; // ''\ncout << m[\"zagreb\"] << \"' \"; // ''\nm.obrisi(\"Zagreb\");\n\n// Potpuno korektna HashMapa nece kreirati objekte \"Beograd\" i \"zagreb\"\n// jer oni nemaju vrijednosti pa ce se ispod ispisati 1\n// Ali to zahtijeva implementaciju \"Pristupnika\" pa cemo priznavati\n// rjesenje koje ispise broj 3\ncout << m.brojElemenata(); // 3 ili 1\n\n// Test brisanja\ncout << \" '\" << m[\"Zagreb\"] << \"' \" ; // ''\nm.obrisi();\ncout << m.brojElemenata(); // 0\ncout << \" '\" << m[\"Sarajevo\"] << \"' \"; // ''"
+        },
+        {
+          "position": "above_main",
+          "code": "#include <string>\nunsigned int djbhash(std::string ulaz, unsigned int max) {\n\tunsigned int suma=5381; \n// 5381 je pocetna vrijednost \n// koja poboljsava distribuciju\n\tfor (int i(0); i<ulaz.length(); i++)\n\t\tsuma = suma*33 + ulaz[i];\n\treturn suma % max;\n}"
+        }
+      ],
+      "expect": "2 Hrvatska '' '' 1 '' 0 ''"
+    },
+    {
+      "id": 1,
+      "patch": [
+        {
+          "position": "main",
+          "code": "HashMapa<std::string,std::string> m;\nm.definisiHashFunkciju(djbhash);\nm[\"Sarajevo\"] = \"BiH\";\nm[\"Zagreb\"] = \"Hrvatska\";\n{\n        // Konstruktor kopije\n\tHashMapa<std::string,std::string> m2(m);\n        // Operator dodjele\n\tHashMapa<std::string,std::string> m3;\n\tm3.definisiHashFunkciju(djbhash);\n\tm3[\"Kiseljak\"] = \"BiH\";\n\tcout << (m3=m).brojElemenata() << \" \"; // 2\n        // Destruktivna samododjela\n\tcout << (m=m).brojElemenata() << \" \"; // 2\n\n        // Plitka kopija\n\tm.obrisi(\"Sarajevo\");\n\tcout << m2.brojElemenata() << \" \"; // 2\n        cout << m2[\"Sarajevo\"] << \" \"; // BiH\n        cout << m3.brojElemenata() << \" \"; // 2\n        cout << m3[\"Sarajevo\"] << \" \"; // BiH\n}\ncout << m.brojElemenata(); // 1\ncout << \" '\" << m[\"Sarajevo\"] << \"' \"; // ''\nm.obrisi();\ncout << m.brojElemenata(); // 0\ncout << \" '\" << m[\"Zagreb\"] << \"'\"; // ''"
+        },
+        {
+          "position": "above_main",
+          "code": "#include <string>\nunsigned int djbhash(std::string ulaz, unsigned int max) {\n\tunsigned int suma=5381; \n// 5381 je pocetna vrijednost \n// koja poboljsava distribuciju\n\tfor (int i(0); i<ulaz.length(); i++)\n\t\tsuma = suma*33 + ulaz[i];\n\treturn suma % max;\n}"
+        }
+      ],
+      "expect": "2 2 2 BiH 2 BiH 1 '' 0 ''"
+    },
+    {
+      "id": 2,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Test rada sa tipom koji nema default konstruktor (std::vector)\nHashMapa <std::string, std::vector<std::string> > m;\nm.definisiHashFunkciju(djbhash);\nstd::vector<std::string> gradovi;\ngradovi.push_back(\"Sarajevo\");\ngradovi.push_back(\"Mostar\");\ngradovi.push_back(\"Banja Luka\");\nm[\"BiH\"]=gradovi;\ncout << m[\"BiH\"].size() << \" \";\nm[\"BiH\"].push_back(\"Tuzla\");\ncout << m[\"BiH\"][0] << \" \" << m[\"BiH\"][3] << \" \" << m[\"BiH\"].size();"
+        },
+        {
+          "position": "above_main",
+          "code": "#include <string>\n#include <vector>\nunsigned int djbhash(std::string ulaz, unsigned int max) {\n\tunsigned int suma=5381; \n// 5381 je pocetna vrijednost \n// koja poboljsava distribuciju\n\tfor (int i(0); i<ulaz.length(); i++)\n\t\tsuma = suma*33 + ulaz[i];\n\treturn suma % max;\n}"
+        }
+      ],
+      "expect": "3 Sarajevo Tuzla 4"
+    },
+    {
+      "id": 3,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Const korektnost i test rada sa tipom int\nHashMapa <int, int> m;\nm.definisiHashFunkciju(mojhash);\nm[100] = 200;\nconst HashMapa <int, int>& m2(m);\nm[200] = 300;\ncout << m2.brojElemenata() << \" \"; // 2\ncout << m2[200] << \" \"; // 300\n\n// Ovdje se sigurno nece kreirati objekat m2[300] jer je m2 const\ncout << m2[300] << \" \"; // 0\ncout << m2.brojElemenata() << \" \"; // 2\nm[300] = 400;\ncout << m2[300] << \" \"; // 400\ncout << m2.brojElemenata(); // 3"
+        },
+        {
+          "position": "above_main",
+          "code": "unsigned int mojhash(int ulaz, unsigned int max) {\n\tunsigned int suma=23; \n\tsuma = suma*31 + ulaz;\n\treturn suma % max;\n}"
+        }
+      ],
+      "expect": "2 300 0 2 400 3"
+    },
+    {
+      "id": 4,
+      "patch": [
+        {
+          "position": "main",
+          "code": "HashMapa<int, int> m;\nm.definisiHashFunkciju(glupihash);\n// Test ponasanja sa velikim brojem kolizija\nm[1] = 100;\nm[2] = 200;\nm[3] = 300;\nm[4] = 400;\nm[5] = 500;\ncout << m[1] << \" \";\nm.obrisi(2);\ncout << m[1] << \" \" << m[3] << \" \";\ncout << m[4] << \" \" << m[5] << \" \";\ncout << m[2];"
+        },
+        {
+          "position": "above_main",
+          "code": "// Hash funkcija koja uvijek vraca isto\nunsigned int glupihash(int ulaz, \nunsigned int max) {\n\treturn max-1;\n}"
+        }
+      ],
+      "expect": "100 100 300 400 500 0"
+    },
+    {
+      "id": 5,
+      "patch": [
+        {
+          "position": "main",
+          "code": "HashMapa<int, int> m;\nm.definisiHashFunkciju(glupihash);\n// Test ponasanja sa velikim brojem kolizija\nfor (int i(0); i<1002; i++)\n   m[i]=i+10000;\ncout << m[1001];"
+        },
+        {
+          "position": "above_main",
+          "code": "// Hash funkcija koja uvijek vraca isto\nunsigned int glupihash(int ulaz, \nunsigned int max) {\n\treturn max-1;\n}"
+        }
+      ],
+      "expect": "11001"
+    }
+  ]
+}
