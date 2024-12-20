@@ -41,3 +41,5 @@
 IDEMO DALJE:
 
 - isChanged na frontendu detektuje promjene i salje bool 'changed' za brze cachiranje
+
+0.0947567 x^3 - 1.1659 x^2 + 5.35131 x - 9.24274
