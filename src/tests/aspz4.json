@@ -1,0 +1,90 @@
+{
+  "tests": [
+    {
+      "id": 0,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Osnovni test funkcionalnosti AVLStabloMapa\nAVLStabloMapa<std::string,std::string> m;\nm[\"Sarajevo\"] = \"BiH\";\nm[\"Zagreb\"] = \"Hrvatska\";\ncout << m.brojElemenata() << \" \" << m[\"Zagreb\"] << \" '\"; // 2 Hrvatska\n\n// Test praznih elemenata\ncout << m[\"Beograd\"] <<\"' '\"; // ''\ncout << m[\"zagreb\"] << \"' \"; // ''\nm.obrisi(\"Zagreb\");\n\n// Potpuno korektna AVLStabloMapa nece kreirati objekte \"Beograd\" i \"zagreb\"\n// jer oni nemaju vrijednosti pa ce se ispod ispisati 1\n// Ali to zahtijeva implementaciju \"Pristupnika\" pa cemo priznavati\n// rjesenje koje ispise broj 3\ncout << m.brojElemenata(); // 3 ili 1\n\n// Test brisanja\ncout << \" '\" << m[\"Zagreb\"] << \"' \" ; // ''\nm.obrisi();\ncout << m.brojElemenata(); // 0\ncout << \" '\" << m[\"Sarajevo\"] << \"' \"; // ''"
+        },
+        {
+          "position": "above_main",
+          "code": "#include <string>"
+        }
+      ],
+      "expect": "2 Hrvatska '' '' 1 '' 0 ''"
+    },
+    {
+      "id": 1,
+      "patch": [
+        {
+          "position": "main",
+          "code": "AVLStabloMapa<std::string,std::string> m;\nm[\"Sarajevo\"] = \"BiH\";\nm[\"Zagreb\"] = \"Hrvatska\";\n{\n        // Konstruktor kopije\n\tAVLStabloMapa<std::string,std::string> m2(m);\n        // Operator dodjele\n\tAVLStabloMapa<std::string,std::string> m3;\n\tm3[\"Kiseljak\"] = \"BiH\";\n\tcout << (m3=m).brojElemenata() << \" \"; // 2\n        // Destruktivna samododjela\n\tcout << (m=m).brojElemenata() << \" \"; // 2\n\n        // Plitka kopija\n\tm.obrisi(\"Sarajevo\");\n\tcout << m2.brojElemenata() << \" \"; // 2\n        cout << m2[\"Sarajevo\"] << \" \"; // BiH\n        cout << m3.brojElemenata() << \" \"; // 2\n        cout << m3[\"Sarajevo\"] << \" \"; // BiH\n}\ncout << m.brojElemenata(); // 1\ncout << \" '\" << m[\"Sarajevo\"] << \"' \"; // ''\nm.obrisi();\ncout << m.brojElemenata(); // 0\ncout << \" '\" << m[\"Zagreb\"] << \"'\"; // ''"
+        },
+        {
+          "position": "above_main",
+          "code": "#include <string>"
+        }
+      ],
+      "expect": "2 2 2 BiH 2 BiH 1 '' 0 ''"
+    },
+    {
+      "id": 2,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Test rada sa tipom koji nema default konstruktor (std::vector)\nAVLStabloMapa <std::string, std::vector<std::string> > m;\nstd::vector<std::string> gradovi;\ngradovi.push_back(\"Sarajevo\");\ngradovi.push_back(\"Mostar\");\ngradovi.push_back(\"Banja Luka\");\nm[\"BiH\"]=gradovi;\ncout << m[\"BiH\"].size() << \" \";\nm[\"BiH\"].push_back(\"Tuzla\");\ncout << m[\"BiH\"][0] << \" \" << m[\"BiH\"][3] << \" \" << m[\"BiH\"].size();"
+        },
+        {
+          "position": "above_main",
+          "code": "#include <string>\n#include <vector>"
+        }
+      ],
+      "expect": "3 Sarajevo Tuzla 4"
+    },
+    {
+      "id": 3,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Const korektnost i test rada sa tipom int\nAVLStabloMapa <int, int> m;\nm[100] = 200;\nconst AVLStabloMapa <int, int>& m2(m);\nm[200] = 300;\ncout << m2.brojElemenata() << \" \"; // 2\ncout << m2[200] << \" \"; // 300\n\n// Ovdje se sigurno nece kreirati objekat m2[300] jer je m2 const\ncout << m2[300] << \" \"; // 0\ncout << m2.brojElemenata() << \" \"; // 2\nm[300] = 400;\ncout << m2[300] << \" \"; // 400\ncout << m2.brojElemenata(); // 3"
+        }
+      ],
+      "expect": "2 300 0 2 400 3"
+    },
+    {
+      "id": 4,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Test polimorfizma\nMapa<int,int>* m = new AVLStabloMapa<int,int>;\n(*m)[100] = 200;\n(*m)[50] = 100;\ncout << (*m)[100] << \" \" << m->brojElemenata(); // 200 2\nm->obrisi(100);\ncout << \" \" << m->brojElemenata(); // 1\nm->obrisi();\ncout << \" \" << m->brojElemenata(); // 0\n(*m)[25] = 300;\ncout << \" \" << (*m)[100]; // 0\ncout << \" \" << (*m)[50]; // 0\ncout << \" \" << (*m)[25]; // 300\ndelete m;"
+        }
+      ],
+      "expect": "200 2 1 0 0 0 300"
+    },
+    {
+      "id": 5,
+      "patch": [
+        {
+          "position": "main",
+          "code": "// Test brisanja\nAVLStabloMapa <float, float> m;\nm[5] = 5;\nm[3] = 3;\nm[7] = 7;\nm[8] = 8;\nm[1] = 1;\nm[2] = 2;\nm[0.5] = 0.5;\nm[4] = 4;\nm[1.5] = 1.5;\nm[3.5] = 3.5;\nm[4.5] = 4.5;\n\n// Proba\ncout << std::setprecision(2) << m[4.5] << \" \";\n// Brisanje slucaj 1\nm.obrisi(8);\ncout << m[7] << \" \" << m[8] << \" \"; \n// Ovim smo ponovo dodali kljuc 8 u mapu\n// Brisanje slucaj 2\nm[8] = 8;\nm.obrisi(7);\ncout << m[5] << \" \" << m[8] << \" \" << m[7] << \" \";\n// Brisanje slucaj 3\nm.obrisi(3);\ncout << m[2] << \" \" << m[1.5] << \" \" << m[1] << \" \";\ncout << m[0.5] << \" \" << m[3] << \" \";\n// Brisanje korijena\nm.obrisi(5);\nm[3] = 3;\ncout << m[8] << \" \" << m[1.5] << \" \" << m[3];\ncout << \" \" << m[5] << \" \";\n// Da li je roditelj korektno azuriran?\nm.obrisi(7);\ncout << m[8] << \" \" << m[7];"
+        },
+        {
+          "position": "above_main",
+          "code": "#include <iomanip>"
+        }
+      ],
+      "expect": "4.5 7 0 5 8 0 2 1.5 1 0.5 0 8 1.5 3 0 8 0"
+    },
+    {
+      "id": 6,
+      "patch": [
+        {
+          "position": "main",
+          "code": "AVLStabloMapa<int, int> avl;\n  avl[3] = 3;\n  avl[5] = 5;\n  avl[8] = 8;\n  avl[10] = 10;\n  avl[9] = 9;\n  avl[11] = 11;\n  avl.Preorder();\n  std::cout << endl;"
+        }
+      ],
+      "expect": "9,5,3,8,10,11,"
+    }
+  ]
+}

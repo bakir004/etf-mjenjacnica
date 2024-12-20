@@ -1,0 +1,104 @@
+{
+  "tests": [
+    {
+      "id": 0,
+      "patch": [
+        {
+          "position": "main",
+          "code": "    vector<int> a;\n    a.push_back(545);\n    a.push_back(1545);\n    a.push_back(4536);\n    a.push_back(124121);\n    a.push_back(1);\n    a.push_back(95468);\n    radixSort(a);\n    for(int i(0);i<a.size();i++){\n        cout<<a[i]<<\" \";\n    }"
+        }
+      ],
+      "expect": "1 545 1545 4536 95468 124121 "
+    },
+    {
+      "id": 1,
+      "patch": [
+        {
+          "position": "main",
+          "code": "    vector<int> a;\n    vector<int> b;\n    a.push_back(545);\n    a.push_back(1545);\n    a.push_back(4536);\n    a.push_back(124121);\n    a.push_back(1);\n    a.push_back(95468);\n    for(int i=0;i<10000;i+=13){\n        a.push_back(i);\n    }\n    for(int i=0;i<a.size();i++){\n        b.push_back(a[i]);\n    }\n    radixSort(a);\n    sort(b.begin(),b.end());\n    bool testOk = true;\n    for(int i(0);i<a.size();i++){\n        if(a[i]!=b[i]) testOk = false;;\n    }\n    if(testOk) cout<<\"OK\";"
+        }
+      ],
+      "expect": "OK"
+    },
+    {
+      "id": 2,
+      "patch": [
+        {
+          "position": "main",
+          "code": "    vector<int> a;\n    a.push_back(545);\n    a.push_back(1545);\n    a.push_back(4536);\n    a.push_back(124121);\n    a.push_back(1);\n    a.push_back(95468);\n    for(int i=0;i<200000;i++){\n        a.push_back(i);\n    }\n    radixSort(a);\n    cout<<\"OK\";"
+        }
+      ],
+      "expect": "OK"
+    },
+    {
+      "id": 3,
+      "patch": [
+        {
+          "position": "main",
+          "code": "    vector<int> a;\n    a.push_back(545);\n    a.push_back(1545);\n    a.push_back(4536);\n    a.push_back(124121);\n    a.push_back(1);\n    a.push_back(95468);\n    stvoriGomilu(a);\n    for(int i(0);i<a.size();i++){\n        cout<<a[i]<<\" \";\n    }"
+        }
+      ],
+      "expect": "124121 1545 95468 545 1 4536 "
+    },
+    {
+      "id": 4,
+      "patch": [
+        {
+          "position": "main",
+          "code": "    vector<int> a;\n    a.push_back(546);\n    a.push_back(1);\n    a.push_back(31);\n    a.push_back(1001);\n    a.push_back(104351);\n    a.push_back(7);\n    a.push_back(6);\n    a.push_back(60045);\n    gomilaSort(a);\n    for(int i(0);i<a.size();i++){\n        cout<<a[i]<<\" \";\n    }"
+        }
+      ],
+      "expect": "1 6 7 31 546 1001 60045 104351 "
+    },
+    {
+      "id": 5,
+      "patch": [
+        {
+          "position": "main",
+          "code": "   vector<int> a;\n    vector<int> b;\n    a.push_back(545);\n    a.push_back(1545);\n    a.push_back(4536);\n    a.push_back(124121);\n    a.push_back(1);\n    a.push_back(95468);\n    for(int i=0;i<10000;i+=13){\n        a.push_back(i);\n    }\n    for(int i=0;i<a.size();i++){\n        b.push_back(a[i]);\n    }\n    radixSort(a);\n    gomilaSort(b);\n    bool testOk = true;\n    for(int i(0);i<a.size();i++){\n        if(a[i]!=b[i]) testOk = false;;\n    }\n    if(testOk) cout<<\"OK\";"
+        }
+      ],
+      "expect": "OK"
+    },
+    {
+      "id": 6,
+      "patch": [
+        {
+          "position": "main",
+          "code": "    vector<int> a;\n    a.push_back(545);\n    a.push_back(1545);\n    a.push_back(4536);\n    a.push_back(124121);\n    a.push_back(1);\n    a.push_back(95468);\n    int velicina = a.size();\n    stvoriGomilu(a);\n    umetniUGomilu(a,100000,velicina);   \n    umetniUGomilu(a,3,velicina);   \n    umetniUGomilu(a,1,velicina);  \n    umetniUGomilu(a,100,velicina); \n    umetniUGomilu(a,200,velicina);  \n    for(int i(0);i<a.size();i++){\n        cout<<a[i]<<\" \";\n    }\n    gomilaSort(a);\n    for(int i(0);i<a.size();i++){\n        cout<<a[i]<<\" \";\n    }"
+        }
+      ],
+      "expect": "124121 1545 100000 545 200 4536 95468 3 1 1 100 1 1 3 100 200 545 1545 4536 95468 100000 124121 "
+    },
+    {
+      "id": 7,
+      "patch": [
+        {
+          "position": "main",
+          "code": "    vector<int> a;\n    a.push_back(545465);\n    a.push_back(1556445);\n    a.push_back(454636);\n    a.push_back(1254121);\n    a.push_back(15665656);\n    a.push_back(95468);\n    int velicina = a.size();\n    stvoriGomilu(a);\n    umetniUGomilu(a,100000,velicina);   \n    umetniUGomilu(a,3,velicina);   \n    umetniUGomilu(a,1,velicina);  \n    umetniUGomilu(a,100,velicina); \n    umetniUGomilu(a,200,velicina);  \n    izbaciPrvi(a,velicina);\n    for(int i(0);i<a.size();i++){\n        cout<<a[i]<<\" \";\n    }"
+        }
+      ],
+      "expect": "1556445 1254121 454636 200 545465 95468 100000 3 1 100 15665656 "
+    },
+    {
+      "id": 8,
+      "patch": [
+        {
+          "position": "main",
+          "code": "    vector<int> a;\n    int velicina = 0;\n    umetniUGomilu(a,546,velicina);\n    umetniUGomilu(a,435435,velicina);\n    umetniUGomilu(a,12,velicina);\n    umetniUGomilu(a,546,velicina);\n    umetniUGomilu(a,675767,velicina);\n    umetniUGomilu(a,33,velicina);\n    umetniUGomilu(a,555,velicina);\n    umetniUGomilu(a,1,velicina);\n    for(int i(0);i<a.size();i++){\n        cout<<a[i]<<\" \";\n    }\n    radixSort(a);\n    for(int i(0);i<a.size();i++){\n        cout<<a[i]<<\" \";\n    }    "
+        }
+      ],
+      "expect": "675767 435435 555 546 546 12 33 1 1 12 33 546 546 555 435435 675767 "
+    },
+    {
+      "id": 9,
+      "patch": [
+        {
+          "position": "main",
+          "code": "    vector<int> a;\n    int velicina = 0;\n    umetniUGomilu(a,546,velicina);\n    umetniUGomilu(a,435435,velicina);\n    umetniUGomilu(a,12,velicina);\n    umetniUGomilu(a,546,velicina);\n    umetniUGomilu(a,675767,velicina);\n    umetniUGomilu(a,33,velicina);\n    umetniUGomilu(a,555,velicina);\n    umetniUGomilu(a,1,velicina);\n    izbaciPrvi(a,velicina);\n    izbaciPrvi(a,velicina);\n    izbaciPrvi(a,velicina);\n    izbaciPrvi(a,velicina);\n    izbaciPrvi(a,velicina);\n    izbaciPrvi(a,velicina);\n    izbaciPrvi(a,velicina);\n    izbaciPrvi(a,velicina);\n    for(int i(0);i<a.size();i++){\n        cout<<a[i]<<velicina;\n    }    "
+        }
+      ],
+      "expect": "1012033054605460555043543506757670"
+    }
+  ]
+}
